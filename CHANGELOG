@@ -1,0 +1,25 @@
+0.8.1
+	Added Action-URL support per the specification.
+	Added a secondary_response accessor to the Transaction object, which is what the Action-URL result is stored in.
+	Fixed a bug with loggers and parsers
+	
+0.8.0
+	Fixed RParser support, which now means you can use REXML.
+	RParser now retries XML that produced a parser error after trying to clean it.
+	Parser support is now more open so that more parsers can be easily added in the future.
+	Reorganized parser file layout.
+	CParser will only be loaded if libxml (its dependency) is present. If it is, it is the default
+		parser.
+	Added more parser unit tests.
+	Renamed CParser to XMLParser and RPARSER to REXML, both with the hierarchy RETS4R::Client::Module.
+	Fixed a bug with the parser output not being set properly.
+	Fixed a bug with the parser not respecting the DELIMITER value and insisting on tab delimiters.
+	Added support for using a logger
+	Added more defaults to the search options (Count => '0', Format => 'COMPACT')
+	Added some Rubyisms (blocks can now be given to #new, #login, #get_metadata, #get_object, and #search)
+	
+0.7.1
+	Added support for reading the results count for searches.
+	
+0.7.0
+	Initial GEM Version

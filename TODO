@@ -1,0 +1,26 @@
+Fix
+* Unit Tests (We need METADATA!)
+
+Add support for
+* Multiple RETS versions
+* RETS 1.7
+* Standard (non-compact) XML
+
+Add
+* More Examples
+* More Documentation
+* Reply Codes (Readable Meaning)
+* A search convenience method that makes subsequent requests if maxrows is true.
+
+Check
+* GetObject
+* GetMetadata
+
+Possible To-do Items
+* RETS 1.0
+* RETS 2.0 (May not be necessary since it is now SOAP based, but it would be nice to have a consistent API)
+* Running a RETS Server
+* Update Actions
+* Password Change Transaction
+* Get Transaction
+* HTTPS Support
