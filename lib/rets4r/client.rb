@@ -1,6 +1,6 @@
 # RETS4R Client
 #
-# Copyright (c) 2005 Scott Patterson <scott.patterson@digitalaun.com>
+# Copyright (c) 2006 Scott Patterson <scott.patterson@digitalaun.com>
 #
 # This program is copyrighted free software by Scott Patterson.  You can
 # redistribute it and/or modify it under the same terms of Ruby's license;
@@ -9,7 +9,6 @@
 #
 #	TODO
 #		1.0 Support (Adding this support should be fairly easy)
-#		1.7 Support (Adding this support should be fairly easy)
 #		2.0 Support (Adding this support will be very difficult since it is a completely different methodology)
 #		Case-insensitive header
 
@@ -35,9 +34,9 @@ module RETS4R
 		DEFAULT_OUTPUT		   = OUTPUT_RUBY
 		DEFAULT_METHOD 		   = METHOD_GET
 		DEFAULT_RETRY        = 2
-		DEFAULT_USER_AGENT 	 = 'RETS4R/0.8.1'
-		DEFAULT_RETS_VERSION = '1.5'
-		SUPPORTED_RETS_VERSIONS = ['1.5']
+		DEFAULT_USER_AGENT 	 = 'RETS4R/0.8.2'
+		DEFAULT_RETS_VERSION = '1.7'
+		SUPPORTED_RETS_VERSIONS = ['1.5', '1.7']
 		CAPABILITY_LIST   = ['Action', 'ChangePassword', 'GetObject', 'Login', 'LoginComplete', 'Logout', 'Search', 'GetMetadata', 'Update']
 		SUPPORTED_PARSERS = [] # This will be populated by parsers as they load
 
@@ -143,7 +142,11 @@ module RETS4R
 		end
 		
 		def set_header(name, value)
-			@headers[name] = value
+			if value.nil? then
+				@headers.delete(name)
+			else
+				@headers[name] = value
+			end
 			
 			logger.debug("Set header '#{name}' to '#{value}'") if logger
 		end
@@ -351,7 +354,7 @@ module RETS4R
 			results = self.parse(response.body)
 			
 			if block_given?
-				yield
+				yield results
 			else
 				return results
 			end
@@ -413,9 +416,13 @@ module RETS4R
 			
 			@semaphore.lock
 			
-			set_header('RETS-Request-ID', Digest::MD5.hexdigest(Time.new.to_f.to_s))
+			http = Net::HTTP.new(url.host, url.port)
 			
-			Net::HTTP.start(url.host, url.port) do |http|
+			if logger && logger.debug?
+				http.set_debug_output HTTPDebugLogger.new(logger)
+			end
+			
+			http.start do |http|
 				begin
 					uri = url.path
 					
@@ -438,7 +445,13 @@ module RETS4R
 						# Authentication is required
 						raise AuthRequired
 					else
-						set_header('Cookie', response['set-cookie']) if response['set-cookie']
+						cookies = []
+						if set_cookies = response.get_fields('set-cookie') then
+							set_cookies.each do |cookie|
+								cookies << cookie.split(";").first
+							end
+						end
+						set_header('Cookie', cookies.join("; ")) unless cookies.empty?
 						set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID']
 					end
 				rescue AuthRequired
@@ -468,6 +481,17 @@ module RETS4R
 				end
 			rescue
 				raise RETSException.new("Unable to follow action URL: '#{$!}'.")
+			end
+		end
+		
+		# Provides a proxy class to allow for net/http to log its debug to the logger.
+		class HTTPDebugLogger
+			def initialize(logger)
+				@logger = logger
+			end
+			
+			def <<(data)
+				@logger.debug(data)
 			end
 		end
 		

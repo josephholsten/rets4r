@@ -11,7 +11,7 @@
 rets_url = 'http://server.com/my/rets/url'
 username = 'username'
 password = 'password'
-
+  
 #############################################################################################
 $:.unshift 'lib'
 

@@ -1,3 +1,10 @@
+0.8.2
+	Added missing result parameter to Client#search's yield (Scott)
+	Added 1.7 to supported list and default version (François)
+	No longer sends empty (nil) headers (François)
+	Added debugging to HTTP output. (François, Scott)
+	Added support for multiple set-cookie headers in the server response (François)
+	
 0.8.1
 	Added Action-URL support per the specification.
 	Added a secondary_response accessor to the Transaction object, which is what the Action-URL result is stored in.
