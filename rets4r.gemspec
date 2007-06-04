@@ -2,7 +2,7 @@ require 'rubygems'
 
 SPEC = Gem::Specification.new do |s|
 	s.name     = 'rets4r'
-	s.version  = '0.8.1'
+	s.version  = '0.8.2'
 	s.author   = 'Scott Patterson'
 	s.email    = 'scott.patterson@digitalaun.com'
 	s.homepage = 'http://rets4r.rubyforge.org/'
@@ -16,5 +16,5 @@ SPEC = Gem::Specification.new do |s|
 	s.require_path     = 'lib'
 	s.test_file        = 'test/ts_all.rb'
 	s.has_rdoc         = true
-  s.extra_rdoc_files = ['AUTHORS', 'README', 'LICENSE', 'RUBYS', 'GPL', 'CHANGELOG', 'TODO']
+  s.extra_rdoc_files = ['CONTRIBUTORS', 'README', 'LICENSE', 'RUBYS', 'GPL', 'CHANGELOG', 'TODO']
 end
