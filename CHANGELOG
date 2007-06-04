@@ -1,9 +1,10 @@
 0.8.2
-	Added missing result parameter to Client#search's yield (Scott)
-	Added 1.7 to supported list and default version (François)
-	No longer sends empty (nil) headers (François)
-	Added debugging to HTTP output. (François, Scott)
-	Added support for multiple set-cookie headers in the server response (François)
+	Added missing result parameter to Client#search's yield (Scott Patterson)
+	Added 1.7 to supported list and default version (François Beausoleil)
+	No longer sends empty (nil) headers (François Beausoleil)
+	Added debugging to HTTP output. (François Beausoleil, Scott Patterson)
+	Added support for multiple set-cookie headers in the server response (François Beausoleil)
+	Added basic search example (Scott Patterson)
 	
 0.8.1
 	Added Action-URL support per the specification.
