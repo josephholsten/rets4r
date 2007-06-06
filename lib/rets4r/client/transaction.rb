@@ -8,6 +8,7 @@ module RETS4R
 				self.maxrows = false
 				self.header = []
 				self.data = []
+				self.delimiter = ?\t
 			end
 			
 			def success?
