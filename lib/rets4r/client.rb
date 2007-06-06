@@ -68,7 +68,7 @@ module RETS4R
 				'RETS-Session-ID' => '0'
 				}
 			@request_method = DEFAULT_METHOD
-			@parser         = DEFAULT_PARSER
+			@parser_class   = DEFAULT_PARSER
 			@semaphore      = Mutex.new
 			@output         = output
 			
@@ -106,7 +106,7 @@ module RETS4R
 				xml
 			else
 				begin
-					parser = @parser.new
+					parser = @parser_class.new
 					parser.logger = logger
 					parser.output = output ? output : @output
 
@@ -128,7 +128,7 @@ module RETS4R
 		
 		def set_parser_class(klass, force = false)
 			if force || SUPPORTED_PARSERS.include?(klass)
-				@parser = klass
+				@parser_class = klass
 			else
 				message = "The parser class '#{klass}' is not supported!"
 				logger.debug(message) if logger
@@ -138,7 +138,7 @@ module RETS4R
 		end
 		
 		def get_parser_class
-			@parser.class
+			@parser_class
 		end
 		
 		def set_header(name, value)
@@ -182,6 +182,18 @@ module RETS4R
 		def get_request_method
 			@request_method
 		end
+		
+		# Provide more Ruby-like attribute accessors instead of get/set methods
+		alias_method :user_agent=, :set_user_agent
+		alias_method :user_agent, :get_user_agent
+		alias_method :request_method=, :set_request_method
+		alias_method :request_method, :get_request_method
+		alias_method :rets_version=, :set_rets_version
+		alias_method :rets_version, :get_rets_version
+		alias_method :parser_class=, :set_parser_class
+		alias_method :parser_class, :get_parser_class
+		alias_method :output=, :set_output
+		alias_method :output, :get_output
 		
 		#### RETS Transaction Methods ####
 		#
