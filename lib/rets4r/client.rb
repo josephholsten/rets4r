@@ -165,14 +165,14 @@ module RETS4R
 		
 		def set_rets_version(version)
 			if (SUPPORTED_RETS_VERSIONS.include? version)
-				set_header('RETS-Version', version)
+				set_header('RETS-Version', "RETS/#{version}")
 			else
 				raise Unsupported.new("The client does not support RETS version '#{version}'.")
 			end
 		end
 		
 		def get_rets_version
-			get_header('RETS-Version')
+			(get_header('RETS-Version') || "").gsub("RETS/", "")
 		end
 		
 		def set_request_method(method)
