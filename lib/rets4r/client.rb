@@ -269,6 +269,9 @@ module RETS4R
 		# subsets of the Metadata. Please see the RETS specification for more details on this.
 		# The format variable tells the server which format to return the Metadata in. Unless you
 		# need the raw metadata in a specified format, you really shouldn't specify the format.
+		#
+		# If called with a block, yields the results and returns the value of the block, or
+		# returns the metadata directly.
 		def get_metadata(type = 'METADATA-SYSTEM', id = '*', format = 'COMPACT')
 			header = {
 				'Accept' => 'text/xml,text/plain;q=0.5'
@@ -286,9 +289,9 @@ module RETS4R
 			
 			if block_given?
 				yield result
+			else
+				result
 			end
-			
-			return result
 		end
 		
 		# Performs a GetObject transaction on the server. For details on the arguments, please see
