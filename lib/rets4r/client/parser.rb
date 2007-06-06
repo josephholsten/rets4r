@@ -113,15 +113,11 @@ module RETS4R
 				
 				parsed_data = parse_compact_line(data, @transaction.ascii_delimiter)
 				
-				begin
-					header.length.times do |pos|
-						results[header[pos]] = parsed_data[pos]
-					end
-				rescue
-					raise $!
+				header.length.times do |pos|
+					results[header[pos]] = parsed_data[pos]
 				end
 				
-				return results
+				results
 			end
 			
 			def parse_key_value_body(data)
