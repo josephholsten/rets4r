@@ -202,6 +202,15 @@ module RETS4R
 		# found at http://www.rets.org
 		
 		# Attempts to log into the server using the provided username and password.
+		#
+		# If called with a block, the results of the login action are yielded,
+		# and logout is called when the block returns.  In that case, #login
+		# returns the block's value. If called without a block, returns the
+		# result.
+		#
+		# As specified in the RETS specification, the Action URL is called and
+		# the results made available in the #secondary_results accessor of the
+		# results object.
 		def login(username, password)
 			@username = username
 			@password = password
@@ -235,14 +244,16 @@ module RETS4R
 			# Perform the mandatory get request on the action URL.
 			results.secondary_response = perform_action_url
 			
-			# We only yield if 
+			# We only yield
 			if block_given?
-				yield results
-				
-				self.logout
+				begin
+					yield results
+				ensure
+					self.logout
+				end
+			else
+				results
 			end
-			
-			return results
 		end
 		
 		# Logs out of the RETS server.
