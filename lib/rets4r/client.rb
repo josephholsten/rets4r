@@ -296,7 +296,10 @@ module RETS4R
 		
 		# Performs a GetObject transaction on the server. For details on the arguments, please see
 		# the RETS specification on GetObject requests.
-		def get_object(resource, type, id, location = 1)
+		#
+		# This method either returns an Array of DataObject instances, or yields the
+		# Array, returning the block's value.
+		def get_object(resource, type, id, location = 1) #:yields: array_of_data_object
 			header = {
 				'Accept' => mimemap.keys.join(',')
 			}
@@ -309,14 +312,12 @@ module RETS4R
 			}
 			
 			response = request(@urls['GetObject'], data, header)
-			results  = nil
+			results = []
 			
 			if response['content-type'].include?('multipart/parallel')
 				content_type = process_content_type(response['content-type'])
 
-				objects = []
-
-				parts = response.body.split("--#{content_type['boundary']}")
+				parts = response.body.split("\r\n--#{content_type['boundary']}")
 				parts.shift # Get rid of the initial boundary
 				
 				parts.each do |part|
@@ -329,25 +330,24 @@ module RETS4R
 					extension = 'unknown'
 					extension = self.mimemap[data_header['Content-Type']] if self.mimemap[data_header['Content-Type']]
 					
-					objects << DataObject.new(data_header, raw_data)
+					results << DataObject.new(data_header, raw_data)
 				end 
-				
-				results = objects
 			else
 				info = {
-					'content-type' => response['content-type'],
+					'content-type' => response['content-type'], # Compatibility shim.  Deprecated.
+					'Content-Type' => response['content-type'],
 					'Object-ID'    => response['Object-ID'],
 					'Content-ID'   => response['Content-ID']
 				}
 
-				results = [DataObject.new(info, response.body)] if response['Content-Length'].to_i > 100
+				results << DataObject.new(info, response.body) if response['Content-Length'].to_i > 100
 			end
 			
 			if block_given?
 				yield results
+			else
+				results
 			end
-						
-			return results
 		end
 		
 		# Peforms a RETS search transaction. Again, please see the RETS specification for details
@@ -393,8 +393,7 @@ module RETS4R
 			
 			field_start = text.index(';')
 
-			# The -1 is to remove the semi-colon (";")
-			content['content-type'] = text[0..(field_start - 1)].strip
+			content['content-type'] = text[0 ... field_start].strip
 			fields = text[field_start..-1]
 			
 			parts = text.split(';')
