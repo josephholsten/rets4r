@@ -326,10 +326,6 @@ module RETS4R
 					next unless raw_data
 					
 					data_header = process_header(raw_header)
-					
-					extension = 'unknown'
-					extension = self.mimemap[data_header['Content-Type']] if self.mimemap[data_header['Content-Type']]
-					
 					data_object = DataObject.new(data_header, raw_data)
 					
 					if block_given?
