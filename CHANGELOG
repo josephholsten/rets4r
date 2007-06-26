@@ -5,6 +5,23 @@
 	Added debugging to HTTP output. (François Beausoleil, Scott Patterson)
 	Added support for multiple set-cookie headers in the server response (François Beausoleil)
 	Added basic search example (Scott Patterson)
+	Implied default value of \t in RETS4R::Client::Transaction#delimiter (François Beausoleil)
+	#get_metadata now returns the block's value or the results. (François Beausoleil)
+	Made sure #login always calls #logout if called with a block.  #login returns the block's value 
+		instead of results. (François Beausoleil)
+	New assertions that require Client to have Ruby-like accessors for attributes, instead of 
+		getters and setters.  Applied 'Rename Attribute' on @parser, because #get_parser_class 
+		was returning the class of the parser's class, instead of the parser's class itself. (François Beausoleil)
+	Client#set_rets_version should take care to generate the correct RETS-Version header, 
+		and #get_rets_version should undo the changes that #set_rets_version did before 
+		returning the value. (François Beausoleil)
+	Don't rescue an exception that's not being processed in Parser. (François Beausoleil)
+	RETS4R::Client#get_object extensions: yield or return the array of DataObject instances; 
+		changed the multipart/parallel response boundary processing rules 
+		(include \r\n in the boundary detection); added documentation. (François Beausoleil)
+	Added GetObject example (Scott Patterson)
+	Changed #get_object now yields each DataObject if a block is given rather 
+		than an array of DataObjects (Scott Patterson)
 	
 0.8.1
 	Added Action-URL support per the specification.

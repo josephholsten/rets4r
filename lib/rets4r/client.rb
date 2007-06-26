@@ -211,7 +211,7 @@ module RETS4R
 		# As specified in the RETS specification, the Action URL is called and
 		# the results made available in the #secondary_results accessor of the
 		# results object.
-		def login(username, password)
+		def login(username, password) #:yields: login_results
 			@username = username
 			@password = password
 			
@@ -297,9 +297,9 @@ module RETS4R
 		# Performs a GetObject transaction on the server. For details on the arguments, please see
 		# the RETS specification on GetObject requests.
 		#
-		# This method either returns an Array of DataObject instances, or yields the
-		# Array, returning the block's value.
-		def get_object(resource, type, id, location = 1) #:yields: array_of_data_object
+		# This method either returns an Array of DataObject instances, or yields each DataObject
+		# as it is created. If a block is given, the number of objects yielded is returned.
+		def get_object(resource, type, id, location = 1) #:yields: data_object
 			header = {
 				'Accept' => mimemap.keys.join(',')
 			}
@@ -312,7 +312,7 @@ module RETS4R
 			}
 			
 			response = request(@urls['GetObject'], data, header)
-			results = []
+			results = block_given? ? 0 : []
 			
 			if response['content-type'].include?('multipart/parallel')
 				content_type = process_content_type(response['content-type'])
@@ -330,7 +330,14 @@ module RETS4R
 					extension = 'unknown'
 					extension = self.mimemap[data_header['Content-Type']] if self.mimemap[data_header['Content-Type']]
 					
-					results << DataObject.new(data_header, raw_data)
+					data_object = DataObject.new(data_header, raw_data)
+					
+					if block_given?
+						yield data_object
+						results += 1
+					else
+						results << data_object
+					end
 				end 
 			else
 				info = {
@@ -339,15 +346,20 @@ module RETS4R
 					'Object-ID'    => response['Object-ID'],
 					'Content-ID'   => response['Content-ID']
 				}
-
-				results << DataObject.new(info, response.body) if response['Content-Length'].to_i > 100
+				
+				if response['Content-Length'].to_i > 100
+					data_object = DataObject.new(info, response.body)
+				
+					if block_given?
+						yield data_object
+						results += 1
+					else
+						results << data_object
+					end
+				end
 			end
 			
-			if block_given?
-				yield results
-			else
-				results
-			end
+			results
 		end
 		
 		# Peforms a RETS search transaction. Again, please see the RETS specification for details

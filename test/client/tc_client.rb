@@ -115,13 +115,15 @@ module RETS4R
 			@response.expects(:[]).with('Content-ID').at_least_once.returns("5589")
 			@response.expects(:body).returns("\000"*241)
 
-			value = @rets.get_object("Property", "VRImage", "912:0") do |results|
-				assert_kind_of Enumerable, results
-				assert_equal 1, results.size, "Client parsed two objects out of the request"
+			yielded_count = 0
+			
+			value = @rets.get_object("Property", "VRImage", "912:0") do |result|
+				assert_kind_of RETS4R::Client::DataObject, result	
+				yielded_count += 1
 				:return_value
 			end
 
-			assert_equal :return_value, value
+			assert_equal yielded_count, value
 		end
 	end
 	

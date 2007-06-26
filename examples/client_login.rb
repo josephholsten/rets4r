@@ -25,6 +25,7 @@ login_result = client.login(username, password)
 if login_result.success?
 	puts "We successfully logged into the RETS server!"
 	
+	# Print the action URL results (if any)
 	puts login_result.secondary_response
 	
 	client.logout
