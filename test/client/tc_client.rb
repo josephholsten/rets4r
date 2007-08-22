@@ -94,13 +94,30 @@ module RETS4R
 
 		def test_returns_single_entity_object_in_a_single_element_array
 			@response.expects(:[]).with('content-type').at_least_once.returns("image/jpeg")
+			@response.expects(:[]).with('Transfer-Encoding').at_least_once.returns("")
 			@response.expects(:[]).with('Content-Length').at_least_once.returns(241)
 			@response.expects(:[]).with('Object-ID').at_least_once.returns("25478")
 			@response.expects(:[]).with('Content-ID').at_least_once.returns("5589")
 			@response.expects(:body).returns("\000"*241)
 
 			results = @rets.get_object("Property", "Photo", "392103:*")
-			assert_equal 1, results.size, "Client parsed two objects out of the request"
+			assert_equal 1, results.size, "Client parsed one object out of the request"
+			assert_kind_of RETS4R::Client::DataObject, results[0], "First result isn't a DataObject"
+			assert_equal "image/jpeg", results[0].type["Content-Type"], "Content-Type not copied"
+			assert_equal "5589", results[0].type["Content-ID"], "Content-ID not copied"
+			assert_equal "25478", results[0].type["Object-ID"], "Object-ID not copied"
+			assert_equal 241, results[0].data.size, "First object isn't 241 bytes in length"
+		end
+
+		def test_returns_single_entity_object_as_chunked_encoding_in_a_single_element_array
+			@response.expects(:[]).with('content-type').at_least_once.returns("image/jpeg")
+			@response.expects(:[]).with('Transfer-Encoding').at_least_once.returns("chunked")
+			@response.expects(:[]).with('Object-ID').at_least_once.returns("25478")
+			@response.expects(:[]).with('Content-ID').at_least_once.returns("5589")
+			@response.expects(:body).returns("\000"*241)
+
+			results = @rets.get_object("Property", "Photo", "392103:*")
+			assert_equal 1, results.size, "Client parsed one object out of the request"
 			assert_kind_of RETS4R::Client::DataObject, results[0], "First result isn't a DataObject"
 			assert_equal "image/jpeg", results[0].type["Content-Type"], "Content-Type not copied"
 			assert_equal "5589", results[0].type["Content-ID"], "Content-ID not copied"
@@ -110,6 +127,7 @@ module RETS4R
 
 		def test_yields_data_objects_to_block_and_returns_blocks_value
 			@response.expects(:[]).with('content-type').at_least_once.returns("image/jpeg")
+			@response.expects(:[]).with('Transfer-Encoding').at_least_once.returns("")
 			@response.expects(:[]).with('Content-Length').at_least_once.returns(241)
 			@response.expects(:[]).with('Object-ID').at_least_once.returns("25478")
 			@response.expects(:[]).with('Content-ID').at_least_once.returns("5589")

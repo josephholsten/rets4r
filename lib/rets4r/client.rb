@@ -343,9 +343,8 @@ module RETS4R
 					'Content-ID'   => response['Content-ID']
 				}
 				
-				if response['Content-Length'].to_i > 100
+				if response['Transfer-Encoding'].to_s.downcase == "chunked" || response['Content-Length'].to_i > 100 then
 					data_object = DataObject.new(info, response.body)
-				
 					if block_given?
 						yield data_object
 						results += 1
