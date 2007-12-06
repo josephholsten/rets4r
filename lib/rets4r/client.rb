@@ -82,6 +82,18 @@ module RETS4R
 			end
 		end
 		
+		# Assigns a block that will be called just before the request is sent.
+		# This block must accept three parameters:
+		# * self
+		# * Net::HTTP instance
+		# * Hash of headers
+		#
+		# The block's return value will be ignored.  If you want to prevent the request
+		# to go through, raise an exception.
+		def set_pre_request_block(&block)
+			@pre_request_block = block
+		end
+		
 		# We only allow external read access to URLs because they are internally set based on the
 		# results of various queries.
 		def urls
@@ -464,6 +476,8 @@ module RETS4R
 
 					headers = @headers
 					headers.merge(header) unless header.empty?
+					
+					@pre_request_block.call(self, http, headers) if @pre_request_block
 					
 					logger.debug(headers.inspect) if logger
 					
