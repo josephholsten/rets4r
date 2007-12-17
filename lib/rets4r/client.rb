@@ -515,7 +515,7 @@ module RETS4R
 						raise AuthRequired
 					elsif response.code.to_i >= 300
 						# We have a non-successful response that we cannot handle
-						@semaphore.unlock
+						@semaphore.unlock if @semaphore.locked?
 						raise HTTPError.new(response)
 					else
 						cookies = []
@@ -534,6 +534,9 @@ module RETS4R
 						retry_auth -= 1
 						set_header('Authorization', Auth.authenticate(response, @username, @password, url.path, method, @headers['RETS-Request-ID'], get_user_agent, @nc))
 						retry
+					else
+						@semaphore.unlock if @semaphore.locked?
+						raise LoginError.new(response.message)
 					end
 				end		
 				
