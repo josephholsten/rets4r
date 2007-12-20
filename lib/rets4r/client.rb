@@ -113,6 +113,23 @@ module RETS4R
 		#
 		# The block's return value will be ignored.  If you want to prevent the request
 		# to go through, raise an exception.
+		#
+		# == Example
+		#
+		#  client = RETS4R::Client.new(...)
+		#  # Make a new pre_request_block that calculates the RETS-UA-Authorization header.
+		#  client.set_pre_request_block do |rets, http, headers|
+		#    a1 = Digest::MD5.hexdigest([headers["User-Agent"], @password].join(":"))
+		#    if headers.has_key?("Cookie") then
+		#      cookie = headers["Cookie"].split(";").map(&:strip).select {|c| c =~ /rets-session-id/i}
+		#      cookie = cookie ? cookie.split("=").last : ""
+		#    else
+		#      cookie = ""
+		#    end
+		#
+		#    parts = [a1, "", cookie, headers["RETS-Version"]]
+		#    headers["RETS-UA-Authorization"] = "Digest " + Digest::MD5.hexdigest(parts.join(":"))
+		#  end
 		def set_pre_request_block(&block)
 			@pre_request_block = block
 		end
