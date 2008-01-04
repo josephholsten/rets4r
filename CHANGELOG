@@ -1,3 +1,14 @@
+0.8.3
+	Added example #set_pre_request_block. (François Beausoleil)
+	Allow a pre request block to be set for RETS4R::Client.  
+		This allows the caller to change the request in any meaningful way, such as adding a 
+		RETS-UA-Authorization header when appropriate. (François Beausoleil)
+	Better response handling of HTTP errors. Response codes > 300 other than 401 now raise an 
+		HTTPError exception that encapsulates the HTTPResponse object.
+		401 errors raise a LoginError exception. (Scott Patterson)
+	Added in RETS specification error messages to reference. (Scott Patterson)
+	New Rakefile.  Install the rake gem and do 'rake test' to run the tests. (François Beausoleil)
+	
 0.8.2
 	Added missing result parameter to Client#search's yield (Scott Patterson)
 	Added 1.7 to supported list and default version (François Beausoleil)
