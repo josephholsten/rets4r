@@ -1,3 +1,6 @@
+0.8.4
+	Fixed auth issue with authenticate headers with spaces after commas. (Ken Wiesner, Scott Patterson)
+	
 0.8.3
 	Added example #set_pre_request_block. (François Beausoleil)
 	Allow a pre request block to be set for RETS4R::Client.  

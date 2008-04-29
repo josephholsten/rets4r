@@ -21,9 +21,20 @@ module RETS4R
 			Auth.authenticate(response, @username, @password, '/my/rets/url', 'GET', Auth.request_id, @useragent)
 		end
 		
-		def test_parse_auth_header
+		# test without spacing
+		def test_parse_auth_header_without_spacing
 			header = 'Digest qop="auth",realm="'+ @realm +'",nonce="'+ @nonce +'",opaque="",stale="false",domain="\my\test\domain"'
-			
+			check_header(header)
+		end
+		
+		# test with spacing between each item
+		def test_parse_auth_header_with_spacing
+			header = 'Digest qop="auth", realm="'+ @realm +'", nonce="'+ @nonce +'", opaque="", stale="false", domain="\my\test\domain"'
+			check_header(header)
+		end
+		
+		# used to check the that the header was processed properly.
+		def check_header(header)
 			results = Auth.parse_header(header)
 			
 			assert_equal('auth', results['qop'])

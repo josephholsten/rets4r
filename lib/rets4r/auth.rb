@@ -45,7 +45,7 @@ module RETS4R
 		
 		def Auth.parse_header(header)
 			type = header[0, header.index(' ')]
-			args = header[header.index(' '), header.length].strip.split(',')
+			args = header[header.index(' '), header.length].strip.split(',').map {|x| x.strip}
 	
 			parts = {'type' => type}
 			
