@@ -496,73 +496,82 @@ module RETS4R
 		# for how to make use of this method.
 		#++
 		def request(url, data = {}, header = {}, method = @request_method, retry_auth = DEFAULT_RETRY)
-			response = ''
+			headers, response = nil
+			begin
+				response = ''
 			
-			@semaphore.lock
+				@semaphore.lock
 			
-			http = Net::HTTP.new(url.host, url.port)
+				http = Net::HTTP.new(url.host, url.port)
 			
-			if logger && logger.debug?
-				http.set_debug_output HTTPDebugLogger.new(logger)
-			end
+				if logger && logger.debug?
+					http.set_debug_output HTTPDebugLogger.new(logger)
+				end
 			
-			http.start do |http|
-				begin
-					uri = url.path
+				http.start do |http|
+					begin
+						uri = url.path
 					
-					if ! data.empty? && method == METHOD_GET
-						uri += "?#{create_query_string(data)}"
-					end
-
-					headers = @headers
-					headers.merge(header) unless header.empty?
-					
-					@pre_request_block.call(self, http, headers) if @pre_request_block
-					
-					logger.debug(headers.inspect) if logger
-					
-					@semaphore.unlock
-										
-					response = http.get(uri, headers)
-										
-					@semaphore.lock
-					
-					if response.code == '401'
-						# Authentication is required
-						raise AuthRequired
-					elsif response.code.to_i >= 300
-						# We have a non-successful response that we cannot handle
-						@semaphore.unlock if @semaphore.locked?
-						raise HTTPError.new(response)
-					else
-						cookies = []
-						if set_cookies = response.get_fields('set-cookie') then
-							set_cookies.each do |cookie|
-								cookies << cookie.split(";").first
-							end
+						if ! data.empty? && method == METHOD_GET
+							uri += "?#{create_query_string(data)}"
 						end
-						set_header('Cookie', cookies.join("; ")) unless cookies.empty?
-						set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID']
-					end
-				rescue AuthRequired
-					@nc += 1
 
-					if retry_auth > 0
-						retry_auth -= 1
-						set_header('Authorization', Auth.authenticate(response, @username, @password, url.path, method, @headers['RETS-Request-ID'], get_user_agent, @nc))
-						retry
-					else
-						@semaphore.unlock if @semaphore.locked?
-						raise LoginError.new(response.message)
-					end
-				end		
+						headers = @headers
+						headers.merge(header) unless header.empty?
+					
+						@pre_request_block.call(self, http, headers) if @pre_request_block
+					
+						logger.debug(headers.inspect) if logger
+					
+						@semaphore.unlock
+										
+						response = http.get(uri, headers)
+										
+						@semaphore.lock
+					
+						if response.code == '401'
+							# Authentication is required
+							raise AuthRequired
+						elsif response.code.to_i >= 300
+							# We have a non-successful response that we cannot handle
+							@semaphore.unlock if @semaphore.locked?
+							raise HTTPError.new(response)
+						else
+							cookies = []
+							if set_cookies = response.get_fields('set-cookie') then
+								set_cookies.each do |cookie|
+									cookies << cookie.split(";").first
+								end
+							end
+							set_header('Cookie', cookies.join("; ")) unless cookies.empty?
+							set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID']
+						end
+					rescue AuthRequired
+						@nc += 1
+
+						if retry_auth > 0
+							retry_auth -= 1
+							set_header('Authorization', Auth.authenticate(response, @username, @password, url.path, method, @headers['RETS-Request-ID'], get_user_agent, @nc))
+							retry
+						else
+							@semaphore.unlock if @semaphore.locked?
+							raise LoginError.new(response.message)
+						end
+					end		
 				
-				logger.debug(response.body) if logger
+					logger.debug(response.body) if logger
+				end
+			
+				@semaphore.unlock if @semaphore.locked?
+			
+				return response
+			
+			rescue
+				data = {"request" => headers, "body" => response.body}
+				data["response"] = response.respond_to?(:headers) ? response.headers : response
+				data = data.respond_to?(:to_yaml) ? data.to_yaml : data.inspect
+				raise RETSException, "#{$!.message}\nRequest/Response Details:\n#{data}"
 			end
-			
-			@semaphore.unlock if @semaphore.locked?
-			
-			return response
 		end
 		
 		# If an action URL is present in the URL capability list, it calls that action URL and returns the
