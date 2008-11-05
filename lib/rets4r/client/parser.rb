@@ -102,7 +102,7 @@ module RETS4R
 			
 			def parse_compact_line(data, delim = "\t")
 				begin
-					return data.to_s.strip.split(delim)
+					return data.to_s.split(delim)
 				rescue
 					raise "Error while parsing compact line: #{$!} with data: #{data}"
 				end
