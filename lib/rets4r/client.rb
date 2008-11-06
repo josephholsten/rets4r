@@ -30,9 +30,9 @@ module RETS4R
 		METHOD_HEAD = 'HEAD'
 		
 		DEFAULT_OUTPUT		   = OUTPUT_RUBY
-		DEFAULT_METHOD 		   = METHOD_GET
+		DEFAULT_METHOD 		   = METHOD_POST
 		DEFAULT_RETRY        = 2
-		DEFAULT_USER_AGENT 	 = 'RETS4R/0.8.2'
+		DEFAULT_USER_AGENT 	 = 'RETS4R/0.8.4'
 		DEFAULT_RETS_VERSION = '1.7'
 		SUPPORTED_RETS_VERSIONS = ['1.5', '1.7']
 		CAPABILITY_LIST   = ['Action', 'ChangePassword', 'GetObject', 'Login', 'LoginComplete', 'Logout', 'Search', 'GetMetadata', 'Update']

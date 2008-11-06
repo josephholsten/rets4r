@@ -1,5 +1,8 @@
 0.8.4
 	Fixed auth issue with authenticate headers with spaces after commas. (Ken Wiesner, Scott Patterson)
+	When an exception is raised in the authentication parsing code, complain by raising a new exception, but also report anything of interest at the same time: request, response, response's body. (François Beausoleil)
+	Fixed Client#request to actually respect the specified request method instead of always using GET requests. (Scott Patterson)
+	Set default request method to POST since some RETS servers seem to have trouble with GET requests. (Scott Patterson)
 	
 0.8.3
 	Added example #set_pre_request_block. (François Beausoleil)
