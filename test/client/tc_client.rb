@@ -279,7 +279,41 @@ module RETS4R
 			assert_equal('multipart/parallel', results['content-type'])
 			assert_equal('utf-8', results['charset'])
 		end
-						
+	
+		def test_performs_get_request
+			assert_nothing_raised() {@rets.request_method = 'GET'}	
+			assert_equal('GET', @rets.request_method)
+			
+			http     = mock('http')
+			response = mock('response')
+			response.stubs(:to_hash).returns({})
+			response.stubs(:code).returns('500')
+			response.stubs(:message).returns('Move along, nothing to see here.')
+			
+			http.expects(:get).with('', {'RETS-Session-ID' => '0', 'User-Agent' => 'RETS4R/0.8.2', 'RETS-Version' => 'RETS/1.7', 'Accept' => '*/*'}).at_least_once.returns(response)
+			http.expects(:post).never
+			Net::HTTP.any_instance.expects(:start).at_least_once.yields(http)
+			
+			assert_raises(RETS4R::Client::HTTPError) {@rets.login('user', 'pass')}
+		end
+		
+		def test_performs_post_request
+			assert_nothing_raised() {@rets.request_method = 'POST'}	
+			assert_equal('POST', @rets.request_method)
+			
+			http     = mock('http')
+			response = mock('response')
+			response.stubs(:to_hash).returns({})
+			response.stubs(:code).returns('500')
+			response.stubs(:message).returns('Move along, nothing to see here.')
+			
+			http.expects(:post).with('', '', {'RETS-Session-ID' => '0', 'User-Agent' => 'RETS4R/0.8.2', 'RETS-Version' => 'RETS/1.7', 'Accept' => '*/*'}).at_least_once.returns(response)
+			http.expects(:get).never
+			Net::HTTP.any_instance.expects(:start).at_least_once.yields(http)
+			
+			assert_raises(RETS4R::Client::HTTPError) {@rets.login('user', 'pass')}
+		end
+		
 		class MockParser
 		end
 	end

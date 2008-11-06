@@ -8,8 +8,6 @@
 # version.
 #
 #	TODO
-#		1.0 Support (Adding this support should be fairly easy)
-#		2.0 Support (Adding this support will be very difficult since it is a completely different methodology)
 #		Case-insensitive header
 
 require 'digest/md5'
@@ -183,7 +181,7 @@ module RETS4R
 				@parser_class = klass
 			else
 				message = "The parser class '#{klass}' is not supported!"
-				logger.debug(message) if logger
+				debug(message)
 				
 				raise Unsupported.new(message)
 			end
@@ -200,7 +198,7 @@ module RETS4R
 				@headers[name] = value
 			end
 			
-			logger.debug("Set header '#{name}' to '#{value}'") if logger
+			debug("Set header '#{name}' to '#{value}'")
 		end
 		
 		def get_header(name)
@@ -284,7 +282,7 @@ module RETS4R
 					@urls[capability] = base
 				end
 				
-				logger.debug("Capability URL List: #{@urls.inspect}") if logger
+				debug("Capability URL List: #{@urls.inspect}")
 			else
 				raise LoginError.new(response.message + "(#{results.reply_code}: #{results.reply_text})")
 			end
@@ -376,7 +374,7 @@ module RETS4R
 					(raw_header, raw_data) = part.split("\r\n\r\n")
 					
 					next unless raw_data
-					
+															
 					data_header = process_header(raw_header)
 					data_object = DataObject.new(data_header, raw_data)
 					
@@ -497,9 +495,7 @@ module RETS4R
 		#++
 		def request(url, data = {}, header = {}, method = @request_method, retry_auth = DEFAULT_RETRY)
 			headers, response = nil
-			begin
-				response = ''
-			
+			begin			
 				@semaphore.lock
 			
 				http = Net::HTTP.new(url.host, url.port)
@@ -521,12 +517,16 @@ module RETS4R
 					
 						@pre_request_block.call(self, http, headers) if @pre_request_block
 					
-						logger.debug(headers.inspect) if logger
+						debug("Request headers: #{headers.inspect}")
 					
 						@semaphore.unlock
 										
-						response = http.get(uri, headers)
-										
+						post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
+						response  = method == METHOD_POST ? http.post(uri, post_data, headers) : 
+						                                    http.get(uri, headers)
+											
+						debug("Response headers: #{response.to_hash.inspect}")
+
 						@semaphore.lock
 					
 						if response.code == '401'
@@ -559,18 +559,18 @@ module RETS4R
 						end
 					end		
 				
-					logger.debug(response.body) if logger
+					debug(response.body)
 				end
 			
 				@semaphore.unlock if @semaphore.locked?
 			
 				return response
 			
-			rescue
-				data = {"request" => headers, "body" => response.body}
-				data["response"] = response.respond_to?(:headers) ? response.headers : response
-				data = data.respond_to?(:to_yaml) ? data.to_yaml : data.inspect
-				raise RETSException, "#{$!.message}\nRequest/Response Details:\n#{data}"
+			#rescue
+				#data = {"request" => headers, "body" => response.body}
+				#data["response"] = response.respond_to?(:headers) ? response.headers : response
+				#data = data.respond_to?(:to_yaml) ? data.to_yaml : data.inspect
+				#raise RETSException, "#{$!.message}\nRequest/Response Details:\n#{data}"
 			end
 		end
 		
@@ -584,6 +584,11 @@ module RETS4R
 			rescue
 				raise RETSException.new("Unable to follow action URL: '#{$!}'.")
 			end
+		end
+		
+		# Shorthand for sending debug messages to the logger if a logger is provided
+		def debug(message)
+			logger.debug(message) if logger
 		end
 		
 		# Provides a proxy class to allow for net/http to log its debug to the logger.
