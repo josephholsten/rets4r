@@ -104,6 +104,25 @@ module RETS4R
 				assert_equal('20400', transaction.reply_code)
 				assert_equal('Invalid Invalidness.', transaction.reply_text)
 			end
+			
+			def test_parse_compact_line
+				results = @parser.parse_compact_line("	1	2	3	")
+
+				assert_equal 3, results.size
+				assert_equal '1', results[0]
+				assert_equal '2', results[1]
+				assert_equal '3', results[2]
+			end
+			
+			def test_parse_data_should_ignore_empty_header_fields
+				header = ["", "1", "2", "3"]
+				data   = "		1	2	3	"
+				
+				results = @parser.parse_data(data, header)
+				
+				assert_nil results[""]
+				assert_equal 3, results.size
+			end
 		end
 	end
 end

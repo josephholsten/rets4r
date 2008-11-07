@@ -102,7 +102,9 @@ module RETS4R
 			
 			def parse_compact_line(data, delim = "\t")
 				begin
-					return data.to_s.split(delim)
+					# We need to remove the beginning and ending delimiters prior to splitting
+					string_data = data.to_s
+					return string_data[1, string_data.length - 2].split(delim, -1)
 				rescue
 					raise "Error while parsing compact line: #{$!} with data: #{data}"
 				end
@@ -114,7 +116,11 @@ module RETS4R
 				parsed_data = parse_compact_line(data, @transaction.ascii_delimiter)
 				
 				header.length.times do |pos|
-					results[header[pos]] = parsed_data[pos]
+					# The removal of delimiters in #parse_compact_line prevents blank fields in newer
+					# version of Ruby, but on older versions (specifically 1.8.5 from 2006) a blank
+					# field would still manage to sneak in, so we now explicitly prevent them from going
+					# to the results.
+					results[header[pos]] = parsed_data[pos] unless header[pos].nil? || header[pos].strip == ""
 				end
 				
 				results
