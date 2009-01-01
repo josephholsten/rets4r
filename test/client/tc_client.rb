@@ -92,10 +92,14 @@ module RETS4R
 			assert_equal 140, results[1].data.size, "Second object isn't 140 bytes in length"
 		end
 
-		def test_returns_multipart_parallel_objects_in_a_single_array_boundary_with_quotes
+		def test_returns_multipart_parallel_objects_in_a_single_array_boundary_with_double_quotes
 			test_returns_multipart_parallel_objects_in_a_single_array('"1231"')
 		end
-		
+
+		def test_returns_multipart_parallel_objects_in_a_single_array_boundary_with_double_quotes
+			test_returns_multipart_parallel_objects_in_a_single_array("'1231'")
+		end
+				
 		def test_returns_single_entity_object_in_a_single_element_array
 			@response.expects(:[]).with('content-type').at_least_once.returns("image/jpeg")
 			@response.expects(:[]).with('Transfer-Encoding').at_least_once.returns("")
