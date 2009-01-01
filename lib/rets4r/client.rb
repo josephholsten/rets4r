@@ -366,8 +366,11 @@ module RETS4R
 			
 			if response['content-type'].include?('multipart/parallel')
 				content_type = process_content_type(response['content-type'])
-
-				parts = response.body.split("\r\n--#{content_type['boundary']}")
+				
+				# Handle quotes in the boundary field.
+				boundary     = content_type['boundary'] =~ /^("|').*("|')$/ ? content_type['boundary'][1..(content_type['boundary'].length - 2)] : content_type['boundary']
+								
+				parts = response.body.split("\r\n--#{boundary}")
 				parts.shift # Get rid of the initial boundary
 				
 				parts.each do |part|

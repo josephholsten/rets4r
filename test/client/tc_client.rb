@@ -79,8 +79,8 @@ module RETS4R
 			@rets.stubs(:request).returns(@response = mock("response"))
 		end
 
-		def test_returns_multipart_parallel_objects_in_a_single_array
-			@response.expects(:[]).with('content-type').at_least_once.returns("multipart/parallel; boundary=1231")
+		def test_returns_multipart_parallel_objects_in_a_single_array(boundary = "1231")
+			@response.expects(:[]).with('content-type').at_least_once.returns("multipart/parallel; boundary=#{boundary}")
 			@response.expects(:body).returns("\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 1\r\nContent-Type: image/jpeg\r\n\r\n" + "\000"*120 + "\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 2\r\nContent-Type: image/gif\r\n\r\n" + "\000"*140 + "\r\n--1231--")
 			results = @rets.get_object("Property", "Photo", "392103:*")
 			assert_equal 2, results.size, "Client parsed two objects out of the request"
@@ -92,6 +92,10 @@ module RETS4R
 			assert_equal 140, results[1].data.size, "Second object isn't 140 bytes in length"
 		end
 
+		def test_returns_multipart_parallel_objects_in_a_single_array_boundary_with_quotes
+			test_returns_multipart_parallel_objects_in_a_single_array('"1231"')
+		end
+		
 		def test_returns_single_entity_object_in_a_single_element_array
 			@response.expects(:[]).with('content-type').at_least_once.returns("image/jpeg")
 			@response.expects(:[]).with('Transfer-Encoding').at_least_once.returns("")
