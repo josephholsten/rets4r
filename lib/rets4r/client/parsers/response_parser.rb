@@ -12,7 +12,7 @@ module RETS4R
             parsed = {}
             first_child.text.each do |line|
               (key, value) = line.strip.split('=')
-              parsed[key] = value
+              parsed[key.strip] = value.strip
             end
           else
             raise 'Response was not a proper RETS XML doc!'
