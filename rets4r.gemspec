@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rets4r}
-  s.version = "1.1.1"
+  s.version = "1.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["John Wulff"]
-  s.date = %q{2009-03-24}
+  s.date = %q{2009-04-06}
   s.email = %q{john@johnwulff.com}
   s.extra_rdoc_files = ["README.rdoc", "LICENSE"]
   s.files = ["README.rdoc", "VERSION.yml", "lib/rets4r", "lib/rets4r/auth.rb", "lib/rets4r/client", "lib/rets4r/client/data.rb", "lib/rets4r/client/dataobject.rb", "lib/rets4r/client/metadata.rb", "lib/rets4r/client/metadataindex.rb", "lib/rets4r/client/parser.rb", "lib/rets4r/client/parsers", "lib/rets4r/client/parsers/compact.rb", "lib/rets4r/client/parsers/metadata.rb", "lib/rets4r/client/parsers/response_parser.rb", "lib/rets4r/client/transaction.rb", "lib/rets4r/client.rb", "lib/rets4r.rb", "spec/rets4r_spec.rb", "spec/spec_helper.rb", "LICENSE"]
