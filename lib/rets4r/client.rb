@@ -32,11 +32,22 @@ module RETS4R
     
     DEFAULT_METHOD          = METHOD_GET
     DEFAULT_RETRY           = 2
-    #DEFAULT_USER_AGENT      = 'RETS4R/0.8.2'
-    DEFAULT_USER_AGENT      = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b5) Gecko/2008050509 Firefox/3.0b5'
+    #DEFAULT_USER_AGENT      = 'RETS4R/0.8.2' # FIXME We cannot get anything from mlsni when we use this.
+    DEFAULT_USER_AGENT      = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b5) ' +
+															'Gecko/2008050509 Firefox/3.0b5'
     DEFAULT_RETS_VERSION    = '1.7'
     SUPPORTED_RETS_VERSIONS = ['1.5', '1.7']
-    CAPABILITY_LIST   = ['Action', 'ChangePassword', 'GetObject', 'Login', 'LoginComplete', 'Logout', 'Search', 'GetMetadata', 'Update']
+    CAPABILITY_LIST   = [
+			'Action', 
+			'ChangePassword', 
+			'GetObject', 
+			'Login', 
+			'LoginComplete', 
+			'Logout', 
+			'Search', 
+			'GetMetadata', 
+			'Update'
+		]
     
     # These are the response messages as defined in the RETS 1.5e2 and 1.7d6 specifications.
     # Provided for convenience and are used by the HTTPError class to provide more useful
@@ -44,21 +55,31 @@ module RETS4R
     RETS_HTTP_MESSAGES = {
       '200' => 'Operation successful.',
       '400' => 'The request could not be understood by the server due to malformed syntax.',
-      '401' => 'Either the header did not contain an acceptable Authorization or the username/password was invalid. The server response MUST include a WWW-Authenticate header field.',
+      '401' => 'Either the header did not contain an acceptable Authorization or the ' +
+							 'username/password was invalid. The server response MUST include a ' +
+							 'WWW-Authenticate header field.',
       '402' => 'The requested transaction requires a payment which could not be authorized.',
       '403' => 'The server understood the request, but is refusing to fulfill it.',
       '404' => 'The server has not found anything matching the Request-URI.',
-      '405' => 'The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.',
-      '406' => 'The resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.',
+      '405' => 'The method specified in the Request-Line is not allowed for the resource ' +
+							 'identified by the Request-URI.',
+      '406' => 'The resource identified by the request is only capable of generating response ' +
+							 'entities which have content characteristics not acceptable according to the accept ' +
+							 'headers sent in the request.',
       '408' => 'The client did not produce a request within the time that the server was prepared to wait.',
       '411' => 'The server refuses to accept the request without a defined Content-Length.',
       '412' => 'Transaction not permitted at this point in the session.',
-      '413' => 'The server is refusing to process a request because the request entity is larger than the server is willing or able to process.',
-      '414' => 'The server is refusing to service the request because the Request-URI is longer than the server is willing to interpret. This error usually only occurs for a GET method.',
-      '500' => 'The server encountered an unexpected condition which prevented it from fulfilling the request.',
+      '413' => 'The server is refusing to process a request because the request entity is larger than ' +
+							 'the server is willing or able to process.',
+      '414' => 'The server is refusing to service the request because the Request-URI is longer than ' +
+							 'the server is willing to interpret. This error usually only occurs for a GET method.',
+      '500' => 'The server encountered an unexpected condition which prevented it from fulfilling ' +
+							 'the request.',
       '501' => 'The server does not support the functionality required to fulfill the request.',
-      '503' => 'The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.',
-      '505' => 'The server does not support, or refuses to support, the HTTP protocol version that was used in the request message.',
+      '503' => 'The server is currently unable to handle the request due to a temporary overloading ' +
+							 'or maintenance of the server.',
+      '505' => 'The server does not support, or refuses to support, the HTTP protocol version that ' +
+							 'was used in the request message.',
     }
   
     attr_accessor :mimemap, :logger
@@ -70,14 +91,16 @@ module RETS4R
     # determines the type of data returned by the various RETS transaction methods.
     def initialize(url, format = COMPACT_FORMAT)
       @format   = format
-      @urls     = { 'Login' => URI.parse(url) }
+      @urls     = { 
+				'Login' => URI.parse(url) 
+			}
       @nc       = 0
       @headers  = {
         'User-Agent'   => DEFAULT_USER_AGENT, 
         'Accept'       => '*/*', 
         'RETS-Version' => "RETS/#{DEFAULT_RETS_VERSION}"#,
-#        'RETS-Session-ID' => '0'
-        }
+				#'RETS-Session-ID' => '0'
+      }
       @request_method = DEFAULT_METHOD
       @semaphore      = Mutex.new
 
@@ -86,7 +109,7 @@ module RETS4R
       self.mimemap    = {
         'image/jpeg'  => 'jpg',
         'image/gif'   => 'gif'
-        }
+      }
         
       if block_given?
         yield self
@@ -454,8 +477,7 @@ module RETS4R
     
     # Given a hash, it returns a URL encoded query string.
     def create_query_string(hash)
-      #parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}"}
-      parts = hash.map {|key,value| "#{key}=#{value}"}
+      parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}"}
       return parts.join('&')
     end
     
@@ -521,13 +543,15 @@ module RETS4R
 
           if retry_auth > 0
             retry_auth -= 1
- #           if response['WWW-Authenticate'].include?('Basic')
- #             # Basic Authentication
- #             @headers['Authorization'] = basic_encode(@username, @password)
- #           else
-              # Digest Authentication
-              set_header('Authorization', Auth.authenticate(response, @username, @password, url.path, method, @headers['RETS-Request-ID'], get_user_agent, @nc))
-  #          end
+					  auth = Auth.authenticate(response, 
+																		 @username, 
+																		 @password, 
+																		 url.path, 
+																		 method, 
+																		 @headers['RETS-Request-ID'], 
+																	 	 get_user_agent, 
+																		 @nc)
+            set_header('Authorization', auth) 
             retry
           else
             @semaphore.unlock if @semaphore.locked?
