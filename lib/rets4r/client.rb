@@ -32,7 +32,7 @@ module RETS4R
     
     DEFAULT_METHOD          = METHOD_GET
     DEFAULT_RETRY           = 2
-    #DEFAULT_USER_AGENT      = 'RETS4R/0.8.2' # FIXME We cannot get anything from mlsni when we use this.
+    #DEFAULT_USER_AGENT      = 'RETS4R/0.8.2' # FIXME
     DEFAULT_USER_AGENT      = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b5) ' +
 															'Gecko/2008050509 Firefox/3.0b5'
     DEFAULT_RETS_VERSION    = '1.7'
