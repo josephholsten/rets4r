@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rets4r}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["bgetting"]
@@ -19,9 +19,40 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "examples/client_get_object.rb",
+     "examples/client_login.rb",
+     "examples/client_metadata.rb",
+     "examples/client_search.rb",
+     "examples/metadata.xml",
      "lib/rets4r.rb",
+     "lib/rets4r/auth.rb",
+     "lib/rets4r/client.rb",
+     "lib/rets4r/client/data.rb",
+     "lib/rets4r/client/dataobject.rb",
+     "lib/rets4r/client/metadata.rb",
+     "lib/rets4r/client/metadataindex.rb",
+     "lib/rets4r/client/parser.rb",
+     "lib/rets4r/client/parser/rexml.rb",
+     "lib/rets4r/client/parser/xmlparser.rb",
+     "lib/rets4r/client/transaction.rb",
+     "rets4r.gemspec",
+     "test/client/data/1.5/error.xml",
+     "test/client/data/1.5/invalid_compact.xml",
+     "test/client/data/1.5/login.xml",
+     "test/client/data/1.5/metadata.xml",
+     "test/client/data/1.5/search_compact.xml",
+     "test/client/data/1.5/search_unescaped_compact.xml",
+     "test/client/parser/tc_rexml.rb",
+     "test/client/parser/tc_xmlparser.rb",
+     "test/client/tc_auth.rb",
+     "test/client/tc_client.rb",
+     "test/client/tc_metadataindex.rb",
+     "test/client/test_parser.rb",
+     "test/client/ts_all.rb",
      "test/rets4r_test.rb",
-     "test/test_helper.rb"
+     "test/test_helper.rb",
+     "test/ts_all.rb",
+     "test/ts_client.rb"
   ]
   s.homepage = %q{http://github.com/bgetting/rets4r}
   s.rdoc_options = ["--charset=UTF-8"]
