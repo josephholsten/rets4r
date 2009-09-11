@@ -7,7 +7,8 @@ module RETS4R
     class CompactDataParser
       def parse_results(doc)
 
-        delimiter = doc.get_elements('/RETS/DELIMITER')[0].attributes['value'].to_i.chr
+        delimiter = doc.get_elements('/RETS/DELIMITER')[0] &&
+                    doc.get_elements('/RETS/DELIMITER')[0].attributes['value'].to_i.chr
         columns   = doc.get_elements('/RETS/COLUMNS')[0]
         rows      = doc.get_elements('/RETS/DATA')
 
@@ -16,7 +17,7 @@ module RETS4R
 
       def parse_data(column_element, row_elements, delimiter = "\t")
 
-        column_names = column_element.text.split(delimiter)
+        column_names = column_element.to_s.split(delimiter)
 
         result = []
 
