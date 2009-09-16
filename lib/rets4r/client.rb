@@ -327,12 +327,12 @@ module RETS4R
       response = request(@urls['GetObject'], data, header)
       results = block_given? ? 0 : []
 
-      if response['content-type'].include?('text/xml')
+      if response['content-type'] && response['content-type'].include?('text/xml')
         # This probably means that there was an error.
         # Response parser will likely raise an exception.
         rr = @response_parser.parse_object_response(response.body)
         return rr
-      elsif response['content-type'].include?('multipart/parallel')
+      elsif response['content-type'] && response['content-type'].include?('multipart/parallel')
         content_type = process_content_type(response['content-type'])
 
 #        TODO: log this
