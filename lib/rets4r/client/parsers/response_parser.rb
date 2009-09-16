@@ -91,7 +91,7 @@ module RETS4R
 
       def get_parser_by_name(name)
         case name
-          when 'COMPACT'
+          when 'COMPACT', 'COMPACT-DECODED'
             type = RETS4R::Client::CompactDataParser
           else
             raise "Invalid format #{name}"
