@@ -8,6 +8,9 @@ require 'rake/contrib/rubyforgepublisher'
 require 'fileutils'
 include FileUtils
 
+# impart all tasks in lib/tasks/
+Dir['lib/tasks/*.rake'].each { |task| import task }
+
 task :default => :test
 
 desc "Run unit tests"
