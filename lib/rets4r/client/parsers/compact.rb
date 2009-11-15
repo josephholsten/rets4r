@@ -29,7 +29,7 @@ module RETS4R
             row_result[col] = data_row[x]
           end
 
-          row_result.reject! { |k,v| k.blank? }
+          row_result.reject! { |k,v| k.nil? || k.empty? }
 
           result << row_result
         end

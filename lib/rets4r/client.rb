@@ -313,17 +313,20 @@ module RETS4R
       elsif response['content-type'].include?('multipart/parallel')
         content_type = process_content_type(response['content-type'])
 
-        puts "SPLIT ON #{content_type['boundary']}"
+#        TODO: log this
+#        puts "SPLIT ON #{content_type['boundary']}"
         parts = response.body.split("\r\n--#{content_type['boundary']}")
         
         parts.shift # Get rid of the initial boundary
 
-        puts "GOT PARTS #{parts.length}"
+#        TODO: log this
+#        puts "GOT PARTS #{parts.length}"
 
         parts.each do |part|
           (raw_header, raw_data) = part.split("\r\n\r\n")
           
-          puts raw_data.nil?
+#          TODO: log this
+#          puts raw_data.nil?
           next unless raw_data
           
           data_header = process_header(raw_header)

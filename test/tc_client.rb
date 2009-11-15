@@ -78,23 +78,25 @@ module RETS4R
 			@rets.stubs(:request).returns(@response = mock("response"))
 		end
 
-#		def test_returns_multipart_parallel_objects_in_a_single_array(boundary = "1231")
-#			@response.expects(:[]).with('content-type').at_least_once.returns("multipart/parallel; boundary=#{boundary}")
-#			@response.expects(:body).returns("\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 1\r\nContent-Type: image/jpeg\r\n\r\n" + "\000"*120 + "\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 2\r\nContent-Type: image/gif\r\n\r\n" + "\000"*140 + "\r\n--1231--")
-#			results = @rets.get_object("Property", "Photo", "392103:*")
-#			assert_equal 2, results.size, "Client parsed two objects out of the request"
-#			assert_kind_of RETS4R::Client::DataObject, results[0], "First result isn't a DataObject"
-#			assert_kind_of RETS4R::Client::DataObject, results[1], "Second result isn't a DataObject"
-#			assert_equal "image/jpeg", results[0].type["Content-Type"], "First object isn't an image/jpeg"
-#			assert_equal 120, results[0].data.size, "First object isn't 120 bytes in length"
-#			assert_equal "image/gif", results[1].type["Content-Type"], "Second object isn't an image/gif"
-#			assert_equal 140, results[1].data.size, "Second object isn't 140 bytes in length"
-#		end
+		def test_returns_multipart_parallel_objects_in_a_single_array(boundary = "1231")
+			@response.expects(:[]).with('content-type').at_least_once.returns("multipart/parallel; boundary=#{boundary}")
+			@response.expects(:body).returns("\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 1\r\nContent-Type: image/jpeg\r\n\r\n" + "\000"*120 + "\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 2\r\nContent-Type: image/gif\r\n\r\n" + "\000"*140 + "\r\n--1231--")
+			results = @rets.get_object("Property", "Photo", "392103:*")
+			assert_equal 2, results.size, "Client parsed two objects out of the request"
+			assert_kind_of RETS4R::Client::DataObject, results[0], "First result isn't a DataObject"
+			assert_kind_of RETS4R::Client::DataObject, results[1], "Second result isn't a DataObject"
+			assert_equal "image/jpeg", results[0].type["Content-Type"], "First object isn't an image/jpeg"
+			assert_equal 120, results[0].data.size, "First object isn't 120 bytes in length"
+			assert_equal "image/gif", results[1].type["Content-Type"], "Second object isn't an image/gif"
+			assert_equal 140, results[1].data.size, "Second object isn't 140 bytes in length"
+		end
 
+#       FIXME
 #		def test_returns_multipart_parallel_objects_in_a_single_array_boundary_with_double_quotes
 #			test_returns_multipart_parallel_objects_in_a_single_array('"1231"')
 #		end
 
+#       FIXME
 #		def test_returns_multipart_parallel_objects_in_a_single_array_boundary_with_double_quotes
 #			test_returns_multipart_parallel_objects_in_a_single_array("'1231'")
 #		end

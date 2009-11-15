@@ -12,6 +12,7 @@ module RETS4R
 	end
 	
 =begin
+#       FIXME
 		def setup
 			File.open('tests/rets/data/metadata.marshal') do |file|
 				@trans = Marshal.load(file)
@@ -20,6 +21,7 @@ module RETS4R
 			@index = MetadataIndex.new(@trans.data)
 		end
 		
+#       FIXME
 		# Ensure that our lookup and search functions, although different, will return the same data
 		# for the same criteria.
 		def test_lookup_search
@@ -33,4 +35,4 @@ module RETS4R
 		end
 =end
 	end
-end 
+end
