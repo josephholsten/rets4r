@@ -1,3 +1,43 @@
+1.1.2
+	ResponseParser#parse_key_value: Accept CARETS response (John Wulff)
+
+1.1.1
+	ResponseParser#parse_key_value: Handle nils (John Wulff)
+
+1.1.0
+	Strip key value pairs for CAPABILITY_LIST endpoints (John Wulff)
+	Add lib/rets4r to default load path (John Wulff)
+
+1.0.0
+	See changes in 9f7ff731250abc1f73b21cb01d3a6fc3a6617e73 (John Wulff)
+
+	Parser#parse_compact_line: simplify split.
+	Parser#parse_data: remove legacy support.
+	Auth::authenticate: handle missing www-authenticate header.
+	Auth::parse_header: strip keys, values.
+	Client#initialize: method signature changed, removed options, added format.
+	Client#set_parser_class, Client#get_parser_class,
+	  Client#parser_class, Client#parser_class=, Client#set_output,
+	  Client#get_output, Client#output, Client#output=: removed, callers changed.
+	Lay groundwork for non-compact format requests
+	Client::DEFAULT_METHOD: changed to GET
+	Client::DEFAULT_USER_AGENT: changed to Firefox
+	Client#login: handle absolute uris 
+	Client#parse: Removed. Changed callers to access parser directly.
+	Client#get_metadata: method signature changed, format removed. Use format instance variable.
+	Client#download_metadata: added
+	Client#get_object: handle text/xml responses
+!!!	  Client#get_object: remove quote support from multipart boundary handling
+	Client#count: added
+	Client#basic_encode: added
+!!!	Client#create_query_string: Remove escaping on request query keys, values 
+	Client#debug: removed, all calls inlined.
+	Client#RETSTransactionException: added
+
+
+	client/parsers/
+
+
 0.8.5
 	Parser#parse_compact_line now once again ignores beginning and ending delimiters. (Scott Patterson)
 	Parser#parse_data now ignores header fields that are nil or blank when stripped. (Scott Patterson)

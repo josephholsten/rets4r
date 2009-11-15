@@ -4,8 +4,12 @@ module RETS4R
 	class Auth
 		# This is the primary method that would normally be used, and while it 
 		def Auth.authenticate(response, username, password, uri, method, requestId, useragent, nc = 0)
+			if response['www-authenticate'].nil? || response['www-authenticate'].empty?
+			  raise "Missing required header 'www-authenticate'. Got: #{response}"
+			end
+
 			authHeader = Auth.parse_header(response['www-authenticate'])
-					
+
 			cnonce = cnonce(useragent, password, requestId, authHeader['nonce'])
 			
 			authHash = calculate_digest(username, password, authHeader['realm'], authHeader['nonce'], method, uri, authHeader['qop'], cnonce, nc)
@@ -45,14 +49,14 @@ module RETS4R
 		
 		def Auth.parse_header(header)
 			type = header[0, header.index(' ')]
-			args = header[header.index(' '), header.length].strip.split(',').map {|x| x.strip}
+			args = header[header.index(' '), header.length].strip.split(',')
 	
 			parts = {'type' => type}
 			
 			args.each do |arg|
 				name, value = arg.split('=')
 				
-				parts[name.downcase] = value.tr('"', '')
+				parts[name.downcase.strip] = value.tr('"', '').strip
 			end
 			
 			return parts
