@@ -29,23 +29,23 @@ client.logger = logger
 login_result = client.login(username, password)
 
 if login_result.success?
-	puts "We successfully logged into the RETS server!"
-	
-	options = {'Limit' => 5}
-	
-	client.search(rets_resource, rets_class, rets_query, options) do |result|
-		result.data.each do |row|
-			puts row.inspect
-			puts
-		end
-	end
-	
-	client.logout
-	
-	puts "We just logged out of the server."
+    puts "We successfully logged into the RETS server!"
+
+    options = {'Limit' => 5}
+
+    client.search(rets_resource, rets_class, rets_query, options) do |result|
+        result.data.each do |row|
+            puts row.inspect
+            puts
+        end
+    end
+
+    client.logout
+
+    puts "We just logged out of the server."
 else
-	puts "We were unable to log into the RETS server."
-	puts "Please check that you have set the login variables correctly."
+    puts "We were unable to log into the RETS server."
+    puts "Please check that you have set the login variables correctly."
 end
 
 logger.close

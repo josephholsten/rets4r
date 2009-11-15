@@ -6,11 +6,11 @@ module RETS4R
   class Client
     class MetadataParser
 
-      TAGS = [ 'METADATA-RESOURCE', 
-               'METADATA-CLASS', 
-               'METADATA-TABLE', 
-               'METADATA-OBJECT', 
-               'METADATA-LOOKUP', 
+      TAGS = [ 'METADATA-RESOURCE',
+               'METADATA-CLASS',
+               'METADATA-TABLE',
+               'METADATA-OBJECT',
+               'METADATA-LOOKUP',
                'METADATA-LOOKUP_TYPE' ]
 
       def initialize()
@@ -28,7 +28,7 @@ module RETS4R
         rets_resources = {}
 
         doc.get_elements('/RETS/*').each do |elem|
-          
+
           next unless TAGS.include?(elem.name)
 
           columns   = elem.get_elements('COLUMNS')[0]
@@ -48,7 +48,7 @@ module RETS4R
             when 'METADATA-CLASS'
               data.each do |class_info|
                 class_name = class_info.delete('ClassName')
-                rets_resources[resource_id][:classes] ||= {} 
+                rets_resources[resource_id][:classes] ||= {}
                 rets_resources[resource_id][:classes][class_name] = class_info
               end
 
@@ -56,21 +56,21 @@ module RETS4R
               class_name = elem.attributes['Class']
               data.each do |table_info|
                 system_name = table_info.delete('SystemName')
-                rets_resources[resource_id][:classes][class_name][:tables] ||= {} 
+                rets_resources[resource_id][:classes][class_name][:tables] ||= {}
                 rets_resources[resource_id][:classes][class_name][:tables][system_name] = table_info
               end
-            
+
             when 'METADATA-OBJECT'
               data.each do |object_info|
                 object_type = object_info.delete('ObjectType')
-                rets_resources[resource_id][:objects] ||= {} 
+                rets_resources[resource_id][:objects] ||= {}
                 rets_resources[resource_id][:objects][object_type] = object_info
               end
 
             when 'METADATA-LOOKUP'
               data.each do |lookup_info|
                 lookup_name = lookup_info.delete('LookupName')
-                rets_resources[resource_id][:lookups] ||= {} 
+                rets_resources[resource_id][:lookups] ||= {}
                 rets_resources[resource_id][:lookups][lookup_name] = lookup_info
               end
 

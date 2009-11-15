@@ -29,7 +29,7 @@ module RETS4R
     METHOD_GET  = 'GET'
     METHOD_POST = 'POST'
     METHOD_HEAD = 'HEAD'
-    
+
     DEFAULT_METHOD          = METHOD_GET
     DEFAULT_RETRY           = 2
     #DEFAULT_USER_AGENT      = 'RETS4R/0.8.2'
@@ -37,7 +37,7 @@ module RETS4R
     DEFAULT_RETS_VERSION    = '1.7'
     SUPPORTED_RETS_VERSIONS = ['1.5', '1.7']
     CAPABILITY_LIST   = ['Action', 'ChangePassword', 'GetObject', 'Login', 'LoginComplete', 'Logout', 'Search', 'GetMetadata', 'Update']
-    
+
     # These are the response messages as defined in the RETS 1.5e2 and 1.7d6 specifications.
     # Provided for convenience and are used by the HTTPError class to provide more useful
     # messages.
@@ -60,12 +60,12 @@ module RETS4R
       '503' => 'The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.',
       '505' => 'The server does not support, or refuses to support, the HTTP protocol version that was used in the request message.',
     }
-  
+
     attr_accessor :mimemap, :logger
     attr_reader   :format
-    
+
     # Constructor
-    # 
+    #
     # Requires the URL to the RETS server and takes an optional output format. The output format
     # determines the type of data returned by the various RETS transaction methods.
     def initialize(url, format = COMPACT_FORMAT)
@@ -73,8 +73,8 @@ module RETS4R
       @urls     = { 'Login' => URI.parse(url) }
       @nc       = 0
       @headers  = {
-        'User-Agent'   => DEFAULT_USER_AGENT, 
-        'Accept'       => '*/*', 
+        'User-Agent'   => DEFAULT_USER_AGENT,
+        'Accept'       => '*/*',
         'RETS-Version' => "RETS/#{DEFAULT_RETS_VERSION}",
         'RETS-Session-ID' => '0'
         }
@@ -82,17 +82,17 @@ module RETS4R
       @semaphore      = Mutex.new
 
       @response_parser = RETS4R::Client::ResponseParser.new
-      
+
       self.mimemap    = {
         'image/jpeg'  => 'jpg',
         'image/gif'   => 'gif'
         }
-        
+
       if block_given?
         yield self
       end
     end
-    
+
     # Assigns a block that will be called just before the request is sent.
     # This block must accept three parameters:
     # * self
@@ -121,35 +121,35 @@ module RETS4R
     def set_pre_request_block(&block)
       @pre_request_block = block
     end
-    
+
     # We only allow external read access to URLs because they are internally set based on the
     # results of various queries.
     def urls
       @urls
     end
-          
+
     def set_header(name, value)
       if value.nil? then
         @headers.delete(name)
       else
         @headers[name] = value
       end
-      
+
       logger.debug("Set header '#{name}' to '#{value}'") if logger
     end
-    
+
     def get_header(name)
       @headers[name]
     end
-    
+
     def set_user_agent(name)
       set_header('User-Agent', name)
     end
-    
+
     def get_user_agent
       get_header('User-Agent')
     end
-    
+
     def set_rets_version(version)
       if (SUPPORTED_RETS_VERSIONS.include? version)
         set_header('RETS-Version', "RETS/#{version}")
@@ -157,21 +157,21 @@ module RETS4R
         raise Unsupported.new("The client does not support RETS version '#{version}'.")
       end
     end
-    
+
     def get_rets_version
       (get_header('RETS-Version') || "").gsub("RETS/", "")
     end
-    
+
     def set_request_method(method)
       @request_method = method
     end
-    
+
     def get_request_method
         # Basic Authentication
         #
       @request_method
     end
-    
+
     # Provide more Ruby-like attribute accessors instead of get/set methods
     alias_method :user_agent=, :set_user_agent
     alias_method :user_agent, :get_user_agent
@@ -179,13 +179,13 @@ module RETS4R
     alias_method :request_method, :get_request_method
     alias_method :rets_version=, :set_rets_version
     alias_method :rets_version, :get_rets_version
-    
+
     #### RETS Transaction Methods ####
     #
-    # Most of these transaction methods mirror the RETS specification methods, so if you are 
+    # Most of these transaction methods mirror the RETS specification methods, so if you are
     # unsure what they mean, you should check the RETS specification. The latest version can be
     # found at http://www.rets.org
-    
+
     # Attempts to log into the server using the provided username and password.
     #
     # If called with a block, the results of the login action are yielded,
@@ -199,12 +199,12 @@ module RETS4R
     def login(username, password) #:yields: login_results
       @username = username
       @password = password
-      
+
       # We are required to set the Accept header to this by the RETS 1.5 specification.
       set_header('Accept', '*/*')
-      
+
       response = request(@urls['Login'])
-      
+
       # Parse response to get other URLS
       results = @response_parser.parse_key_value(response.body)
 
@@ -222,15 +222,15 @@ module RETS4R
             @urls[capability] = base
           end
         end
-        
+
         logger.debug("Capability URL List: #{@urls.inspect}") if logger
       else
         raise LoginError.new(response.message + "(#{results.reply_code}: #{results.reply_text})")
       end
-           
+
       # Perform the mandatory get request on the action URL.
       results.secondary_response = perform_action_url
-      
+
       # We only yield
       if block_given?
         begin
@@ -242,16 +242,16 @@ module RETS4R
         results
       end
     end
-    
+
     # Logs out of the RETS server.
     def logout()
-      # If no logout URL is provided, then we assume that logout is not necessary (not to 
+      # If no logout URL is provided, then we assume that logout is not necessary (not to
       # mention impossible without a URL). We don't throw an exception, though, but we might
       # want to if this becomes an issue in the future.
-      
+
       request(@urls['Logout']) if @urls['Logout']
     end
-    
+
     # Requests Metadata from the server. An optional type and id can be specified to request
     # subsets of the Metadata. Please see the RETS specification for more details on this.
     # The format variable tells the server which format to return the Metadata in. Unless you
@@ -261,9 +261,9 @@ module RETS4R
     # returns the metadata directly.
     def get_metadata(type = 'METADATA-SYSTEM', id = '*')
       xml = download_metadata(type, id)
-      
+
       result = @response_parser.parse_metadata(xml, @format)
-      
+
       if block_given?
         yield result
       else
@@ -275,16 +275,16 @@ module RETS4R
       header = {
         'Accept' => 'text/xml,text/plain;q=0.5'
       }
-      
+
       data = {
         'Type'   => type,
         'ID'     => id,
         'Format' => @format
       }
-          
+
       request(@urls['GetMetadata'], data, header).body
     end
-    
+
     # Performs a GetObject transaction on the server. For details on the arguments, please see
     # the RETS specification on GetObject requests.
     #
@@ -294,14 +294,14 @@ module RETS4R
       header = {
         'Accept' => mimemap.keys.join(',')
       }
-      
+
       data = {
         'Resource' => resource,
         'Type'     => type,
         'ID'       => id,
         'Location' => location.to_s
       }
-      
+
       response = request(@urls['GetObject'], data, header)
       results = block_given? ? 0 : []
 
@@ -316,7 +316,7 @@ module RETS4R
 #        TODO: log this
 #        puts "SPLIT ON #{content_type['boundary']}"
         parts = response.body.split("\r\n--#{content_type['boundary']}")
-        
+
         parts.shift # Get rid of the initial boundary
 
 #        TODO: log this
@@ -324,21 +324,21 @@ module RETS4R
 
         parts.each do |part|
           (raw_header, raw_data) = part.split("\r\n\r\n")
-          
+
 #          TODO: log this
 #          puts raw_data.nil?
           next unless raw_data
-          
+
           data_header = process_header(raw_header)
           data_object = DataObject.new(data_header, raw_data)
-          
+
           if block_given?
             yield data_object
             results += 1
           else
             results << data_object
           end
-        end 
+        end
       else
         info = {
           'content-type' => response['content-type'], # Compatibility shim.  Deprecated.
@@ -346,7 +346,7 @@ module RETS4R
           'Object-ID'    => response['Object-ID'],
           'Content-ID'   => response['Content-ID']
         }
-        
+
         if response['Transfer-Encoding'].to_s.downcase == "chunked" || response['Content-Length'].to_i > 100 then
           data_object = DataObject.new(info, response.body)
           if block_given?
@@ -357,16 +357,16 @@ module RETS4R
           end
         end
       end
-      
+
       results
     end
-    
+
     # Peforms a RETS search transaction. Again, please see the RETS specification for details
     # on what these parameters mean. The options parameter takes a hash of options that will
     # added to the search statement.
     def search(search_type, klass, query, options = false)
       header = {}
-    
+
       # Required Data
       data = {
         'SearchType' => search_type,
@@ -376,7 +376,7 @@ module RETS4R
         'Format'     => format,
         'Count'      => '0'
       }
-      
+
       # Options
       #--
       # We might want to switch this to merge!, but I've kept it like this for now because it
@@ -385,11 +385,11 @@ module RETS4R
       # that happens, though...
       #++
       options.each { |k,v| data[k] = v.to_s } if options
-      
+
       response = request(@urls['Search'], data, header)
-      
+
       results = @response_parser.parse_results(response.body, @format)
-      
+
       if block_given?
         yield results
       else
@@ -411,7 +411,7 @@ module RETS4R
       result = @response_parser.parse_count(response.body)
       return result
     end
-    
+
     private
 
     # Copied from http.rb
@@ -422,88 +422,88 @@ module RETS4R
     # XXX: This is crap. It does not properly handle quotes.
     def process_content_type(text)
       content = {}
-      
+
       field_start = text.index(';')
 
       content['content-type'] = text[0 ... field_start].strip
       fields = text[field_start..-1]
-      
+
       parts = text.split(';')
-      
+
       parts.each do |part|
         (name, value) = part.gsub(/\"/, '').split('=')
-        
+
         content[name.strip] = value ? value.strip : value
       end
-      
+
       content
     end
-    
+
     # Processes the HTTP header
-    #-- 
+    #--
     # Could we switch over to using CGI for this?
     #++
     def process_header(raw)
       header = {}
-      
+
       raw.each do |line|
         (name, value) = line.split(':')
-        
+
         header[name.strip] = value.strip if name && value
       end
-      
+
       header
     end
-    
+
     # Given a hash, it returns a URL encoded query string.
     def create_query_string(hash)
       #parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}"}
       parts = hash.map {|key,value| "#{key}=#{value}"}
       return parts.join('&')
     end
-    
+
     # This is the primary transaction method, which the other public methods make use of.
     # Given a url for the transaction (endpoint) it makes a request to the RETS server.
-    # 
-    #-- 
+    #
+    #--
     # This needs to be better documented, but for now please see the public transaction methods
     # for how to make use of this method.
     #++
     def request(url, data = {}, header = {}, method = @request_method, retry_auth = DEFAULT_RETRY)
       response = ''
-      
+
       @semaphore.lock
-      
+
       http = Net::HTTP.new(url.host, url.port)
       http.read_timeout = 600
-      
+
       if logger && logger.debug?
         http.set_debug_output HTTPDebugLogger.new(logger)
       end
-      
+
       http.start do |http|
         begin
           uri = url.path
-          
+
           if ! data.empty? && method == METHOD_GET
             uri += "?#{create_query_string(data)}"
           end
 
           headers = @headers
           headers.merge(header) unless header.empty?
-          
+
           @pre_request_block.call(self, http, headers) if @pre_request_block
-          
+
           logger.debug(headers.inspect) if logger
-          
+
           @semaphore.unlock
-                    
-		  post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
-		  response  = method == METHOD_POST ? http.post(uri, post_data, headers) : 
-											  http.get(uri, headers)
-                    
+
+          post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
+          response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
+                                              http.get(uri, headers)
+
           @semaphore.lock
-          
+
           if response.code == '401'
             # Authentication is required
             raise AuthRequired
@@ -538,16 +538,16 @@ module RETS4R
             @semaphore.unlock if @semaphore.locked?
             raise LoginError.new(response.message)
           end
-        end    
-        
+        end
+
         logger.debug(response.body) if logger
       end
-      
+
       @semaphore.unlock if @semaphore.locked?
-      
+
       return response
     end
-    
+
     # If an action URL is present in the URL capability list, it calls that action URL and returns the
     # raw result. Throws a generic RETSException if it is unable to follow the URL.
     def perform_action_url
@@ -559,75 +559,75 @@ module RETS4R
         raise RETSException.new("Unable to follow action URL: '#{$!}'.")
       end
     end
-    
+
     # Provides a proxy class to allow for net/http to log its debug to the logger.
     class HTTPDebugLogger
       def initialize(logger)
         @logger = logger
       end
-      
+
       def <<(data)
         @logger.debug(data)
       end
     end
-    
+
     #### Exceptions ####
-    
+
     # This exception should be thrown when a generic client error is encountered.
     class ClientException < Exception
     end
-    
-    # This exception should be thrown when there is an error with the parser, which is 
+
+    # This exception should be thrown when there is an error with the parser, which is
     # considered a subcomponent of the RETS client. It also includes the XML data that
     # that was being processed at the time of the exception.
     class ParserException < ClientException
       attr_accessor :file
     end
-    
+
     # The client does not currently support a specified action.
     class Unsupported < ClientException
     end
-    
+
     # The HTTP response returned by the server indicates that there was an error processing
     # the request and the client cannot continue on its own without intervention.
     class HTTPError < ClientException
       attr_accessor :http_response
-      
+
       # Takes a HTTPResponse object
       def initialize(http_response)
         self.http_response = http_response
       end
-      
+
       # Shorthand for calling HTTPResponse#code
       def code
         http_response.code
       end
-      
+
       # Shorthand for calling HTTPResponse#message
       def message
         http_response.message
       end
-      
+
       # Returns the RETS specification message for the HTTP response code
       def rets_message
         Client::RETS_HTTP_MESSAGES[code]
       end
-      
+
       def to_s
         "#{code} #{message}: #{rets_message}"
       end
     end
-    
-    # A general RETS level exception was encountered. This would include HTTP and RETS 
+
+    # A general RETS level exception was encountered. This would include HTTP and RETS
     # specification level errors as well as informative mishaps such as authentication being
     # required for access.
     class RETSException < RuntimeError
     end
-    
+
     # There was a problem with logging into the RETS server.
     class LoginError < RETSException
     end
-    
+
     # For internal client use only, it is thrown when the a RETS request is made but a password
     # is prompted for.
     class AuthRequired < RETSException
@@ -692,4 +692,4 @@ module RETS4R
     }
 
   end
-end 
+end
