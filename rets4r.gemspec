@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rets4r}
-  s.version = "1.1.7"
+  s.version = "1.1.11"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Scott Patterson", "John Wulff", "bgetting", "Jacob Basham"]
@@ -34,7 +34,6 @@ Gem::Specification.new do |s|
      "examples/client_login.rb",
      "examples/client_metadata.rb",
      "examples/client_search.rb",
-     "examples/mobi_config.rb",
      "lib/rets4r.rb",
      "lib/rets4r/auth.rb",
      "lib/rets4r/client.rb",
@@ -48,7 +47,6 @@ Gem::Specification.new do |s|
      "lib/rets4r/client/transaction.rb",
      "lib/tasks/annotations.rake",
      "lib/tasks/coverage.rake",
-     "lib/tasks/ctags.rake",
      "test/data/1.5/error.xml",
      "test/data/1.5/invalid_compact.xml",
      "test/data/1.5/login.xml",
