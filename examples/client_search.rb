@@ -7,33 +7,29 @@
 #############################################################################################
 # Settings
 
-rets_url = 'http://server.com/my/rets/url'
-username = 'username'
-password = 'password'
-
-rets_resource = 'Property'
-rets_class    = 'Residential'
-rets_query    = '(RetsField=Value)'
+require 'yaml'
+settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
+settings = YAML.load_file(settings_file)['settings']
 
 #############################################################################################
 $:.unshift 'lib'
 
 require 'rets4r'
 
-client = RETS4R::Client.new(rets_url)
+client = RETS4R::Client.new(settings[:url])
 
 logger = Logger.new($stdout)
 logger.level = Logger::WARN
 client.logger = logger
 
-login_result = client.login(username, password)
+login_result = client.login(settings[:username], settings[:password])
 
 if login_result.success?
     puts "We successfully logged into the RETS server!"
 
     options = {'Limit' => 5}
 
-    client.search(rets_resource, rets_class, rets_query, options) do |result|
+    client.search(settings[:resource], settings[:class], settings[:query], options) do |result|
         result.response.each do |row|
             puts row.inspect
             puts

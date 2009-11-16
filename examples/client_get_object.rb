@@ -7,14 +7,9 @@
 #############################################################################################
 # Settings
 
-rets_url = 'http://server.com/my/rets/url'
-username = 'username'
-password = 'password'
-
-# GetObject Settings
-resource    = 'Property'
-object_type = 'Photo'
-resource_id = 'id:*'
+require 'yaml'
+settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
+settings = YAML.load_file(settings_file)['settings']
 
 #############################################################################################
 $:.unshift 'lib'
@@ -35,22 +30,14 @@ def handle_object(object)
     end
 end
 
-client = RETS4R::Client.new(rets_url)
+client = RETS4R::Client.new(settings[:url])
 
-client.login(username, password) do |login_result|
+client.login(settings[:username], settings[:password]) do |login_result|
 
     if login_result.success?
         ## Method 1
         # Get objects using a block
-        client.get_object(resource, object_type, resource_id) do |object|
-            handle_object(object)
-        end
-
-        ## Method 2
-        # Get objects using a return value
-        results = client.get_object(resource, object_type, resource_id)
-
-        results.each do |object|
+        client.get_object(settings[:resource], settings[:object_type], settings[:resource_id]) do |object|
             handle_object(object)
         end
     else

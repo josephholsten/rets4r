@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
      "examples/client_login.rb",
      "examples/client_metadata.rb",
      "examples/client_search.rb",
+     "examples/settings.yml",
      "lib/rets4r.rb",
      "lib/rets4r/auth.rb",
      "lib/rets4r/client.rb",
@@ -53,11 +54,10 @@ Gem::Specification.new do |s|
      "test/data/1.5/metadata.xml",
      "test/data/1.5/search_compact.xml",
      "test/data/1.5/search_unescaped_compact.xml",
-     "test/tc_auth.rb",
-     "test/tc_client.rb",
-     "test/tc_metadataindex.rb",
-     "test/test_parser.rb",
-     "test/ts_all.rb"
+     "test/test_auth.rb",
+     "test/test_client.rb",
+     "test/test_metadataindex.rb",
+     "test/test_parser.rb"
   ]
   s.homepage = %q{http://rets4r.rubyforge.org/}
   s.rdoc_options = ["--charset=UTF-8", "--main", "README"]
@@ -66,7 +66,10 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{A native Ruby implementation of RETS (Real Estate Transaction Standard).}
   s.test_files = [
-    "test/ts_all.rb"
+    "test/test_auth.rb",
+     "test/test_client.rb",
+     "test/test_metadataindex.rb",
+     "test/test_parser.rb"
   ]
 
   if s.respond_to? :specification_version then

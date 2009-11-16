@@ -1,0 +1,9 @@
+settings:
+  :rets_url: http://server.com/my/rets/url
+  :username: username
+  :password: password
+  :resource: Property
+  :class: Residential
+  :query: (ModificationTimestamp=2000-01-01-TODAY)
+  :object_type: Photo
+  :resource_id: 'id:*'

@@ -7,9 +7,9 @@
 #############################################################################################
 # Settings
 
-rets_url = 'http://server.com/my/rets/url'
-username = 'username'
-password = 'password'
+require 'yaml'
+settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
+settings = YAML.load_file(settings_file)['settings']
 
 #############################################################################################
 $:.unshift 'lib'
@@ -17,10 +17,10 @@ $:.unshift 'lib'
 require 'rets4r'
 require 'logger'
 
-client = RETS4R::Client.new(rets_url)
+client = RETS4R::Client.new(settings[:url])
 client.logger = Logger.new(STDOUT)
 
-login_result = client.login(username, password)
+login_result = client.login(settings[:username], settings[:password])
 
 if login_result.success?
     puts "We successfully logged into the RETS server!"
