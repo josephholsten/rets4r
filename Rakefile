@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
-require 'rake/testtask'
 require 'rake/packagetask'
 require 'rake/gempackagetask'
 require 'rake/contrib/rubyforgepublisher'
@@ -10,15 +9,6 @@ include FileUtils
 
 # impart all tasks in lib/tasks/
 Dir['lib/tasks/*.rake'].each { |task| import task }
-
-task :default => :test
-
-desc "Run unit tests"
-Rake::TestTask.new(:test) do |test|
-  test.libs << "test"
-  test.pattern = "test/ts_all.rb"
-  test.verbose = true
-end
 
 begin
   require 'jeweler'
@@ -33,13 +23,22 @@ begin
     gem.extra_rdoc_files = ['CONTRIBUTORS', 'README', 'LICENSE', 'RUBYS', 'GPL',
       'CHANGELOG', 'TODO' ]
     gem.rdoc_options << '--main' << 'README'
-    gem.test_files = 'test/ts_all.rb'
+    gem.test_files = FileList['test/test_*.rb']
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
+
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << "test"
+  test.pattern = "test/test_*.rb"
+  test.verbose = true
+end
+
+task :default => :test
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
