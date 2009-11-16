@@ -14,7 +14,6 @@ bindings available from the Center for Realtor¨ Technology
 == Requirements
 
 * Ruby 1.8.4
-* XML::Parser (Optional. If not present, REXML will be used.)
 
 == License
 
@@ -22,7 +21,7 @@ Please see the LICENSE file.
 
 == Acknowledgments
 
-This project was made possible by the Contra Costa Association of
+This project was made possible in part by the Contra Costa Association of
 Realtors¨ (http://www.ccartoday.com).
 
 == Getting Started
@@ -34,3 +33,6 @@ objects, rather than making real transaction calls.
 Due to the nature of this library, it is HIGHLY recommended that you
 have at least a basic understanding of the RETS protocol. The official
 RETS website is http://www.rets.org.
+
+Most of the time, you will be either searching for resources or getting
+objects, so begin there.

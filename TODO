@@ -9,6 +9,8 @@ Add
 * More Documentation
 * Reply Codes (Readable Meaning)
 * A search convenience method that makes subsequent requests if maxrows is true.
+* Extend examples so they are useful replacements for SimpleRETS
+* Shared configuration between examples
 
 Verify
 * 1.7 Compliance and support
@@ -24,3 +26,4 @@ Possible To-do Items
 * Password Change Transaction
 * Get Transaction
 * HTTPS Support
+* Simple mapping to ActiveRecord
