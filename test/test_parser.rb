@@ -39,7 +39,7 @@ module RETS4R
                 assert_equal '0', transaction.reply_code
                 assert_equal 'SUCCESS', transaction.reply_text
                 assert_equal [], transaction.header
-                # this used to say, why?
+                # XXX: this used to say, why?
 #                assert_equal false, transaction.header.empty?
 
                 assert_equal nil, transaction.metadata
@@ -68,7 +68,6 @@ module RETS4R
             def test_invalid_search_compact
                 assert_raise(REXML::ParseException) do
                   @parser.parse_key_value(load_xml_from_file("#{DATA_DIR}search_unescaped_compact.xml"))
-                    parse_to_transaction("#{DATA_DIR}invalid_compact.xml")
                 end
             end
 

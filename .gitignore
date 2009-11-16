@@ -1,2 +1,7 @@
 coverage
 coverage.data
+*.sw?
+.DS_Store
+coverage
+rdoc
+pkg

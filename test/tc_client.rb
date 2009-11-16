@@ -95,7 +95,6 @@ module RETS4R
             test_returns_multipart_parallel_objects_in_a_single_array('"1231"')
         end
 
-#        FIXME: multipart boundary with single quotes
         def test_returns_multipart_parallel_objects_in_a_single_array_boundary_with_single_quotes
             test_returns_multipart_parallel_objects_in_a_single_array("'1231'")
         end
@@ -169,7 +168,6 @@ module RETS4R
 
             @rets.stubs(:request).returns(@response = mock("response"))
             @response.stubs(:body).returns(:body)
-#            @rets.stubs(:parse).returns(@results = mock("results"))
             Client::ResponseParser.any_instance.stubs(:parse_key_value).returns(@results = mock("results"))
             @results.stubs(:success?).returns(true)
             @results.stubs(:response).returns(Hash.new)
@@ -257,15 +255,6 @@ module RETS4R
 
             assert_equal('POST', @rets.request_method)
 
-#           assert_nothing_raised() { @rets.set_parser_class(Client::Parser::REXML) }
-#            assert_raise(Client::Unsupported) { @rets.parser_class = MockParser }
-#            assert_nothing_raised() { @rets.set_parser_class(MockParser, true) }
-#            assert_equal(MockParser, @rets.parser_class)
-
-#            assert_nothing_raised() { @rets.set_output(RETS4R::Client::OUTPUT_RAW) }
-#            assert_equal(RETS4R::Client::OUTPUT_RAW, @rets.output)
-#            assert_nothing_raised() { @rets.output = RETS4R::Client::OUTPUT_RUBY }
-#            assert_equal(RETS4R::Client::OUTPUT_RUBY, @rets.get_output)
 
             # Check that our changes were logged when in debug mode
             assert @logfile.length > 0
@@ -321,9 +310,6 @@ module RETS4R
             Net::HTTP.any_instance.expects(:start).at_least_once.yields(http)
 
             assert_raises(RETS4R::Client::HTTPError) {@rets.login('user', 'pass')}
-        end
-
-        class MockParser
         end
     end
 end
