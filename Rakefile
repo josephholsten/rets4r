@@ -25,8 +25,8 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "rets4r"
     gem.summary  = 'A native Ruby implementation of RETS (Real Estate Transaction Standard).'
-    gem.authors   = ['Scott Patterson', 'John Wulff', 'bgetting']
-    gem.email    = ['scott.patterson@digitalaun.com', 'john@johnwulff.com', 'brian@terra-firma-design.com']
+    gem.authors   = ['Scott Patterson', 'John Wulff', 'bgetting', "Jacob Basham"]
+    gem.email    = ['scott.patterson@digitalaun.com', 'john@johnwulff.com', 'brian@terra-firma-design.com','jacob@paperpigeons.net']
     gem.homepage = 'http://rets4r.rubyforge.org/'
     gem.files =  FileList["[A-Z]*", "{examples,lib,test}/**/*"]
     gem.rubyforge_project = 'rets4r'

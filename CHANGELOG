@@ -1,3 +1,22 @@
+1.1.10
+    ResponseParser#parse_common: should be _not_ equals (Jacob Basham)
+
+1.1.9
+    (no change)
+
+1.1.8
+   Client, ResponseParser#parse_common: Parser cleanup (Jacob Basham)
+
+1.1.7
+    Client, Client#initialize, Client#create_query_string, Client#request:
+      Cleaned up files to be 80 skinny, added CGI escaping of data (Jacob Basham)
+
+1.1.5
+    gemspec: fix date error (Jacob Basham)
+
+1.1.3
+    gemspec: update (Jacob Basham)
+
 1.1.2
     ResponseParser#parse_key_value: Accept CARETS response (John Wulff)
 
