@@ -34,7 +34,7 @@ if login_result.success?
     options = {'Limit' => 5}
 
     client.search(rets_resource, rets_class, rets_query, options) do |result|
-        result.data.each do |row|
+        result.response.each do |row|
             puts row.inspect
             puts
         end

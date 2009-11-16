@@ -7,10 +7,9 @@
 # either the dual license version in 2003 (see the file RUBYS), or any later
 # version.
 #
-#  TODO
-#    1.0 Support (Adding this support should be fairly easy)
-#    2.0 Support (Adding this support will be very difficult since it is a completely different methodology)
-#    Case-insensitive header
+#  TODO: 1.0 Support (Adding this support should be fairly easy)
+#  TODO: 2.0 Support (Adding this support will be very difficult since it is a completely different methodology)
+#  TODO: Case-insensitive header
 
 require 'digest/md5'
 require 'net/http'
@@ -315,7 +314,11 @@ module RETS4R
 
 #        TODO: log this
 #        puts "SPLIT ON #{content_type['boundary']}"
-        parts = response.body.split("\r\n--#{content_type['boundary']}")
+        boundary = content_type['boundary']
+        if boundary =~ /\s*'([^']*)\s*/
+          boundary = $1
+        end
+        parts = response.body.split("\r\n--#{boundary}")
 
         parts.shift # Get rid of the initial boundary
 

@@ -23,7 +23,6 @@ RETS4R::Client.new(rets_url) do |client|
             puts "Logged in successfully!"
 
             # We want the raw metadata, so we need to set the output to raw XML.
-            client.set_output RETS4R::Client::OUTPUT_RAW
             metadata = ''
 
             begin
