@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
      "CONTRIBUTORS",
      "GPL",
      "LICENSE",
-     "README",
+     "README.rdoc",
      "RUBYS",
      "TODO"
   ]
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
      "CONTRIBUTORS",
      "GPL",
      "LICENSE",
-     "README",
+     "README.rdoc",
      "RUBYS",
      "Rakefile",
      "TODO",
@@ -60,7 +60,7 @@ Gem::Specification.new do |s|
      "test/test_parser.rb"
   ]
   s.homepage = %q{http://rets4r.rubyforge.org/}
-  s.rdoc_options = ["--charset=UTF-8", "--main", "README"]
+  s.rdoc_options = ["--charset=UTF-8", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{rets4r}
   s.rubygems_version = %q{1.3.5}
