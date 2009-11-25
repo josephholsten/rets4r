@@ -1,4 +1,8 @@
 1.1.13
+    Use gemcutter (Joseph Holsten)
+    
+    * Rakefile: include GemcutterTasks
+
     Fix rdoc reference (Joseph Holsten)
 
 	* README: renamed to README.rdoc
