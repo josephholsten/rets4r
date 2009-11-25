@@ -1,3 +1,11 @@
+1.1.13
+    Fix rdoc reference (Joseph Holsten)
+
+	* README: renamed to README.rdoc
+	* Rakefile: likewise
+	* rets4r.gemspec: likewise
+	* CONTRIBUTORS: added Joseph Holsten
+
 1.1.12
     Merge example settings into a config file (Joseph Holsten)
     Clean up testing (Joseph Holsten)

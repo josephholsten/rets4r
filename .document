@@ -1,4 +1,4 @@
-README
+README.rdoc
 lib/**/*.rb
 bin/*
 features/**/*.feature

@@ -20,9 +20,9 @@ begin
     gem.homepage = 'http://rets4r.rubyforge.org/'
     gem.files =  FileList["[A-Z]*", "{examples,lib,test}/**/*"]
     gem.rubyforge_project = 'rets4r'
-    gem.extra_rdoc_files = ['CONTRIBUTORS', 'README', 'LICENSE', 'RUBYS', 'GPL',
+    gem.extra_rdoc_files = ['CONTRIBUTORS', 'README.rdoc', 'LICENSE', 'RUBYS', 'GPL',
       'CHANGELOG', 'TODO' ]
-    gem.rdoc_options << '--main' << 'README'
+    gem.rdoc_options << '--main' << 'README.rdoc'
     gem.test_files = FileList['test/test_*.rb']
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
@@ -52,6 +52,6 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "rets4r #{version}"
   rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
