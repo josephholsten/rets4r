@@ -1,9 +1,11 @@
 settings:
-  :rets_url: http://server.com/my/rets/url
-  :username: username
-  :password: password
+  :url:  http://demo.crt.realtors.org:6103/rets/login
+  :username: Joe
+  :password: Schmoe
   :resource: Property
-  :class: Residential
-  :query: (ModificationTimestamp=2000-01-01-TODAY)
+  :class: RES
+  :query: (MODIFIED=2009-11-14-TODAY)
   :object_type: Photo
-  :resource_id: 'id:*'
+  :resource_id: '11003049:*'
+  #:query: (LISTPRICE=0+)
+  #:query: (MODIFIED=2009-11-14-TODAY)
