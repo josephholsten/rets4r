@@ -21,8 +21,10 @@ module RETS4R
             @delimiter = attrs.last.to_i.chr
           when 'COLUMNS'
             @columns_element = true
+            @string = ''
           when 'DATA'
             @data_element = true
+            @string = ''
           end
         end
 
@@ -30,20 +32,21 @@ module RETS4R
           case name
           when 'COLUMNS'
             @columns_element = false
+            @columns = @string.split(@delimiter)
           when 'DATA'
             @data_element = false
+            @results << @columns.zip(@string.split(@delimiter)).inject({}) do | h,(k,v) |
+              h[k] = v unless k.empty?
+              next h
+            end
           end
         end
 
         def characters string
           if @columns_element
-            @columns = string.split(@delimiter)
+            @string << string
           elsif @data_element
-            data = @columns.zip(string.split(@delimiter)).inject({}) do | h,(k,v) |
-              h[k] = v unless k.empty?
-              next h
-            end
-            @results << data
+            @string << string
           end
         end
       end

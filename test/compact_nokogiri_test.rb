@@ -10,4 +10,10 @@ class CompactNokogiriTest < Test::Unit::TestCase
     assert_equal({"Third"=>"Datum3", "Second"=>"Datum2", "First"=>"Datum1"}, listings[0])
     assert_equal({"Third"=>"Datum6", "Second"=>"Datum5", "First"=>"Datum4"}, listings[1])
   end
+  def test_should_handle_big_data
+    file = File.expand_path(File.join('test', 'data', '1.5', 'bad_compact.xml'))
+    listings = RETS4R::Client::CompactNokogiriParser.new.parse_results(file)
+    assert_equal 1, listings.length
+    assert_equal 79, listings.first.keys.length
+  end
 end
