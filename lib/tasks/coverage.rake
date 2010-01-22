@@ -8,6 +8,6 @@ begin
   end
 rescue LoadError
   task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install relevance-rcov"
+    abort "RCov is not available. In order to run rcov, you must: gem install rcov"
   end
 end
