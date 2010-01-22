@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rets4r}
-  s.version = "1.1.13"
+  s.version = "1.1.14"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Scott Patterson", "John Wulff", "bgetting", "Jacob Basham"]
-  s.date = %q{2009-11-25}
+  s.date = %q{2010-01-22}
   s.email = ["scott.patterson@digitalaun.com", "john@johnwulff.com", "brian@terra-firma-design.com", "jacob@paperpigeons.net"]
   s.extra_rdoc_files = [
     "CHANGELOG",
@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
      "examples/client_get_object.rb",
      "examples/client_login.rb",
      "examples/client_metadata.rb",
+     "examples/client_parser.rb",
      "examples/client_search.rb",
      "examples/settings.yml",
      "lib/rets4r.rb",
@@ -43,17 +44,21 @@ Gem::Specification.new do |s|
      "lib/rets4r/client/metadata.rb",
      "lib/rets4r/client/metadataindex.rb",
      "lib/rets4r/client/parsers/compact.rb",
+     "lib/rets4r/client/parsers/compact_nokogiri.rb",
      "lib/rets4r/client/parsers/metadata.rb",
      "lib/rets4r/client/parsers/response_parser.rb",
      "lib/rets4r/client/transaction.rb",
+     "lib/rets4r/loader.rb",
      "lib/tasks/annotations.rake",
      "lib/tasks/coverage.rake",
+     "test/compact_nokogiri_test.rb",
      "test/data/1.5/error.xml",
      "test/data/1.5/invalid_compact.xml",
      "test/data/1.5/login.xml",
      "test/data/1.5/metadata.xml",
      "test/data/1.5/search_compact.xml",
      "test/data/1.5/search_unescaped_compact.xml",
+     "test/loader_test.rb",
      "test/test_auth.rb",
      "test/test_client.rb",
      "test/test_metadataindex.rb",
