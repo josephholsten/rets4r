@@ -7,5 +7,6 @@ settings:
   :query: (MODIFIED=2009-11-14-TODAY)
   :object_type: Photo
   :resource_id: '11003049:*'
+  :limit: 400
   #:query: (LISTPRICE=0+)
   #:query: (MODIFIED=2009-11-14-TODAY)

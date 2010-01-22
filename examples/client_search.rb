@@ -27,7 +27,7 @@ login_result = client.login(settings[:username], settings[:password])
 if login_result.success?
     puts "We successfully logged into the RETS server!"
 
-    options = {'Limit' => 5}
+    options = {'Limit' => settings[:limit]}
 
     client.search(settings[:resource], settings[:class], settings[:query], options) do |result|
         result.response.each do |row|
