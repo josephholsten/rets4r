@@ -1,0 +1,13 @@
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+
+require 'test/unit'
+require 'rets4r'
+
+class CompactNokogiriTest < Test::Unit::TestCase
+  def test_should_do_stuff
+    file = File.expand_path(File.join('test', 'data', '1.5', 'search_compact.xml'))
+    listings = RETS4R::Client::CompactNokogiriParser.new.parse_results(file)
+    assert_equal({"Third"=>"Datum3", "Second"=>"Datum2", "First"=>"Datum1"}, listings[0])
+    assert_equal({"Third"=>"Datum6", "Second"=>"Datum5", "First"=>"Datum4"}, listings[1])
+  end
+end
