@@ -8,7 +8,7 @@ class LoaderTest < Test::Unit::TestCase
     file = File.expand_path(File.join('test', 'data', '1.5', 'search_compact.xml'))
 
     listings = []
-    RETS4R::Loader.load(file) do |record|
+    RETS4R::Loader.load(open(file)) do |record|
       listings << record
     end
     

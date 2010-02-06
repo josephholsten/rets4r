@@ -3,10 +3,10 @@ require 'nokogiri'
 module RETS4R
   class Client
     class CompactNokogiriParser < Nokogiri::XML::SAX::Document
-      def parse_results(file)
+      def parse_results(io)
         doc = CompactDocument.new
         parser = Nokogiri::XML::SAX::Parser.new(doc)
-        parser.parse_file(file)
+        parser.parse(io)
         doc.results
       end
       class CompactDocument < Nokogiri::XML::SAX::Document
