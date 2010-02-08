@@ -23,6 +23,9 @@ module RETS4R
       def ascii_delimiter
         self.delimiter.chr
       end
+
+      # For compatibility with the original library.
+      alias :data :response
     end
   end
 end
