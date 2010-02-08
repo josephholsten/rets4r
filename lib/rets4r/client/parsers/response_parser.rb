@@ -61,10 +61,6 @@ module RETS4R
           raise RETSException, 'No transaction body was returned!'
         end
 
-        File.open('/tmp/meh', 'w') do |file|
-          file.write(xml)
-        end
-
         doc = REXML::Document.new(xml)
 
         root = doc.root
