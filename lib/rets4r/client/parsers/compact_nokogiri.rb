@@ -2,15 +2,28 @@ require 'rubygems'
 require 'nokogiri'
 module RETS4R
   class Client
-    class CompactNokogiriParser < Nokogiri::XML::SAX::Document
-      def parse_results(io)
-        doc = CompactDocument.new
-        parser = Nokogiri::XML::SAX::Parser.new(doc)
-        parser.parse(io)
-        doc.results
+    class CompactNokogiriParser
+
+      def initialize(io)
+        @doc    = CompactDocument.new 
+        @parser = Nokogiri::XML::SAX::Parser.new(@doc)
+        @io     = io
       end
+
+      def to_a
+        @parser.parse(@io) if @doc.results.empty?
+        @doc.results
+      end
+
+      def each(&block)
+        @doc.proc = block.to_proc
+        @parser.parse(@io)
+        nil
+      end
+
       class CompactDocument < Nokogiri::XML::SAX::Document
         attr_reader :results
+        attr_writer :proc
         
         def initialize
           @results = []
@@ -35,10 +48,7 @@ module RETS4R
             @columns = @string.split(@delimiter)
           when 'DATA'
             @data_element = false
-            @results << @columns.zip(@string.split(@delimiter)).inject({}) do | h,(k,v) |
-              h[k] = v unless k.empty?
-              next h
-            end
+            handle_row
           end
         end
 
@@ -47,6 +57,22 @@ module RETS4R
             @string << string
           elsif @data_element
             @string << string
+          end
+        end
+
+        private 
+        def handle_row
+          data = make_hash
+          if @proc
+            @proc.call(data)
+          else
+            @results << data
+          end
+        end
+        def make_hash
+          @columns.zip(@string.split(@delimiter)).inject({}) do | h,(k,v) |
+            h[k] = v unless k.empty?
+            next h
           end
         end
       end
