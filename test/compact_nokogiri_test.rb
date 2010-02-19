@@ -16,7 +16,20 @@ class CompactNokogiriTest < Test::Unit::TestCase
     assert_equal 1, listings.length
     assert_equal 79, listings.first.keys.length
   end
-  def test_should_yield_between_results_if_given_a_block
-
+  def test_each_should_yield_between_results
+    file = File.expand_path(
+      File.join('test', 'data', '1.5', 'search_compact_big.xml'))
+    stat = File::Stat.new(file)
+    unless stat.size > stat.blksize 
+      flunk "This test probably won't work on this machine. 
+        It needs a test input file larger than the native block size."
+    end
+    stream = open(file)
+    positions = []
+    listings = RETS4R::Client::CompactNokogiriParser.new(stream).each do |row|
+      positions << stream.pos
+    end
+    assert positions.first < positions.last, 
+      "data was yielded durring the reading of the stream"
   end
 end
