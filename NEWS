@@ -1,0 +1,183 @@
+    New features
+    * RETS4R::Client::ResponseParser#parse_results: works with COMPACT-DECODED
+    * RETS4R::Client::CompactDataParser#parse_results: works without a delimiter in response
+    * RETS4R::Client::CompactDataParser#parse_data: works without column names in response
+    * RETS4R::Client::CompactNokogiriParser: yields data as it is read
+    * RETS4R::ListingMapper: added
+    
+    Bug fixes
+    * RETS4R::Client#get_object: checks content-type
+    * RETS4R::Client::ResponseParser: no longer writes a temp file
+
+    Internal API changes
+    * RETS4R::Client::MetadataIndex: removed
+
+1.1.16
+    Internal API changes
+    * RETS4R::Loader::load: parse from io, not file name
+
+1.1.15
+    Bug fixes
+    * RETS4R::Client::CompactNokogiriParser: now parses long lines
+
+1.1.14
+    New features
+    * RETS4R::Loader: added
+    * RETS4R::Client::CompactNokogiriParser: added
+    
+    Other changes
+    * Examples use demo RETS server
+    * New parser example
+    
+1.1.13
+    Use gemcutter (Joseph Holsten)
+    
+    * Rakefile: include GemcutterTasks
+
+    Fix rdoc reference (Joseph Holsten)
+
+	* README: renamed to README.rdoc
+	* Rakefile: likewise
+	* rets4r.gemspec: likewise
+	* CONTRIBUTORS: added Joseph Holsten
+
+1.1.12
+    Merge example settings into a config file (Joseph Holsten)
+    Clean up testing (Joseph Holsten)
+
+1.1.11
+    Merge many rets4r forks (Joseph Holsten)
+
+1.1.10
+    ResponseParser#parse_common: should be _not_ equals (Jacob Basham)
+
+1.1.9
+    (no change)
+
+1.1.8
+   Client, ResponseParser#parse_common: Parser cleanup (Jacob Basham)
+
+1.1.7
+    Client, Client#initialize, Client#create_query_string, Client#request:
+      Cleaned up files to be 80 skinny, added CGI escaping of data (Jacob Basham)
+
+1.1.5
+    gemspec: fix date error (Jacob Basham)
+
+1.1.3
+    gemspec: update (Jacob Basham)
+
+1.1.2
+    ResponseParser#parse_key_value: Accept CARETS response (John Wulff)
+
+1.1.1
+    ResponseParser#parse_key_value: Handle nils (John Wulff)
+
+1.1.0
+    Strip key value pairs for CAPABILITY_LIST endpoints (John Wulff)
+    Add lib/rets4r to default load path (John Wulff)
+
+1.0.0
+    See changes in 9f7ff731250abc1f73b21cb01d3a6fc3a6617e73 (John Wulff)
+
+    Parser#parse_compact_line: simplify split.
+    Parser#parse_data: remove legacy support.
+    Auth::authenticate: handle missing www-authenticate header.
+    Auth::parse_header: strip keys, values.
+    Client#initialize: method signature changed, removed options, added format.
+    Client#set_parser_class, Client#get_parser_class,
+      Client#parser_class, Client#parser_class=, Client#set_output,
+      Client#get_output, Client#output, Client#output=: removed, callers changed.
+    Lay groundwork for non-compact format requests
+    Client::DEFAULT_METHOD: changed to GET
+    Client::DEFAULT_USER_AGENT: changed to Firefox
+    Client#login: handle absolute uris
+    Client#parse: Removed. Changed callers to access parser directly.
+    Client#get_metadata: method signature changed, format removed. Use format instance variable.
+    Client#download_metadata: added
+    Client#get_object: handle text/xml responses
+!!!      Client#get_object: remove quote support from multipart boundary handling
+    Client#count: added
+    Client#basic_encode: added
+!!!    Client#create_query_string: Remove escaping on request query keys, values
+    Client#debug: removed, all calls inlined.
+    Client#RETSTransactionException: added
+
+
+    client/parsers/
+
+
+0.8.5
+    Parser#parse_compact_line now once again ignores beginning and ending delimiters. (Scott Patterson)
+    Parser#parse_data now ignores header fields that are nil or blank when stripped. (Scott Patterson)
+    Updated test to use the rets client version of the client, not hardcoded for post and get tests. (Scott Patterson)
+
+0.8.4
+    Fixed auth issue with authenticate headers with spaces after commas. (Ken Wiesner, Scott Patterson)
+    When an exception is raised in the authentication parsing code, complain by raising
+        a new exception, but also report anything of interest at the same time: request,
+        response, response's body. (François Beausoleil)
+    Fixed Client#request to actually respect the specified request method instead of always using GET requests. (Scott Patterson)
+    Set default request method to POST since some RETS servers seem to have trouble with GET requests. (Scott Patterson)
+
+0.8.3
+    Added example #set_pre_request_block. (François Beausoleil)
+    Allow a pre request block to be set for RETS4R::Client.
+        This allows the caller to change the request in any meaningful way, such as adding a
+        RETS-UA-Authorization header when appropriate. (François Beausoleil)
+    Better response handling of HTTP errors. Response codes > 300 other than 401 now raise an
+        HTTPError exception that encapsulates the HTTPResponse object.
+        401 errors raise a LoginError exception. (Scott Patterson)
+    Added in RETS specification error messages to reference. (Scott Patterson)
+    New Rakefile.  Install the rake gem and do 'rake test' to run the tests. (François Beausoleil)
+
+0.8.2
+    Added missing result parameter to Client#search's yield (Scott Patterson)
+    Added 1.7 to supported list and default version (François Beausoleil)
+    No longer sends empty (nil) headers (François Beausoleil)
+    Added debugging to HTTP output. (François Beausoleil, Scott Patterson)
+    Added support for multiple set-cookie headers in the server response (François Beausoleil)
+    Added basic search example (Scott Patterson)
+    Implied default value of \t in RETS4R::Client::Transaction#delimiter (François Beausoleil)
+    #get_metadata now returns the block's value or the results. (François Beausoleil)
+    Made sure #login always calls #logout if called with a block.  #login returns the block's value
+        instead of results. (François Beausoleil)
+    New assertions that require Client to have Ruby-like accessors for attributes, instead of
+        getters and setters.  Applied 'Rename Attribute' on @parser, because #get_parser_class
+        was returning the class of the parser's class, instead of the parser's class itself. (François Beausoleil)
+    Client#set_rets_version should take care to generate the correct RETS-Version header,
+        and #get_rets_version should undo the changes that #set_rets_version did before
+        returning the value. (François Beausoleil)
+    Don't rescue an exception that's not being processed in Parser. (François Beausoleil)
+    RETS4R::Client#get_object extensions: yield or return the array of DataObject instances;
+        changed the multipart/parallel response boundary processing rules
+        (include \r\n in the boundary detection); added documentation. (François Beausoleil)
+    Added GetObject example (Scott Patterson)
+    Changed #get_object now yields each DataObject if a block is given rather
+        than an array of DataObjects (Scott Patterson)
+
+0.8.1
+    Added Action-URL support per the specification.
+    Added a secondary_response accessor to the Transaction object, which is what the Action-URL result is stored in.
+    Fixed a bug with loggers and parsers
+
+0.8.0
+    Fixed RParser support, which now means you can use REXML.
+    RParser now retries XML that produced a parser error after trying to clean it.
+    Parser support is now more open so that more parsers can be easily added in the future.
+    Reorganized parser file layout.
+    CParser will only be loaded if libxml (its dependency) is present. If it is, it is the default
+        parser.
+    Added more parser unit tests.
+    Renamed CParser to XMLParser and RPARSER to REXML, both with the hierarchy RETS4R::Client::Module.
+    Fixed a bug with the parser output not being set properly.
+    Fixed a bug with the parser not respecting the DELIMITER value and insisting on tab delimiters.
+    Added support for using a logger
+    Added more defaults to the search options (Count => '0', Format => 'COMPACT')
+    Added some Rubyisms (blocks can now be given to #new, #login, #get_metadata, #get_object, and #search)
+
+0.7.1
+    Added support for reading the results count for searches.
+
+0.7.0
+    Initial GEM Version

@@ -1,6 +1,192 @@
+Wed Mar  3 12:43:25 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Require mocha before shoulda to fix 'uninitialized constant Test::Unit::TestResult::TestResultFailureSupport'
+    
+	* test/test_helper.rb: require mocha earlier
+
+Tue Feb 23 07:12:46 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Add ListingMapper to convert listing keys
+    
+    * lib/rets4r.rb: require listing service, mapper
+    * lib/rets4r/listing_mapper.rb: new file
+    * lib/rets4r/listing_service.rb: new file
+    * test/data/listing_service.yml: new file
+    * test/listing_mapper_test.rb: new file
+    * test/test_helper.rb: new file
+    
+    * lib/rets4r/core_ext/array/extract_options.rb: helper from rails
+    * lib/rets4r/core_ext/class/attribute_accessors.rb: likewise
+    * lib/rets4r/core_ext/hash/keys.rb: likewise
+    * lib/rets4r/core_ext/hash/slice.rb: likewise
+
+Sat Feb 20 05:39:51 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    Test that SAX parser yeilds durring read.
+    * test/compact_nokogiri_test.rb: modified
+    * test/data/1.5/search_compact_big.xml: new file
+
+Thu Feb 11 06:21:54 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    * lib/rets4r/client/parsers/compact_nokogiri.rb
+    	(CompactNokogiriParser#each): new. should yield each row as the stream is
+    								  read
+    	(CompactNokogiriParser#to_a): reads the whole stream and returns
+    								  rows in an array
+    * lib/rets4r/loader.rb: uses the each method to yield as the stream
+    					    is read
+    * test/compact_nokogiri_test.rb: uses to_a instead.
+
+Sun Feb  7 19:05:46 2010  Scott Patterson <scott.patterson@digitalaun.com>
+
+    Removed unnecessary writing of response to xml file in /tmp dir.
+
+Sun Feb  7 19:11:38 2010  Scott Patterson <scott.patterson@digitalaun.com>
+
+    Reversed aliases and accessors to use Ruby-style accessors with the get/set methods aliased.
+    
+Sun Feb  7 19:04:17 2010  Scott Patterson <scott.patterson@digitalaun.com>
+
+    Added in #data alias to #response for compatibility.
+
+Sun Feb  7 18:57:50 2010  Scott Patterson <scott.patterson@digitalaun.com>
+
+    Removed old experiment.
+
+Sun Feb  7 18:56:24 2010  Scott Patterson <scott.patterson@digitalaun.com>
+
+    Added compact response with only a count.
+
+Thu Sep 10 23:47:49 2009  Andrew Vit <andrew@avit.ca>
+
+    Support response without a delimiter or column names
+
+Mon Sep 14 22:21:35 2009  Andrew Vit <andrew@avit.ca>
+
+    requiring needed compact parser
+
+Wed Sep 16 04:06:16 2009  Andrew Vit <andrew@avit.ca>
+
+    Handle compact-decoded format using same parser
+
+Wed Sep 16 04:06:35 2009  Andrew Vit <andrew@avit.ca>
+
+    Fixed crash with missing response headers
+
+Fri Feb  5 20:37:14 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Version bump to 1.1.16
+
+Fri Feb  5 20:36:39 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Merge branch 'master' of github.com:josephholsten/rets4r
+
+Fri Feb  5 20:34:13 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Make loader accept any IO
+
+    * lib/rets4r/client/parsers/compact_nokogiri.rb
+      (RETS4R::Loader::load): parse from io, not file name. Callers
+      changed
+
+Fri Jan 22 01:39:23 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Version bump to 1.1.15
+
+Fri Jan 22 01:37:22 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Merge branch 'master' of github.com:josephholsten/rets4r
+
+Fri Jan 22 01:32:47 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Fix bug for parsing long lines
+
+    * lib/rets4r/client/parsers/compact_nokogiri.rb
+      (RETS4R::Client::CompactNokogiriParser::CompactDocument#start_element)
+      (RETS4R::Client::CompactNokogiriParser::CompactDocument#end_element)
+      (RETS4R::Client::CompactNokogiriParser::CompactDocument#characters):
+        defer string handling until the element has ended
+    * test/compact_nokogiri_test.rb
+      (CompactNokogiriTest#test_should_handle_big_data): added
+    * test/data/1.5/bad_compact.xml: new file
+
+Fri Jan 22 00:51:00 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Regenerated gemspec for version 1.1.14
+
+Fri Jan 22 00:50:32 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Version bump to 1.1.14
+
+Fri Jan 22 00:44:04 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Add sax parser
+
+    * lib/rets4r.rb: require compact_nokogiri.rb
+    * lib/rets4r/loader.rb (RETS4R::Loader::load): use sax parser
+    * lib/rets4r/client/parsers/compact_nokogiri.rb: new file
+    * test/compact_nokogiri_test.rb: new file
+
+Fri Jan 22 00:38:43 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Run tests that end in _test.rb
+
+    * Rakefile: add *_test.rb to test pattern
+
+Thu Jan 21 23:35:34 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Add a batch file loader
+
+    * lib/rets4r.rb: require loader
+    * lib/rets4r/loader.rb: new file
+    * test/loader_test.rb: new file
+
+Thu Jan 21 23:10:36 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Add parser example
+
+    * examples/client_parser.rb: added
+
+Thu Jan 21 23:02:50 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Fix reference to rcov instead of relevance-rcov
+
+    * lib/tasks/coverage.rake: say rcov, not relevance-rcov
+
+Thu Jan 21 23:02:04 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Add limit to settings
+
+    * examples/client_search.rb: pull limit from settings
+    * examples/settings.yml: set a sane default
+
+Wed Jan 20 11:58:32 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    use demo rets server
+
+Thu Nov 26 01:06:06 2009  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    fix links list
+
+Thu Nov 26 01:05:26 2009  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    fix indentation
+
+Thu Nov 26 01:04:25 2009  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Link to related sites
+
+    * README.rdoc: updated docs
+
+Wed Nov 25 06:37:07 2009  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Use gemcutter
+
+    * Rakefile: include GemcutterTasks
+
 1.1.13
     Use gemcutter (Joseph Holsten)
-    
+
     * Rakefile: include GemcutterTasks
 
     Fix rdoc reference (Joseph Holsten)
@@ -72,9 +258,7 @@
     Client#debug: removed, all calls inlined.
     Client#RETSTransactionException: added
 
-
     client/parsers/
-
 
 0.8.5
     Parser#parse_compact_line now once again ignores beginning and ending delimiters. (Scott Patterson)
