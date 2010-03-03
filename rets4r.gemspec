@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rets4r}
-  s.version = "1.1.14"
+  s.version = "1.1.17"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Scott Patterson", "John Wulff", "bgetting", "Jacob Basham"]
-  s.date = %q{2010-01-22}
+  s.date = %q{2010-03-03}
   s.email = ["scott.patterson@digitalaun.com", "john@johnwulff.com", "brian@terra-firma-design.com", "jacob@paperpigeons.net"]
   s.extra_rdoc_files = [
     "CHANGELOG",
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
      "CONTRIBUTORS",
      "GPL",
      "LICENSE",
+     "NEWS",
      "README.rdoc",
      "RUBYS",
      "Rakefile",
@@ -42,38 +43,48 @@ Gem::Specification.new do |s|
      "lib/rets4r/client/data.rb",
      "lib/rets4r/client/dataobject.rb",
      "lib/rets4r/client/metadata.rb",
-     "lib/rets4r/client/metadataindex.rb",
      "lib/rets4r/client/parsers/compact.rb",
      "lib/rets4r/client/parsers/compact_nokogiri.rb",
      "lib/rets4r/client/parsers/metadata.rb",
      "lib/rets4r/client/parsers/response_parser.rb",
      "lib/rets4r/client/transaction.rb",
+     "lib/rets4r/core_ext/array/extract_options.rb",
+     "lib/rets4r/core_ext/class/attribute_accessors.rb",
+     "lib/rets4r/core_ext/hash/keys.rb",
+     "lib/rets4r/core_ext/hash/slice.rb",
+     "lib/rets4r/listing_mapper.rb",
+     "lib/rets4r/listing_service.rb",
      "lib/rets4r/loader.rb",
      "lib/tasks/annotations.rake",
      "lib/tasks/coverage.rake",
      "test/compact_nokogiri_test.rb",
+     "test/data/1.5/bad_compact.xml",
+     "test/data/1.5/count_only_compact.xml",
      "test/data/1.5/error.xml",
      "test/data/1.5/invalid_compact.xml",
      "test/data/1.5/login.xml",
      "test/data/1.5/metadata.xml",
      "test/data/1.5/search_compact.xml",
+     "test/data/1.5/search_compact_big.xml",
      "test/data/1.5/search_unescaped_compact.xml",
+     "test/data/listing_service.yml",
+     "test/listing_mapper_test.rb",
      "test/loader_test.rb",
      "test/test_auth.rb",
      "test/test_client.rb",
-     "test/test_metadataindex.rb",
+     "test/test_helper.rb",
      "test/test_parser.rb"
   ]
   s.homepage = %q{http://rets4r.rubyforge.org/}
   s.rdoc_options = ["--charset=UTF-8", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{rets4r}
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{A native Ruby implementation of RETS (Real Estate Transaction Standard).}
   s.test_files = [
     "test/test_auth.rb",
      "test/test_client.rb",
-     "test/test_metadataindex.rb",
+     "test/test_helper.rb",
      "test/test_parser.rb"
   ]
 
