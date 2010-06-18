@@ -111,6 +111,8 @@ module RETS4R
         'image/gif'   => 'gif'
       }
 
+      @pre_request_block = nil
+
       if block_given?
         yield self
       end
