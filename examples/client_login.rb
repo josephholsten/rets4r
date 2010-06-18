@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 #
 # This is an example of how to use the RETS client to log in and out of a server.
 #
@@ -8,8 +8,10 @@
 # Settings
 
 require 'yaml'
+require 'active_support/core_ext/hash'
 settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
-settings = YAML.load_file(settings_file)['settings']
+env = ENV['LISTING_ENV'] || 'development'
+settings = YAML.load_file(settings_file)[env].symbolize_keys
 
 #############################################################################################
 $:.unshift 'lib'

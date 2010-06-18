@@ -1,12 +1,113 @@
-settings:
-  :url:  http://demo.crt.realtors.org:6103/rets/login
-  :username: Joe
-  :password: Schmoe
-  :resource: Property
-  :class: RES
-  :query: (MODIFIED=2009-11-14-TODAY)
-  :object_type: Photo
-  :resource_id: '11003049:*'
-  :limit: 400
-  #:query: (LISTPRICE=0+)
-  #:query: (MODIFIED=2009-11-14-TODAY)
+# This file specifies the access information for the listing service
+# To access the standard RETS demo server, use:
+#
+#test:
+#  url: http://demo.crt.realtors.org:6103/rets/login
+#  username: Joe
+#  password: Schmoe
+#  version: 1.7.2
+#  resource: Property
+#  class: RES
+#  select:
+#    ListingID: :rets_id
+#    AgentID: :agent_id
+#    ModificationTimestamp: :modification_timestamp
+#    Status: :status
+#    ListDate: :list_date
+#    ListPrice: :list_price
+#    ClosePrice: :close_price
+#    ContractDate: :contract_date
+#    StreetNumber: :street_number
+#    ZipCode: :zip_code
+#    City: :city
+#    County: :county
+#    Unit: :unit_number
+#    StreetName: :street_name
+#    StreetDirection: :street_direction
+#    Rooms: :rooms
+#    State: :state
+#    Board: :board
+#    LivingArea: :living_area
+#    Baths: :baths
+#    Bedrooms: :beds
+#    Garage: :garage
+#    SqFt: :square_footage
+#    YearBuilt: :year_built
+#    AssociationFee: :assoc_fee
+#    BathsFull: :baths_full
+#    BathHalf: :baths_half
+#    Directions: :directions
+#    OriginalListPrice: :original_list_price
+#    LotSizeDim: :lot_size_dim
+#    ListOfficeBrokerID: :office_list
+#    OfficeName: :office_name
+#    Pool: :pool
+#    Remarks: :remarks
+#    Stories: :stories
+#    TaxID: :taxid
+#    ConstructionMaterial: :construction
+#    ExteriorFeatures: :exterior
+#    Fireplaces: :fireplaces
+#    Heating: :heating
+#    InteriorFeatures: :interior
+#    LotSizeArea: :lot_size
+#    MapCoordinate: :mapbook
+#    PresentUse: :present_use
+#    Style: :style
+
+common: &COMMON
+  url: http://demo.crt.realtors.org:6103/rets/login
+  username: Joe
+  password: Schmoe
+  version: 1.5
+  resource: Property
+  class: RES
+  limit: 10
+  resource_id: "10202512"
+  object_type: Photo
+  select:
+    MLSNUM: :mls
+    AGENTLIST: :agent_id
+    AGENTLIST_FULLNAME: :agent_full_name
+    OFFICELIST_OFFICENAM1: :office_name
+    MODIFIED: :rets_updated_at
+    LISTSTATUS: :status
+    PHOTOCOUNT: :photo_count
+    LISTPRICE: :list_price
+    STREETNUMDISPLAY: :street_number
+    STREETDIR: :street_direction
+    STREETDIRSUFFIX: :street_dir_suffix
+    STREETNAME: :street_name
+    STREETTYPE: :street_type
+    UNITNUM: :unit_number
+    ZIPCODE: :zip_code
+    CITY: :city
+    COUNTY: :county
+    AREA: :area
+    LOTSIZE: :lot_size
+    SQFTTOTAL: :square_feet
+    NUMLIVINGAREAS: :living_area
+    BATHSTOTAL: :baths
+    BEDS: :beds
+    GARAGECAP: :garage
+    YEARBUILT: :year_built
+    UID: :uid
+    INTERNETDISPLAYYN: :allow_internet_display
+    INTERNETLIST_ALL: :internet_list_all
+    INTERNETADDRYN: :allow_address_display
+    SCHOOLDISTRICT: :school_district
+
+development:
+  <<: *COMMON
+
+test: &TEST
+  <<: *COMMON
+
+production:
+  <<: *COMMON
+
+cucumber:
+  <<: *TEST
+
+staging:
+  <<: *TEST
