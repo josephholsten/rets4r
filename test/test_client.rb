@@ -4,7 +4,6 @@ require 'rets4r'
 require 'test/unit'
 require 'stringio'
 require 'logger'
-require 'rubygems' rescue nil
 require 'mocha'
 
 module RETS4R

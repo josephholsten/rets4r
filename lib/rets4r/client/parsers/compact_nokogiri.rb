@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'nokogiri'
 module RETS4R
   class Client
