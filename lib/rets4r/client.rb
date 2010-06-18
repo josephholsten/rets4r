@@ -486,7 +486,7 @@ module RETS4R
 
     # Given a hash, it returns a URL encoded query string.
     def create_query_string(hash)
-      parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}"}
+      parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}" unless key.nil? || value.nil?}
       return parts.join('&')
     end
 

@@ -65,6 +65,7 @@ common: &COMMON
   limit: 10
   resource_id: "10202512"
   object_type: Photo
+  query: "(*)"
   select:
     MLSNUM: :mls
     AGENTLIST: :agent_id
