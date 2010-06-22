@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 #
 # This is an example of how to use the RETS client to login to a server and retrieve metadata. It
 # also makes use of passing blocks to client methods and demonstrates how to set the output format.
@@ -9,8 +9,10 @@
 # Settings
 
 require 'yaml'
+require 'active_support/core_ext/hash'
 settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
-settings = YAML.load_file(settings_file)['settings']
+env = ENV['LISTING_ENV'] || 'development'
+settings = YAML.load_file(settings_file)[env].symbolize_keys
 
 #############################################################################################
 $:.unshift 'lib'

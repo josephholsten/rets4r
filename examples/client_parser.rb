@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 $:.unshift 'lib'
-require 'rubygems'
 require 'rets4r'
 
 xml = ARGF

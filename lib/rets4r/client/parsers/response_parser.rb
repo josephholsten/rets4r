@@ -61,10 +61,6 @@ module RETS4R
           raise RETSException, 'No transaction body was returned!'
         end
 
-        File.open('/tmp/meh', 'w') do |file|
-          file.write(xml)
-        end
-
         doc = REXML::Document.new(xml)
 
         root = doc.root
@@ -91,7 +87,7 @@ module RETS4R
 
       def get_parser_by_name(name)
         case name
-          when 'COMPACT'
+          when 'COMPACT', 'COMPACT-DECODED'
             type = RETS4R::Client::CompactDataParser
           else
             raise "Invalid format #{name}"

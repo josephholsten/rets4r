@@ -56,6 +56,9 @@ module RETS4R
                 assert_equal "Datum5", transaction.response[1]['Second']
                 assert_equal "Datum6", transaction.response[1]['Third']
 
+                # Check for compatibility
+                assert_equal transaction.data, transaction.response
+
                 assert_equal nil, transaction.secondary_response
             end
 

@@ -1,0 +1,36 @@
+# This file specifies the access information for the listing service #
+# To access the standard RETS demo server, use:
+#
+test:
+ url: http://demo.crt.realtors.org:6103/rets/login
+ username: Joe
+ password: Schmoe
+ version: 1.7.2
+ resource: Property
+ class: RES
+ object_type: Photo
+ select:
+   ListingID: :mls
+   AgentID: :agent_id
+   ModificationTimestamp: :rets_update_at
+   Status: :status
+   # ListDate: :list_date
+   ListPrice: :list_price
+   # ClosePrice: :close_price
+   # ContractDate: :contract_date
+   StreetNumber: :street_number
+   StreetName: :street_name
+   StreetDirection: :street_direction
+   Unit: :unit_number
+   ZipCode: :zip_code
+   City: :city
+   County: :county
+   # Rooms: :rooms
+   # State: :state
+   # Board: :board
+   LivingArea: :living_area
+   Baths: :baths
+   Bedrooms: :beds
+   Garage: :garage
+   SqFt: :square_feet
+   YearBuilt: :year_built

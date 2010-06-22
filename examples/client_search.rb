@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 #
 # This is an example of how to use the RETS client to perform a basic search.
 #
@@ -8,8 +8,10 @@
 # Settings
 
 require 'yaml'
+require 'active_support/core_ext/hash'
 settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
-settings = YAML.load_file(settings_file)['settings']
+ENV['LISTING_ENV'] ||= 'development'
+settings = YAML.load_file(settings_file)[ENV['LISTING_ENV']].symbolize_keys
 
 #############################################################################################
 $:.unshift 'lib'

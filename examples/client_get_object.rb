@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 #
 # This is an example of how to use the RETS client to retrieve an objet.
 #
@@ -8,8 +8,10 @@
 # Settings
 
 require 'yaml'
+require 'active_support/core_ext/hash'
 settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
-settings = YAML.load_file(settings_file)['settings']
+env = ENV['LISTING_ENV'] || 'development'
+settings = YAML.load_file(settings_file)[env].symbolize_keys
 
 #############################################################################################
 $:.unshift 'lib'
@@ -37,7 +39,7 @@ client.login(settings[:username], settings[:password]) do |login_result|
     if login_result.success?
         ## Method 1
         # Get objects using a block
-        client.get_object(settings[:resource], settings[:object_type], settings[:resource_id]) do |object|
+        client.get_object(settings[:resource], settings[:object_type], settings[:resource_id] + ':0:*') do |object|
             handle_object(object)
         end
     else

@@ -5,3 +5,5 @@ $:.unshift(dir) unless $:.include?(dir) || $:.include?(File.expand_path(dir))
 require 'client'
 require 'loader'
 require 'client/parsers/compact_nokogiri'
+require 'rets4r/listing_service'
+require 'rets4r/listing_mapper'

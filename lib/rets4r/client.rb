@@ -18,6 +18,7 @@ require 'cgi'
 require 'auth'
 require 'client/dataobject'
 require 'client/parsers/response_parser'
+require 'client/parsers/compact'
 require 'thread'
 require 'logger'
 
@@ -110,6 +111,8 @@ module RETS4R
         'image/gif'   => 'gif'
       }
 
+      @pre_request_block = nil
+
       if block_given?
         yield self
       end
@@ -164,15 +167,15 @@ module RETS4R
       @headers[name]
     end
 
-    def set_user_agent(name)
+    def user_agent=(name)
       set_header('User-Agent', name)
     end
 
-    def get_user_agent
+    def user_agent
       get_header('User-Agent')
     end
 
-    def set_rets_version(version)
+    def rets_version=(version)
       if (SUPPORTED_RETS_VERSIONS.include? version)
         set_header('RETS-Version', "RETS/#{version}")
       else
@@ -180,27 +183,27 @@ module RETS4R
       end
     end
 
-    def get_rets_version
+    def rets_version
       (get_header('RETS-Version') || "").gsub("RETS/", "")
     end
 
-    def set_request_method(method)
+    def request_method=(method)
       @request_method = method
     end
 
-    def get_request_method
+    def request_method
         # Basic Authentication
         #
       @request_method
     end
 
-    # Provide more Ruby-like attribute accessors instead of get/set methods
-    alias_method :user_agent=, :set_user_agent
-    alias_method :user_agent, :get_user_agent
-    alias_method :request_method=, :set_request_method
-    alias_method :request_method, :get_request_method
-    alias_method :rets_version=, :set_rets_version
-    alias_method :rets_version, :get_rets_version
+    # Provide backwards-compatible get/set methods.
+    alias_method :set_user_agent, :user_agent=
+    alias_method :get_user_agent, :user_agent
+    alias_method :set_request_method, :request_method=
+    alias_method :get_request_method, :request_method
+    alias_method :set_rets_version, :rets_version=
+    alias_method :get_rets_version, :rets_version
 
     #### RETS Transaction Methods ####
     #
@@ -327,12 +330,12 @@ module RETS4R
       response = request(@urls['GetObject'], data, header)
       results = block_given? ? 0 : []
 
-      if response['content-type'].include?('text/xml')
+      if response['content-type'] && response['content-type'].include?('text/xml')
         # This probably means that there was an error.
         # Response parser will likely raise an exception.
         rr = @response_parser.parse_object_response(response.body)
         return rr
-      elsif response['content-type'].include?('multipart/parallel')
+      elsif response['content-type'] && response['content-type'].include?('multipart/parallel')
         content_type = process_content_type(response['content-type'])
 
 #        TODO: log this
@@ -483,7 +486,7 @@ module RETS4R
 
     # Given a hash, it returns a URL encoded query string.
     def create_query_string(hash)
-      parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}"}
+      parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}" unless key.nil? || value.nil?}
       return parts.join('&')
     end
 

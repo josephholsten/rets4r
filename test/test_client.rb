@@ -4,7 +4,6 @@ require 'rets4r'
 require 'test/unit'
 require 'stringio'
 require 'logger'
-require 'rubygems' rescue nil
 require 'mocha'
 
 module RETS4R
@@ -310,6 +309,15 @@ module RETS4R
             Net::HTTP.any_instance.expects(:start).at_least_once.yields(http)
 
             assert_raises(RETS4R::Client::HTTPError) {@rets.login('user', 'pass')}
+        end
+        
+        def test_search_without_query_should_not_raise_no_metho_error
+            client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
+            client.login('Joe', 'Schmoe')
+            
+            assert_nothing_raised do
+                client.search('', '', nil)
+            end
         end
     end
 end
