@@ -1,10 +1,5 @@
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
-
-require 'rets4r'
-require 'test/unit'
-require 'stringio'
-require 'logger'
-require 'mocha'
+require 'test_helper'
 
 module RETS4R
     class Client
@@ -148,6 +143,9 @@ module RETS4R
             end
 
             assert_equal yielded_count, value
+        end
+        def test_correcly_handles_location_header_url
+          flunk "it's splitting at the :. should use CGI for header parsing."
         end
     end
 
