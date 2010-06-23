@@ -1,4 +1,5 @@
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
 require 'test_helper'
 
 module RETS4R
@@ -145,7 +146,18 @@ module RETS4R
             assert_equal yielded_count, value
         end
         def test_correcly_handles_location_header_url
-          flunk "it's splitting at the :. should use CGI for header parsing."
+          @response.expects(:[]).with('content-type').at_least_once.returns("multipart/parallel; boundary='1231'")
+          @response.expects(:body).returns(
+"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 1\r\nContent-Type: image/jpeg\r\nLocation: http://example.com/391203-1.jpg\r\n\r\n" + 
+"\000"*120 + 
+"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 2\r\nContent-Type: image/gif\r\nLocation: http://example.com/391203-2.gif\r\n\r\n" + 
+"\000"*140 + 
+"\r\n--1231--"
+          )
+          results = @rets.get_object("Property", "Photo", "392103:*", 1)
+
+          assert_equal 'http://example.com/391203-1.jpg', results.first.info['Location'], "incorrect location"
+          assert_equal 'http://example.com/391203-2.gif', results.last.info['Location'], "incorrect location"
         end
     end
 

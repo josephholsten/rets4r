@@ -21,6 +21,7 @@ require 'client/parsers/response_parser'
 require 'client/parsers/compact'
 require 'thread'
 require 'logger'
+require 'webrick/httputils'
 
 module RETS4R
   class Client
@@ -315,6 +316,8 @@ module RETS4R
     #
     # This method either returns an Array of DataObject instances, or yields each DataObject
     # as it is created. If a block is given, the number of objects yielded is returned.
+    #
+    # TODO: how much of this could we move over to WEBrick::HTTPRequest#parse?
     def get_object(resource, type, id, location = 0) #:yields: data_object
       header = {
         'Accept' => mimemap.keys.join(',')
@@ -470,18 +473,12 @@ module RETS4R
 
     # Processes the HTTP header
     #--
-    # Could we switch over to using CGI for this?
     #++
     def process_header(raw)
-      header = {}
-
-      raw.each do |line|
-        (name, value) = line.split(':')
-
-        header[name.strip] = value.strip if name && value
+      # this util gives us arrays of values. We are only set up to handle one header value.
+      WEBrick::HTTPUtils.parse_header(raw.strip).map.inject({}) do |h,(k,v)|
+        h[k]=v.first; h
       end
-
-      header
     end
 
     # Given a hash, it returns a URL encoded query string.
