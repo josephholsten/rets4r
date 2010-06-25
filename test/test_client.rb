@@ -154,7 +154,7 @@ module RETS4R
 "\000"*140 + 
 "\r\n--1231--"
           )
-          results = @rets.get_object("Property", "Photo", "392103:*", 1)
+          results = @rets.get_object("Property", "Photo", "392103:*", true)
 
           assert_equal 'http://example.com/391203-1.jpg', results.first.info['Location'], "incorrect location"
           assert_equal 'http://example.com/391203-2.gif', results.last.info['Location'], "incorrect location"
@@ -325,8 +325,11 @@ module RETS4R
             client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
             client.login('Joe', 'Schmoe')
             
-            assert_nothing_raised do
-                client.search('', '', nil)
+            
+            begin
+              client.search('', '', nil)
+            rescue Exception => e
+              assert_not_equal "NoMethodError", e.class.to_s
             end
         end
     end

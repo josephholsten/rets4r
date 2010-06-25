@@ -318,7 +318,7 @@ module RETS4R
     # as it is created. If a block is given, the number of objects yielded is returned.
     #
     # TODO: how much of this could we move over to WEBrick::HTTPRequest#parse?
-    def get_object(resource, type, id, location = 0) #:yields: data_object
+    def get_object(resource, type, id, location = false) #:yields: data_object
       header = {
         'Accept' => mimemap.keys.join(',')
       }
@@ -327,7 +327,7 @@ module RETS4R
         'Resource' => resource,
         'Type'     => type,
         'ID'       => id,
-        'Location' => location.to_s
+        'Location' => location ? '1' : '0'
       }
 
       response = request(@urls['GetObject'], data, header)
