@@ -54,3 +54,6 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+require 'rake/clean'
+CLEAN.include %w{.bundle .rake_tasks pkg}
