@@ -19,7 +19,6 @@ require 'auth'
 require 'client/dataobject'
 require 'client/parsers/response_parser'
 require 'client/parsers/compact'
-require 'thread'
 require 'logger'
 
 module RETS4R
@@ -102,7 +101,6 @@ module RETS4R
         'RETS-Session-ID' => '0'
       }
       @request_method = DEFAULT_METHOD
-      @semaphore      = Mutex.new
 
       @response_parser = RETS4R::Client::ResponseParser.new
 
@@ -417,12 +415,13 @@ module RETS4R
 
       response = request(@urls['Search'], data, header)
 
-      results = @response_parser.parse_results(response.body, @format)
+      # TODO: make parser configurable
+      results = RETS4R::Client::CompactNokogiriParser.new(response.body)
 
       if block_given?
-        yield results
+        results.each {|result| yield result}
       else
-        return results
+        return results.to_a
       end
     end
 
@@ -500,8 +499,6 @@ module RETS4R
     def request(url, data = {}, header = {}, method = @request_method, retry_auth = DEFAULT_RETRY)
       response = ''
 
-      @semaphore.lock
-
       http = Net::HTTP.new(url.host, url.port)
       http.read_timeout = 600
 
@@ -524,20 +521,16 @@ module RETS4R
 
           logger.debug(headers.inspect) if logger
 
-          @semaphore.unlock
-
           post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
           response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
                                               http.get(uri, headers)
 
-          @semaphore.lock
 
           if response.code == '401'
             # Authentication is required
             raise AuthRequired
           elsif response.code.to_i >= 300
             # We have a non-successful response that we cannot handle
-            @semaphore.unlock if @semaphore.locked?
             raise HTTPError.new(response)
           else
             cookies = []
@@ -565,15 +558,12 @@ module RETS4R
             set_header('Authorization', auth)
             retry
           else
-            @semaphore.unlock if @semaphore.locked?
             raise LoginError.new(response.message)
           end
         end
 
         logger.debug(response.body) if logger
       end
-
-      @semaphore.unlock if @semaphore.locked?
 
       return response
     end
