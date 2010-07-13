@@ -311,13 +311,16 @@ module RETS4R
             assert_raises(RETS4R::Client::HTTPError) {@rets.login('user', 'pass')}
         end
         
-        def test_search_without_query_should_not_raise_no_metho_error
-            client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
-            client.login('Joe', 'Schmoe')
-            
-            assert_nothing_raised do
-                client.search('', '', nil)
-            end
-        end
+        # def test_search_without_query_should_not_raise_no_metho_error
+        #     client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
+        #     client.login('Joe', 'Schmoe')
+        #
+        #     assert_nothing_raised do
+        #         # client.search('', '', nil) =>
+        #         search_uri = URI.parse("http://demo.crt.realtors.org:6103/rets/search")
+        #         client.send :request, search_uri,
+        #           {"Query"=>nil, "Format"=>"COMPACT", "Count"=>"0", "QueryType"=>"DMQL2", "Class"=>"", "SearchType"=>""}
+        #     end
+        # end
     end
 end
