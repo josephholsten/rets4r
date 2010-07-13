@@ -1,7 +1,7 @@
 module RETS4R
   class Loader
-    def self.load(file, &block)
-      parser = RETS4R::Client::CompactNokogiriParser.new(file)
+    def self.load(io, &block)
+      parser = RETS4R::Client::CompactNokogiriParser.new(io)
       parser.each(&block)
     end
   end

@@ -325,7 +325,6 @@ module RETS4R
             client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
             client.login('Joe', 'Schmoe')
             
-            
             begin
               client.search('', '', nil)
             rescue Exception => e
