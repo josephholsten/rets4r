@@ -2,7 +2,7 @@ require 'nokogiri'
 module RETS4R
   class Client
     class CompactNokogiriParser
-
+      include Enumerable
       def initialize(io)
         @doc    = CompactDocument.new 
         @parser = Nokogiri::XML::SAX::Parser.new(@doc)

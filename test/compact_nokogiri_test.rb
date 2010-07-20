@@ -1,7 +1,4 @@
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
-
-require 'test/unit'
-require 'rets4r'
+require 'test_helper'
 
 class CompactNokogiriTest < Test::Unit::TestCase
   def test_should_do_stuff
@@ -31,5 +28,10 @@ class CompactNokogiriTest < Test::Unit::TestCase
     end
     assert positions.first < positions.last, 
       "data was yielded durring the reading of the stream"
+  end
+  def test_should_not_include_column_elements_in_keys
+    response = "<RETS ReplyCode=\"0\" ReplyText=\"Operation Successful\">\r\n<DELIMITER value=\"09\" />\r\n<COLUMNS>\tDISPLAYORDER\tINPUTDATE\tMEDIADESCR\tMEDIANAME\tMEDIASOURCE\tMEDIATYPE\tMODIFIED\tPICCOUNT\tPRIMARYPIC\tTABLEUID\tUID\t</COLUMNS>\r\n<DATA>\t7\t2009-09-17 07:08:19 \t\tNew 023.jpg\t3155895-11.jpg\tpic\t2009-09-17 07:09:32 \t11\tn\t3155895\t9601458\t</DATA>\r\n<MAXROWS />\r\n</RETS>\r\n"
+
+    assert RETS4R::Client::CompactNokogiriParser.new(StringIO.new(response)).map.first.keys.grep( /COLUMN/ ).empty?
   end
 end

@@ -1,10 +1,6 @@
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
-
-require 'rets4r'
-require 'test/unit'
-require 'stringio'
-require 'logger'
-require 'mocha'
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+require 'test_helper'
 
 module RETS4R
     class Client
@@ -148,6 +144,20 @@ module RETS4R
             end
 
             assert_equal yielded_count, value
+        end
+        def test_correcly_handles_location_header_url
+          @response.expects(:[]).with('content-type').at_least_once.returns("multipart/parallel; boundary='1231'")
+          @response.expects(:body).returns(
+"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 1\r\nContent-Type: image/jpeg\r\nLocation: http://example.com/391203-1.jpg\r\n\r\n" + 
+"\000"*120 + 
+"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 2\r\nContent-Type: image/gif\r\nLocation: http://example.com/391203-2.gif\r\n\r\n" + 
+"\000"*140 + 
+"\r\n--1231--"
+          )
+          results = @rets.get_object("Property", "Photo", "392103:*", true)
+
+          assert_equal 'http://example.com/391203-1.jpg', results.first.info['Location'], "incorrect location"
+          assert_equal 'http://example.com/391203-2.gif', results.last.info['Location'], "incorrect location"
         end
     end
 
@@ -311,16 +321,17 @@ module RETS4R
             assert_raises(RETS4R::Client::HTTPError) {@rets.login('user', 'pass')}
         end
         
-        # def test_search_without_query_should_not_raise_no_metho_error
-        #     client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
-        #     client.login('Joe', 'Schmoe')
-        #
-        #     assert_nothing_raised do
-        #         # client.search('', '', nil) =>
-        #         search_uri = URI.parse("http://demo.crt.realtors.org:6103/rets/search")
-        #         client.send :request, search_uri,
-        #           {"Query"=>nil, "Format"=>"COMPACT", "Count"=>"0", "QueryType"=>"DMQL2", "Class"=>"", "SearchType"=>""}
-        #     end
-        # end
+        def test_search_without_query_should_not_raise_no_metho_error
+            client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
+            client.login('Joe', 'Schmoe')
+            begin
+              client.search('', '', nil)
+              # search_uri = URI.parse("http://demo.crt.realtors.org:6103/rets/search")
+              # client.send :request, search_uri,
+              #   {"Query"=>nil, "Format"=>"COMPACT", "Count"=>"0", "QueryType"=>"DMQL2", "Class"=>"", "SearchType"=>""}
+            rescue Exception => e
+              assert_not_equal "NoMethodError", e.class.to_s
+            end
+        end
     end
 end
