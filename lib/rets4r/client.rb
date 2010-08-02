@@ -20,6 +20,7 @@ require 'client/dataobject'
 require 'client/parsers/response_parser'
 require 'client/parsers/compact'
 require 'rets4r/client/links'
+require 'rets4r/client/requester'
 require 'rets4r/client/exceptions'
 require 'logger'
 require 'webrick/httputils'
@@ -34,10 +35,6 @@ module RETS4R
 
     DEFAULT_METHOD          = METHOD_GET
     DEFAULT_RETRY           = 2
-    #DEFAULT_USER_AGENT      = 'RETS4R/0.8.2' # FIXME
-    DEFAULT_USER_AGENT      = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b5) ' +
-                                                            'Gecko/2008050509 Firefox/3.0b5'
-    DEFAULT_RETS_VERSION    = '1.7'
     SUPPORTED_RETS_VERSIONS = ['1.5', '1.7']
     CAPABILITY_LIST   = [
             'Action',
@@ -84,23 +81,18 @@ module RETS4R
                              'was used in the request message.',
     }
 
-    attr_accessor :mimemap, :logger
-    attr_reader   :format, :urls
+    attr_accessor :mimemap
+    attr_reader :format, :urls
 
     # Constructor
     #
     # Requires the URL to the RETS server and takes an optional output format. The output format
     # determines the type of data returned by the various RETS transaction methods.
     def initialize(url, format = COMPACT_FORMAT)
+      @request_struct = RETS4R::Client::Requester.new
       @format   = format
       @urls     = RETS4R::Client::Links.from_login_url(url)
-      @nc       = 0
-      @headers  = {
-        'User-Agent'   => DEFAULT_USER_AGENT,
-        'Accept'       => '*/*',
-        'RETS-Version' => "RETS/#{DEFAULT_RETS_VERSION}",
-        'RETS-Session-ID' => '0'
-      }
+
       @request_method = DEFAULT_METHOD
 
       @response_parser = RETS4R::Client::ResponseParser.new
@@ -109,8 +101,6 @@ module RETS4R
         'image/jpeg'  => 'jpg',
         'image/gif'   => 'gif'
       }
-
-      @pre_request_block = nil
 
       if block_given?
         yield self
@@ -143,51 +133,50 @@ module RETS4R
     #    headers["RETS-UA-Authorization"] = "Digest " + Digest::MD5.hexdigest(parts.join(":"))
     #  end
     def set_pre_request_block(&block)
-      @pre_request_block = block
+      @request_struct.pre_request_block = block
     end
 
+    # So very much delegated to the request struct
     def set_header(name, value)
-      if value.nil? then
-        @headers.delete(name)
-      else
-        @headers[name] = value
-      end
-
-      logger.debug("Set header '#{name}' to '#{value}'") if logger
+      @request_struct.set_header(name, value)
     end
 
     def get_header(name)
-      @headers[name]
+      @request_struct.headers[name]
     end
 
     def user_agent=(name)
-      set_header('User-Agent', name)
+      @request_struct.set_header('User-Agent', name)
     end
 
     def user_agent
-      get_header('User-Agent')
+      @request_struct.user_agent
     end
 
     def rets_version=(version)
-      if (SUPPORTED_RETS_VERSIONS.include? version)
-        set_header('RETS-Version', "RETS/#{version}")
-      else
-        raise Unsupported.new("The client does not support RETS version '#{version}'.")
-      end
+      @request_struct.rets_version = version
     end
 
     def rets_version
-      (get_header('RETS-Version') || "").gsub("RETS/", "")
+      @request_struct.rets_version
     end
 
     def request_method=(method)
       @request_method = method
+      @request_struct.method = method
     end
 
     def request_method
-        # Basic Authentication
-        #
       @request_method
+    end
+
+    def logger=(logger)
+      @logger = logger
+      @request_struct.logger = logger
+    end
+
+    def logger
+      @logger
     end
 
     #### RETS Transaction Methods ####
@@ -207,8 +196,8 @@ module RETS4R
     # the results made available in the #secondary_results accessor of the
     # results object.
     def login(username, password) #:yields: login_results
-      @username = username
-      @password = password
+      @request_struct.username = username
+      @request_struct.password = password
 
       # We are required to set the Accept header to this by the RETS 1.5 specification.
       set_header('Accept', '*/*')
@@ -431,11 +420,6 @@ module RETS4R
 
     private
 
-    # Copied from http.rb
-    def basic_encode(account, password)
-      'Basic ' + ["#{account}:#{password}"].pack('m').delete("\r\n")
-    end
-
     # XXX: This is crap. It does not properly handle quotes.
     def process_content_type(text)
       content = {}
@@ -466,12 +450,6 @@ module RETS4R
       end
     end
 
-    # Given a hash, it returns a URL encoded query string.
-    def create_query_string(hash)
-      parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}" unless key.nil? || value.nil?}
-      return parts.join('&')
-    end
-
     # This is the primary transaction method, which the other public methods make use of.
     # Given a url for the transaction (endpoint) it makes a request to the RETS server.
     #
@@ -480,75 +458,7 @@ module RETS4R
     # for how to make use of this method.
     #++
     def request(url, data = {}, header = {}, method = @request_method, retry_auth = DEFAULT_RETRY)
-      response = ''
-
-      http = Net::HTTP.new(url.host, url.port)
-      http.read_timeout = 600
-
-      if logger && logger.debug?
-        http.set_debug_output HTTPDebugLogger.new(logger)
-      end
-
-      http.start do |http|
-        begin
-          uri = url.path
-
-          if ! data.empty? && method == METHOD_GET
-            uri += "?#{create_query_string(data)}"
-          end
-
-          headers = @headers
-          headers.merge(header) unless header.empty?
-
-          @pre_request_block.call(self, http, headers) if @pre_request_block
-
-          logger.debug(headers.inspect) if logger
-
-          post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
-          response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
-                                              http.get(uri, headers)
-
-
-          if response.code == '401'
-            # Authentication is required
-            raise AuthRequired
-          elsif response.code.to_i >= 300
-            # We have a non-successful response that we cannot handle
-            raise HTTPError.new(response)
-          else
-            cookies = []
-            if set_cookies = response.get_fields('set-cookie') then
-              set_cookies.each do |cookie|
-                cookies << cookie.split(";").first
-              end
-            end
-            set_header('Cookie', cookies.join("; ")) unless cookies.empty?
-            set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID']
-          end
-        rescue AuthRequired
-          @nc += 1
-
-          if retry_auth > 0
-            retry_auth -= 1
-                      auth = Auth.authenticate(response,
-                                                                         @username,
-                                                                         @password,
-                                                                         url.path,
-                                                                         method,
-                                                                         @headers['RETS-Request-ID'],
-                                                                         user_agent,
-                                                                         @nc)
-            set_header('Authorization', auth)
-            retry
-          else
-            raise LoginError.new(response.message)
-          end
-        end
-
-        logger.debug(response.body) if logger
-      end
-
-      return response
+      @request_struct.request(url, data, header, method, retry_auth)
     end
 
     # If an action URL is present in the URL capability list, it calls that action URL and returns the
