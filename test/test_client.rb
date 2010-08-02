@@ -243,22 +243,22 @@ module RETS4R
         end
 
         def test_setup
-            assert_nothing_raised() { @rets.set_user_agent('ACK/2.1') }
+            assert_nothing_raised() { @rets.user_agent = 'ACK/2.1' }
             assert_equal('ACK/2.1', @rets.user_agent)
 
             assert_nothing_raised() { @rets.user_agent = 'SPRETS/0.1' }
-            assert_nothing_raised() { @rets.set_request_method('GET') }
+            assert_nothing_raised() { @rets.request_method = 'GET' }
 
-            assert_raise(RETS4R::Client::Unsupported) { @rets.set_rets_version('1.4.0') }
-            assert_nothing_raised() { @rets.set_rets_version('1.5') }
+            assert_raise(RETS4R::Client::Unsupported) { @rets.rets_version = '1.4.0' }
+            assert_nothing_raised() { @rets.rets_version = '1.5' }
             assert_equal("1.5", @rets.rets_version)
             assert_equal("RETS/1.5", @rets.get_header("RETS-Version"))
             assert_nothing_raised() { @rets.rets_version = '1.7' }
             assert_equal("RETS/1.7", @rets.get_header("RETS-Version"))
 
-            assert_equal('SPRETS/0.1', @rets.get_user_agent)
-            assert_equal('GET', @rets.get_request_method)
-            assert_equal('1.7', @rets.get_rets_version)
+            assert_equal('SPRETS/0.1', @rets.user_agent)
+            assert_equal('GET', @rets.request_method)
+            assert_equal('1.7', @rets.rets_version)
 
             assert_nothing_raised() { @rets.request_method = 'POST' }
 
@@ -274,7 +274,7 @@ module RETS4R
         def test_without_logger
             @rets.logger = nil
 
-            assert_nothing_raised() { @rets.set_request_method('GET') }
+            assert_nothing_raised() { @rets.request_method = 'GET' }
         end
 
         def test_content_type_parsing

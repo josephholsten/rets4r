@@ -190,14 +190,6 @@ module RETS4R
       @request_method
     end
 
-    # Provide backwards-compatible get/set methods.
-    alias_method :set_user_agent, :user_agent=
-    alias_method :get_user_agent, :user_agent
-    alias_method :set_request_method, :request_method=
-    alias_method :get_request_method, :request_method
-    alias_method :set_rets_version, :rets_version=
-    alias_method :get_rets_version, :rets_version
-
     #### RETS Transaction Methods ####
     #
     # Most of these transaction methods mirror the RETS specification methods, so if you are
@@ -544,7 +536,7 @@ module RETS4R
                                                                          url.path,
                                                                          method,
                                                                          @headers['RETS-Request-ID'],
-                                                                          get_user_agent,
+                                                                         user_agent,
                                                                          @nc)
             set_header('Authorization', auth)
             retry
