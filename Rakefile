@@ -9,31 +9,8 @@ include FileUtils
 # impart all tasks in lib/tasks/
 Dir['lib/tasks/*.rake'].each { |task| import task }
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "rets4r"
-    gem.summary  = 'A native Ruby implementation of RETS (Real Estate Transaction Standard).'
-    gem.authors   = ['Scott Patterson', 'John Wulff', 'bgetting', "Jacob Basham"]
-    gem.email    = ['scott.patterson@digitalaun.com', 'john@johnwulff.com', 'brian@terra-firma-design.com','jacob@paperpigeons.net']
-    gem.homepage = 'http://rets4r.rubyforge.org/'
-    gem.files =  FileList["[A-Z]*", "{examples,lib,test}/**/*"]
-    gem.rubyforge_project = 'rets4r'
-    gem.extra_rdoc_files = ['CONTRIBUTORS', 'README.rdoc', 'LICENSE', 'RUBYS', 'GPL',
-      'CHANGELOG', 'TODO' ]
-    gem.rdoc_options << '--main' << 'README.rdoc'
-    gem.test_files = FileList['test/test_*.rb']
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
-end
-
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
-  test.libs << "test"
-  test.pattern = ["test/test_*.rb", "test/*_test.rb"]
   test.verbose = true
 end
 
@@ -54,3 +31,16 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+CLEAN << 'rdoc'
+
+file 'MANIFEST.tmp' do
+  sh %{find . -type f | sed 's/\\.\\///' | grep -v '.git' | sort > MANIFEST.tmp}
+end
+CLEAN << 'MANIFEST.tmp'
+
+desc "Check the manifest against current files"
+task :check_manifest => [:clean, 'MANIFEST', 'MANIFEST.tmp'] do
+  puts `diff -du MANIFEST MANIFEST.tmp`
+end
+
+CLEAN << '.rake_tasks'
