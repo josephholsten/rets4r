@@ -19,6 +19,7 @@ require 'auth'
 require 'client/dataobject'
 require 'client/parsers/response_parser'
 require 'client/parsers/compact'
+require 'rets4r/client/links'
 require 'rets4r/client/exceptions'
 require 'logger'
 require 'webrick/httputils'
@@ -84,7 +85,7 @@ module RETS4R
     }
 
     attr_accessor :mimemap, :logger
-    attr_reader   :format
+    attr_reader   :format, :urls
 
     # Constructor
     #
@@ -92,9 +93,7 @@ module RETS4R
     # determines the type of data returned by the various RETS transaction methods.
     def initialize(url, format = COMPACT_FORMAT)
       @format   = format
-      @urls     = {
-                'Login' => URI.parse(url)
-            }
+      @urls     = RETS4R::Client::Links.from_login_url(url)
       @nc       = 0
       @headers  = {
         'User-Agent'   => DEFAULT_USER_AGENT,
@@ -145,12 +144,6 @@ module RETS4R
     #  end
     def set_pre_request_block(&block)
       @pre_request_block = block
-    end
-
-    # We only allow external read access to URLs because they are internally set based on the
-    # results of various queries.
-    def urls
-      @urls
     end
 
     def set_header(name, value)
@@ -228,7 +221,7 @@ module RETS4R
       # We are required to set the Accept header to this by the RETS 1.5 specification.
       set_header('Accept', '*/*')
 
-      response = request(@urls['Login'])
+      response = request(@urls.login)
 
       # Parse response to get other URLS
       results = @response_parser.parse_key_value(response.body)
@@ -242,7 +235,7 @@ module RETS4R
           if uri.absolute?
             @urls[capability] = uri
           else
-            base = @urls['Login'].clone
+            base = @urls.login.clone
             base.path = results.response[capability]
             @urls[capability] = base
           end
@@ -274,7 +267,7 @@ module RETS4R
       # mention impossible without a URL). We don't throw an exception, though, but we might
       # want to if this becomes an issue in the future.
 
-      request(@urls['Logout']) if @urls['Logout']
+      request(@urls.logout) if @urls.logout
     end
 
     # Requests Metadata from the server. An optional type and id can be specified to request
@@ -307,7 +300,7 @@ module RETS4R
         'Format' => @format
       }
 
-      request(@urls['GetMetadata'], data, header).body
+      request(@urls.metadata, data, header).body
     end
 
     # Performs a GetObject transaction on the server. For details on the arguments, please see
@@ -329,7 +322,7 @@ module RETS4R
         'Location' => location ? '1' : '0'
       }
 
-      response = request(@urls['GetObject'], data, header)
+      response = request(@urls.objects, data, header)
       results = block_given? ? 0 : []
 
       if response['content-type'] && response['content-type'].include?('text/xml')
@@ -417,7 +410,7 @@ module RETS4R
       #++
       options.each { |k,v| data[k] = v.to_s } if options
 
-      response = request(@urls['Search'], data, header)
+      response = request(@urls.search, data, header)
 
       # TODO: make parser configurable
       results = RETS4R::Client::CompactNokogiriParser.new(response.body)
@@ -439,7 +432,7 @@ module RETS4R
         'Format'     => format,
         'Count'      => '2'
       }
-      response = request(@urls['Search'], data, header)
+      response = request(@urls.search, data, header)
       result = @response_parser.parse_count(response.body)
       return result
     end
@@ -571,7 +564,7 @@ module RETS4R
     def perform_action_url
       begin
         if @urls.has_key?('Action')
-          return request(@urls['Action'], {}, {}, METHOD_GET)
+          return request(@urls.action, {}, {}, METHOD_GET)
         end
       rescue
         raise RETSException.new("Unable to follow action URL: '#{$!}'.")
