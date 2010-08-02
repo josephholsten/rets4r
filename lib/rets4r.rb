@@ -8,3 +8,7 @@ require 'rubygems'
 require 'client/parsers/compact_nokogiri'
 require 'rets4r/listing_service'
 require 'rets4r/listing_mapper'
+
+module RETS4R # :nodoc:
+  VERSION = '1.1.17'
+end
