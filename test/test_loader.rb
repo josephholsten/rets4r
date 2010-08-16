@@ -11,7 +11,7 @@ class LoaderTest < Test::Unit::TestCase
     RETS4R::Loader.load(open(file)) do |record|
       listings << record
     end
-    
+
     assert_equal 2, listings.length
     assert_equal "Datum1", listings[0]['First']
     assert_equal "Datum2", listings[0]['Second']
@@ -19,6 +19,6 @@ class LoaderTest < Test::Unit::TestCase
     assert_equal "Datum4", listings[1]['First']
     assert_equal "Datum5", listings[1]['Second']
     assert_equal "Datum6", listings[1]['Third']
-    
+
   end
 end

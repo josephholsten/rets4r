@@ -4,7 +4,7 @@
     * RETS4R::Client::CompactDataParser#parse_data: works without column names in response
     * RETS4R::Client::CompactNokogiriParser: yields data as it is read
     * RETS4R::ListingMapper: added
-    
+
     Bug fixes
     * RETS4R::Client#get_object: checks content-type
     * RETS4R::Client::ResponseParser: no longer writes a temp file
@@ -24,22 +24,22 @@
     New features
     * RETS4R::Loader: added
     * RETS4R::Client::CompactNokogiriParser: added
-    
+
     Other changes
     * Examples use demo RETS server
     * New parser example
-    
+
 1.1.13
     Use gemcutter (Joseph Holsten)
-    
+
     * Rakefile: include GemcutterTasks
 
     Fix rdoc reference (Joseph Holsten)
 
-	* README: renamed to README.rdoc
-	* Rakefile: likewise
-	* rets4r.gemspec: likewise
-	* CONTRIBUTORS: added Joseph Holsten
+    * README: renamed to README.rdoc
+    * Rakefile: likewise
+    * rets4r.gemspec: likewise
+    * CONTRIBUTORS: added Joseph Holsten
 
 1.1.12
     Merge example settings into a config file (Joseph Holsten)

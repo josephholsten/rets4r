@@ -1,20 +1,20 @@
 Wed Mar  3 12:43:25 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     Require mocha before shoulda to fix 'uninitialized constant Test::Unit::TestResult::TestResultFailureSupport'
-    
-	* test/test_helper.rb: require mocha earlier
+
+    * test/test_helper.rb: require mocha earlier
 
 Tue Feb 23 07:12:46 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     Add ListingMapper to convert listing keys
-    
+
     * lib/rets4r.rb: require listing service, mapper
     * lib/rets4r/listing_mapper.rb: new file
     * lib/rets4r/listing_service.rb: new file
     * test/data/listing_service.yml: new file
     * test/listing_mapper_test.rb: new file
     * test/test_helper.rb: new file
-    
+
     * lib/rets4r/core_ext/array/extract_options.rb: helper from rails
     * lib/rets4r/core_ext/class/attribute_accessors.rb: likewise
     * lib/rets4r/core_ext/hash/keys.rb: likewise
@@ -29,12 +29,12 @@ Sat Feb 20 05:39:51 2010  Brian Dunn <brianpatrickdunn@gmail.com>
 Thu Feb 11 06:21:54 2010  Brian Dunn <brianpatrickdunn@gmail.com>
 
     * lib/rets4r/client/parsers/compact_nokogiri.rb
-    	(CompactNokogiriParser#each): new. should yield each row as the stream is
-    								  read
-    	(CompactNokogiriParser#to_a): reads the whole stream and returns
-    								  rows in an array
+    (CompactNokogiriParser#each): new. should yield each row as the stream is
+    read
+    (CompactNokogiriParser#to_a): reads the whole stream and returns
+    rows in an array
     * lib/rets4r/loader.rb: uses the each method to yield as the stream
-    					    is read
+    is read
     * test/compact_nokogiri_test.rb: uses to_a instead.
 
 Sun Feb  7 19:05:46 2010  Scott Patterson <scott.patterson@digitalaun.com>
@@ -44,7 +44,7 @@ Sun Feb  7 19:05:46 2010  Scott Patterson <scott.patterson@digitalaun.com>
 Sun Feb  7 19:11:38 2010  Scott Patterson <scott.patterson@digitalaun.com>
 
     Reversed aliases and accessors to use Ruby-style accessors with the get/set methods aliased.
-    
+
 Sun Feb  7 19:04:17 2010  Scott Patterson <scott.patterson@digitalaun.com>
 
     Added in #data alias to #response for compatibility.
@@ -191,10 +191,10 @@ Wed Nov 25 06:37:07 2009  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
 
     Fix rdoc reference (Joseph Holsten)
 
-	* README: renamed to README.rdoc
-	* Rakefile: likewise
-	* rets4r.gemspec: likewise
-	* CONTRIBUTORS: added Joseph Holsten
+    * README: renamed to README.rdoc
+    * Rakefile: likewise
+    * rets4r.gemspec: likewise
+    * CONTRIBUTORS: added Joseph Holsten
 
 1.1.12
     Merge example settings into a config file (Joseph Holsten)

@@ -4,7 +4,7 @@ module RETS4R
     class CompactNokogiriParser
       include Enumerable
       def initialize(io)
-        @doc    = CompactDocument.new 
+        @doc    = CompactDocument.new
         @parser = Nokogiri::XML::SAX::Parser.new(@doc)
         @io     = io
       end
@@ -23,7 +23,7 @@ module RETS4R
       class CompactDocument < Nokogiri::XML::SAX::Document
         attr_reader :results
         attr_writer :proc
-        
+
         def initialize
           @results = []
         end
@@ -59,7 +59,7 @@ module RETS4R
           end
         end
 
-        private 
+        private
         def handle_row
           data = make_hash
           if @proc

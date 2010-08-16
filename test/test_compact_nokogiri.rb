@@ -17,8 +17,8 @@ class CompactNokogiriTest < Test::Unit::TestCase
     file = File.expand_path(
       File.join('test', 'data', '1.5', 'search_compact_big.xml'))
     stat = File::Stat.new(file)
-    unless stat.size > stat.blksize 
-      flunk "This test probably won't work on this machine. 
+    unless stat.size > stat.blksize
+      flunk "This test probably won't work on this machine.
         It needs a test input file larger than the native block size."
     end
     stream = open(file)
@@ -26,7 +26,7 @@ class CompactNokogiriTest < Test::Unit::TestCase
     listings = RETS4R::Client::CompactNokogiriParser.new(stream).each do |row|
       positions << stream.pos
     end
-    assert positions.first < positions.last, 
+    assert positions.first < positions.last,
       "data was yielded durring the reading of the stream"
   end
   def test_should_not_include_column_elements_in_keys

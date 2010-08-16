@@ -148,10 +148,10 @@ module RETS4R
         def test_correcly_handles_location_header_url
           @response.expects(:[]).with('content-type').at_least_once.returns("multipart/parallel; boundary='1231'")
           @response.expects(:body).returns(
-"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 1\r\nContent-Type: image/jpeg\r\nLocation: http://example.com/391203-1.jpg\r\n\r\n" + 
-"\000"*120 + 
-"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 2\r\nContent-Type: image/gif\r\nLocation: http://example.com/391203-2.gif\r\n\r\n" + 
-"\000"*140 + 
+"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 1\r\nContent-Type: image/jpeg\r\nLocation: http://example.com/391203-1.jpg\r\n\r\n" +
+"\000"*120 +
+"\r\n--1231\r\nContent-ID: 392103\r\nObject-ID: 2\r\nContent-Type: image/gif\r\nLocation: http://example.com/391203-2.gif\r\n\r\n" +
+"\000"*140 +
 "\r\n--1231--"
           )
           results = @rets.get_object("Property", "Photo", "392103:*", true)
@@ -320,7 +320,7 @@ module RETS4R
 
             assert_raises(RETS4R::Client::HTTPError) {@rets.login('user', 'pass')}
         end
-        
+
         def test_search_without_query_should_not_raise_no_metho_error
             client = RETS4R::Client.new('http://demo.crt.realtors.org:6103/rets/login')
             client.login('Joe', 'Schmoe')

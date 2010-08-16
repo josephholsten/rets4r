@@ -29,7 +29,7 @@ class ListingMapperTest < Test::Unit::TestCase
         "Garage"=>"PARATTACHE,PAROPENER,PARREAR,PARSIDE",
         "YearBuilt"=>"2005",
         "AgentName"=>"CD Boyd, II",
-        
+
         "GARAGECAP"=>"2",
         "BATHSFULLBASEMENT"=>"",
         "BATHSFULLLEVEL1"=>"",
