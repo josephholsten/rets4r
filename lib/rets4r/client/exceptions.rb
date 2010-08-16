@@ -2,7 +2,7 @@ module RETS4R
   class Client
     # This exception should be thrown when a generic client error is encountered.
     class ClientException < Exception; end
-    
+
     # This exception should be thrown when there is an error with the parser, which is
     # considered a subcomponent of the RETS client. It also includes the XML data that
     # that was being processed at the time of the exception.
@@ -83,7 +83,7 @@ module RETS4R
     class TimeoutException < RETSTransactionException; end
     class TooManyOutstandingRequestsException < RETSTransactionException; end
     class MiscellaneousErrorException < RETSTransactionException; end
-    
+
     EXCEPTION_TYPES = {
       # Search Transaction Reply Codes
       20200 => UnknownQueryFieldException,
