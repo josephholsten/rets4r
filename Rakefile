@@ -44,3 +44,7 @@ task :check_manifest => [:clean, 'MANIFEST', 'MANIFEST.tmp'] do
 end
 
 CLEAN << '.rake_tasks'
+
+lib     = File.expand_path("../lib/rets4r.rb", __FILE__)
+version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d+)\1/, 2]
+CLEAN << "rets4r-#{version}.gem"
