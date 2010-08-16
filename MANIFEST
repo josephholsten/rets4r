@@ -11,6 +11,7 @@ Rakefile
 TODO
 examples/client_get_object.rb
 examples/client_login.rb
+examples/client_mapper.rb
 examples/client_metadata.rb
 examples/client_parser.rb
 examples/client_search.rb
@@ -20,11 +21,14 @@ lib/rets4r/auth.rb
 lib/rets4r/client.rb
 lib/rets4r/client/data.rb
 lib/rets4r/client/dataobject.rb
+lib/rets4r/client/exceptions.rb
+lib/rets4r/client/links.rb
 lib/rets4r/client/metadata.rb
 lib/rets4r/client/parsers/compact.rb
 lib/rets4r/client/parsers/compact_nokogiri.rb
 lib/rets4r/client/parsers/metadata.rb
 lib/rets4r/client/parsers/response_parser.rb
+lib/rets4r/client/requester.rb
 lib/rets4r/client/transaction.rb
 lib/rets4r/core_ext/array/extract_options.rb
 lib/rets4r/core_ext/class/attribute_accessors.rb
@@ -49,8 +53,10 @@ test/data/1.5/search_unescaped_compact.xml
 test/data/listing_service.yml
 test/test_auth.rb
 test/test_client.rb
+test/test_client_links.rb
 test/test_compact_nokogiri.rb
 test/test_helper.rb
 test/test_listing_mapper.rb
 test/test_loader.rb
 test/test_parser.rb
+test/test_quality.rb
