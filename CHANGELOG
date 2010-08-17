@@ -1,3 +1,233 @@
+Tue Aug 17 14:49:49 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    change useragent to something not a total hack
+    
+    * lib/rets4r.rb: set version before requires
+    * lib/rets4r/client/requester
+    (RETS4R::Client::Requester::DEFAULT_USER_AGENT): set to rets4r/n.n.n
+
+Tue Aug 17 14:43:42 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    remove links to dead ci and metric services
+
+Mon Aug 16 11:17:38 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    fix whitespace
+
+Mon Aug 16 11:13:30 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    update manifest
+
+Mon Aug 16 11:13:02 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    clean built gems
+
+    * Rakefile (clean): add rets4r-#{version}.gem to list of files to delete
+
+Mon Aug 16 10:58:26 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    ignore test data from quality checks
+
+Mon Aug 16 10:57:58 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    fix whitespace
+
+Mon Aug 16 10:43:44 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    add test for code quality
+
+Mon Aug  2 04:56:12 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    pull out request support
+
+    * lib/rets4r/client.rb: remove request operations into RETS4R::Client::Requester
+    * lib/rets4r/client/requester.rb: add
+
+Mon Aug  2 04:50:18 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    remove old setters and getters
+
+    * lib/rets4r/client.rb (Client#set_user_agent, #get_user_agent)
+    (#set_request_method, #get_request_method, #set_rets_version)
+    (#get_rets_version): remove, as replacements exist
+
+Mon Aug  2 04:36:03 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    pull out capability links
+
+    * lib/rets4r/client.rb: factor urls hash into links object
+    * lib/rets4r/client/links.rb: add
+
+Mon Aug  2 04:17:47 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    remove exceptions
+    * lib/rets4r/client.rb: remove exceptions into lib/rets4r/client/exceptions.rb
+
+Mon Aug  2 01:07:59 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    merge gemspec changes
+
+Mon Aug  2 01:03:28 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    make gem without jeweler
+
+    * GPL: removed with permission from other authors
+
+    * VERSION.yml: remove
+    * lib/rets4r.rb: add VERSION
+
+    * MANIFEST: added
+
+    * rets4r.gemspec: remove jeweler, add manifest
+    * Rakefile: remove jeweler, add manifest
+    * Gemfile: remove jeweler
+
+Mon Aug  2 00:48:47 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    rename tests to standard test_ form
+
+    * test/compact_nokogiri_test.rb -> test/test_compact_nokogiri.rb
+    * test/listing_mapper_test.rb -> test/test_listing_mapper.rb
+    * test/loader_test.rb -> test/test_loader.rb
+
+Tue Jul 20 10:30:51 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    merge with briandunnn
+
+Tue Jul 20 10:18:18 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Merge branch 'briandunn' into integration
+
+Tue Jul 13 15:27:12 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    fixed misleading parameter name in loader
+
+    * lib/rets4r/loader.rb (Loader::load): rename file to io
+
+Tue Jul 13 10:36:34 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    remove threads, use noko parser
+
+    * lib/rets4r/client.rb (Client#search): streaming yield through SAX parser
+    (Client#request): remove semaphores
+
+Tue Jul 13 10:17:36 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    note issue with queryless search
+
+    * test/test_client.rb (test_search_without_query_should_not_raise_no_metho_error): comment out
+
+Fri Jul  2 11:43:38 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    add a mapper example
+
+    * examples/client_mapper.rb: add
+
+Fri Jul  2 11:30:44 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    update todo
+
+Fri Jul  2 11:25:35 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Add clean task
+
+    * Rakefile: add clean task
+
+Fri Jun 25 09:22:07 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    narrow a test, clean up get object signature
+
+    * lib/rets4r/client.rb (Client#get_object): use true and false for location
+
+    * test/test_client.rb (test_search_without_query_should_not_raise_no_metho_error):
+    just check for that particular exception.
+
+Wed Jun 23 09:33:21 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    correctly handle location header in get_object
+
+    * lib/rets4r/client.rb (Client#process_header): use webrick header parsing
+    * lib/rets4r/client/dataobject.rb: case insensitive headers
+
+Tue Jun 22 17:38:58 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    new happy fails
+
+    * lib/rets4r.rb: require rubygems
+    * lib/rets4r/client/parsers/compact_nokogiri.rb (CompactNokogiriParser): include Enumerable
+    * test/compact_nokogiri_test.rb (test_should_not_include_column_elements_in_keys): add
+    * test/test_client.rb (test_correcly_handles_location_header_url): add
+
+Tue Jun 22 17:04:44 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    Merge SAX changes into master
+
+Fri Jun 18 17:48:40 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    fix nil escaping bug
+
+    * examples/settings.yml: add wildcard query
+    * lib/rets4r/client.rb (Client#create_query_string): ignore nil keys and values
+
+Fri Jun 18 17:19:17 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    initialize pre_request_block to shut up warning
+
+    * lib/rets4r/client.rb (Client#initialize): set @pre_request_block to nil
+
+Fri Jun 18 17:11:12 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    fix example scripts
+
+    * Gemfile: add activesupport
+
+    * examples/settings.yml: add environments
+
+    * examples/client_get_object.rb, examples/client_login.rb
+    examples/client_metadata.rb, examples/client_search.rb: use env
+    ruby. load settings based on LISTING_ENV
+
+Fri Jun 18 15:53:15 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    remove rubygems from here too
+
+    * examples/client_parser.rb: remove require
+
+Fri Jun 18 15:50:04 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    remove rubygems requires
+
+    * Rakefile, lib/rets4r/client/parsers/compact_nokogiri.rb
+    test/test_client.rb, test/test_helper.rb: remove require
+
+Fri Jun 18 15:44:47 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    use bundler for less gem headaches in dev
+
+    * Gemfile: add
+
+Fri Jun 18 15:42:51 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    fix annotations task
+
+    * lib/tasks/annotations.rake: replace require with inline code
+
+Wed Mar  3 16:02:11 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Update gemspec to v1.1.17
+
+    * rets4r.gemspec: update
+
+Wed Mar  3 16:01:12 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Version bump to 1.1.17
+
+    * VERSION.yml: bump patch
+
+Wed Mar  3 15:59:44 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Update change documentation
+
 Wed Mar  3 12:43:25 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     Require mocha before shoulda to fix 'uninitialized constant Test::Unit::TestResult::TestResultFailureSupport'
