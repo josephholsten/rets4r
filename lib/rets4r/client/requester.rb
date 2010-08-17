@@ -1,11 +1,10 @@
+require 'rets4r'
 require 'rets4r/client/exceptions'
 
 module RETS4R
   class Client
     class Requester
-      #DEFAULT_USER_AGENT      = 'RETS4R/0.8.2' # FIXME
-      DEFAULT_USER_AGENT      = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b5) ' +
-                                                              'Gecko/2008050509 Firefox/3.0b5'
+      DEFAULT_USER_AGENT      = "rets4r/#{::RETS4R::VERSION}"
       DEFAULT_RETS_VERSION    = '1.7'
 
       attr_accessor :logger, :headers, :pre_request_block, :nc, :username, :password, :method

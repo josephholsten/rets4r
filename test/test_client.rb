@@ -41,6 +41,11 @@ module RETS4R
             assert in_block, "Block was never yielded to"
         end
 
+        def test_useragent
+          assert_match /^rets4r/, RETS4R::Client::Requester::DEFAULT_USER_AGENT
+          assert_match /#{::RETS4R::VERSION}/, RETS4R::Client::Requester::DEFAULT_USER_AGENT
+        end
+
         def test_get_metadata_returns_the_metadata_when_no_block_given
             rval = @rets.get_metadata
 
