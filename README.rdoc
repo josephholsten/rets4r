@@ -15,8 +15,6 @@ bindings available from the Center for Realtor¨ Technology
 
 * Source: http://github.com/josephholsten/rets4r
 * Documentation: http://rdoc.info/projects/josephholsten/rets4r
-* Continuous Integration: http://runcoderun.com/josephholsten/rets4r
-* Code Metrics: http://devver.net/caliper/project?repo=git%3A%2F%2Fgithub.com%2Fjosephholsten%2Frets4r.git
 
 == Requirements
 
