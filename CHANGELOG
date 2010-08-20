@@ -1,7 +1,7 @@
 Tue Aug 17 14:49:49 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     change useragent to something not a total hack
-    
+
     * lib/rets4r.rb: set version before requires
     * lib/rets4r/client/requester
     (RETS4R::Client::Requester::DEFAULT_USER_AGENT): set to rets4r/n.n.n

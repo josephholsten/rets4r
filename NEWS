@@ -1,9 +1,9 @@
 1.1.17
     New features
     * RETS4R::Client::ResponseParser#parse_results: works with COMPACT-DECODED
-    * RETS4R::Client::CompactDataParser#parse_results: works without a 
+    * RETS4R::Client::CompactDataParser#parse_results: works without a
       delimiter in response
-    * RETS4R::Client::CompactDataParser#parse_data: works without column names 
+    * RETS4R::Client::CompactDataParser#parse_data: works without column names
       in response
     * RETS4R::Client::CompactNokogiriParser: yields data as it is read
     * RETS4R::ListingMapper: added
