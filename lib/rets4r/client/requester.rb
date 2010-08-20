@@ -109,7 +109,9 @@ module RETS4R
                 end
               end
               set_header('Cookie', cookies.join("; ")) unless cookies.empty?
-              set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID']
+              # totally wrong. session id is only ever under the Cookie header
+              #set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID'] 
+              set_header('RETS-Session-ID',nil)
             end
           rescue AuthRequired
             @nc += 1

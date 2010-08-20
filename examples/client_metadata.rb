@@ -27,7 +27,7 @@ RETS4R::Client.new(settings[:url]) do |client|
             metadata = ''
 
             begin
-                metadata = client.get_metadata
+                metadata = client.get_metadata(*ARGV)
             rescue
                 puts "Unable to get metadata: '#{$!}'"
             end
