@@ -37,6 +37,8 @@ module RETS4R
           when 'DATA'
             @data_element = true
             @string = ''
+          when 'RETS'
+            handle_body_start attrs
           end
         end
 
@@ -56,6 +58,9 @@ module RETS4R
             @string << string
           elsif @data_element
             @string << string
+          elsif @reply_code
+            throw string
+            @reply_code = false
           end
         end
 
@@ -66,6 +71,12 @@ module RETS4R
             @proc.call(data)
           else
             @results << data
+          end
+        end
+        def handle_body_start attrs
+          attrs = Hash[*attrs]
+          if exception_class = Client::EXCEPTION_TYPES[attrs['ReplyCode'].to_i]
+            raise exception_class.new(attrs['ReplyText'])
           end
         end
         def make_hash
