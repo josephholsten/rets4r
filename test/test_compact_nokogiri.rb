@@ -36,4 +36,29 @@ class CompactNokogiriTest < Test::Unit::TestCase
 
     assert RETS4R::Client::CompactNokogiriParser.new(StringIO.new(response)).map.first.keys.grep( /COLUMN/ ).empty?
   end
+  context 'non-zero reply code' do
+    setup do
+      @response = <<-BODY
+<?xml version="1.0"?>
+<RETS ReplyCode="20203" ReplyText="User does not have access to Class named RES. Reference ID: 3fe82558-8015-4d9d-ab0c-776d9e4b5943" />
+      BODY
+      @parser = RETS4R::Client::CompactNokogiriParser.new(StringIO.new(@response))
+    end
+    should "raise the execption" do
+      assert_raise RETS4R::Client::MiscellaneousSearchErrorException do
+        @parser.to_a
+      end
+    end
+    context 'when i parse' do
+      should "contain the reply text in the exception message" do
+        message = ''
+        begin
+          @parser.to_a
+        rescue Exception => e
+          message = e.message
+        end
+        assert_equal "User does not have access to Class named RES. Reference ID: 3fe82558-8015-4d9d-ab0c-776d9e4b5943", message
+      end
+    end
+  end
 end
