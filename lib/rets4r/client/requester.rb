@@ -14,7 +14,6 @@ module RETS4R
           'User-Agent'   => DEFAULT_USER_AGENT,
           'Accept'       => '*/*',
           'RETS-Version' => "RETS/#{DEFAULT_RETS_VERSION}",
-          'RETS-Session-ID' => '0'
         }
         @pre_request_block = nil
       end

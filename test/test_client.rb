@@ -302,7 +302,7 @@ module RETS4R
             response.stubs(:code).returns('500')
             response.stubs(:message).returns('Move along, nothing to see here.')
 
-            http.expects(:get).with('', {'RETS-Session-ID' => '0', 'User-Agent' => @rets.user_agent, 'RETS-Version' => "RETS/#{@rets.rets_version}", 'Accept' => '*/*'}).at_least_once.returns(response)
+            http.expects(:get).with('', {'User-Agent' => @rets.user_agent, 'RETS-Version' => "RETS/#{@rets.rets_version}", 'Accept' => '*/*'}).at_least_once.returns(response)
             http.expects(:post).never
             Net::HTTP.any_instance.expects(:start).at_least_once.yields(http)
 
@@ -319,7 +319,7 @@ module RETS4R
             response.stubs(:code).returns('500')
             response.stubs(:message).returns('Move along, nothing to see here.')
 
-            http.expects(:post).with('', '', {'RETS-Session-ID' => '0', 'User-Agent' => @rets.user_agent, 'RETS-Version' => "RETS/#{@rets.rets_version}", 'Accept' => '*/*'}).at_least_once.returns(response)
+            http.expects(:post).with('', '', {'User-Agent' => @rets.user_agent, 'RETS-Version' => "RETS/#{@rets.rets_version}", 'Accept' => '*/*'}).at_least_once.returns(response)
             http.expects(:get).never
             Net::HTTP.any_instance.expects(:start).at_least_once.yields(http)
 
