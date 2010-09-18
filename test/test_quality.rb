@@ -16,7 +16,7 @@ class TestQuality < Test::Unit::TestCase
     error_messages = []
     Dir.chdir(root) do
       File.read("MANIFEST").split("\n").each do |filename|
-        next if filename =~ /data/
+        next if filename =~ /data|NEWS|CHANGELOG/
         error_messages << check_for_tab_characters(filename)
         error_messages << check_for_extra_spaces(filename)
       end
