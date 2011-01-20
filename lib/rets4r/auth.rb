@@ -4,16 +4,15 @@ module RETS4R
     class Auth
         # This is the primary method that would normally be used, and while it
         def Auth.authenticate(response, username, password, uri, method, requestId, useragent, nc = 0)
-            if response['www-authenticate'].nil? || response['www-authenticate'].empty?
-              raise "Missing required header 'www-authenticate'. Got: #{response}"
-            end
-
+          if response['www-authenticate'].nil? || response['www-authenticate'].empty?
+            raise "Missing required header 'www-authenticate'. Got: #{response}"
+          elsif response['www-authenticate'] =~ /Basic/
+            # allow for Baisc auth here since boards are not reliable in headers they send
+            'Basic ' + ["#{username}:#{password}"].pack('m').delete("\r\n")
+          else #using digest
             authHeader = Auth.parse_header(response['www-authenticate'])
-
             cnonce = cnonce(useragent, password, requestId, authHeader['nonce'])
-
             authHash = calculate_digest(username, password, authHeader['realm'], authHeader['nonce'], method, uri, authHeader['qop'], cnonce, nc)
-
             header = ''
             header << "Digest username=\"#{username}\", "
             header << "realm=\"#{authHeader['realm']}\", "
@@ -24,8 +23,8 @@ module RETS4R
             header << "cnonce=\"#{cnonce}\", "
             header << "response=\"#{authHash}\", "
             header << "opaque=\"#{authHeader['opaque']}\""
-
-            return header
+            header
+          end
         end
 
         def Auth.calculate_digest(username, password, realm, nonce, method, uri, qop = false, cnonce = false, nc = 0)

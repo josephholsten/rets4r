@@ -13,9 +13,17 @@ module RETS4R
             @nonce      =  '2006-03-03T17:37:10'
         end
 
-        def test_authenticate
+        def test_digest_authenticatioon
             response = {
                 'www-authenticate' => 'Digest qop="auth",realm="'+ @realm +'",nonce="'+ @nonce +'",opaque="",stale="false",domain="\my\test\domain"'
+                }
+
+            Auth.authenticate(response, @username, @password, '/my/rets/url', 'GET', Auth.request_id, @useragent)
+        end
+
+        def test_basic_authenticatioon
+            response = {
+                'www-authenticate' => 'Basic realm="'+@realm+'"'
                 }
 
             Auth.authenticate(response, @username, @password, '/my/rets/url', 'GET', Auth.request_id, @useragent)
