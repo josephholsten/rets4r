@@ -1,3 +1,8 @@
+1.1.18
+    * Allows for Basic authentication
+    * switched XML parser to Nokogiri
+    * removed redundant user_agent method
+
 1.1.17
     New features
     * RETS4R::Client::ResponseParser#parse_results: works with COMPACT-DECODED

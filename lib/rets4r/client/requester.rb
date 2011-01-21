@@ -48,10 +48,6 @@ module RETS4R
         logger.debug("Set header '#{name}' to '#{value}'") if logger
       end
 
-      def user_agent
-        @headers['User-Agent']
-      end
-
       # Given a hash, it returns a URL encoded query string.
       def create_query_string(hash)
         parts = hash.map {|key,value| "#{CGI.escape(key)}=#{CGI.escape(value)}" unless key.nil? || value.nil?}
