@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.files = File.read("MANIFEST").split(/\r?\n\r?/)
   spec.test_files = spec.files.grep(/^test\/.*test_.*\.rb$/)
 
-  spec.add_runtime_dependency 'nokogiri', '~>1.4.0'
+  spec.add_runtime_dependency 'nokogiri', '~>1.4.3.0'
   spec.add_development_dependency 'mocha'
   spec.add_development_dependency 'shoulda'
   spec.add_development_dependency 'activesupport'
