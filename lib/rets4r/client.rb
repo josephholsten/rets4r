@@ -403,23 +403,7 @@ module RETS4R
       end
     end
 
-    def count(search_type, klass, query)
-      header = {}
-      data = {
-        'SearchType' => search_type,
-        'Class'      => klass,
-        'Query'      => query,
-        'QueryType'  => 'DMQL2',
-        'Format'     => format,
-        'Count'      => '2'
-      }
-      response = request(@urls.search, data, header)
-      result = @response_parser.parse_count(response.body)
-      return result
-    end
-
-    # similar to count but allows you to pass options
-    def custom_count(search_type, klass, query, options = false)
+    def count(search_type, klass, query, options = false)
       header = {}
 
       # Required Data
@@ -429,10 +413,10 @@ module RETS4R
         'Query'      => query,
         'QueryType'  => 'DMQL2',
         'Format'     => format,
-        'Count'      => '0'
+        'Count'      => '2'
       }
       options.each { |k,v| data[k] = v.to_s } if options
-      response = request(@urls['Search'], data, header)
+      response = request(@urls.search, data, header)
       count = @response_parser.parse_count(response.body)
     end
 

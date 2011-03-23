@@ -338,5 +338,59 @@ module RETS4R
               assert_not_equal "NoMethodError", e.class.to_s
             end
         end
+
+        def test_count
+
+          logfile = StringIO.open
+          rets    = RETS4R::Client.new(RETS_URL)
+          rets.logger = Logger.new(logfile)
+          rets.logger.level = Logger::DEBUG
+
+          RETS4R::Client::Requester.any_instance.stubs(:request).returns(response = mock('response'))
+          response.stubs(:body).returns(:body)
+          RETS4R::Client::ResponseParser.any_instance.stubs(:parse_count).returns(:count)
+
+          count = rets.count(:search_type, :class, :query)
+
+          # assert_equal :search_url, search_url
+          # assert_equal :search_type, data['SearchType']
+          # assert_equal :class, data['Class']
+          # assert_equal :query, data['Query']
+          assert_equal :count, count
+        end
+
+        def test_count_returns_count
+          RETS4R::Client::Requester.any_instance.stubs(:request).returns(response = mock('response'))
+          response.stubs(:body).returns(:body)
+          RETS4R::Client::ResponseParser.any_instance.stubs(:parse_count).returns(:count)
+          rets = RETS4R::Client.new(RETS_URL)
+
+          assert_equal :count, rets.count(:search_type, :class, :query)
+        end
+
+        def test_count_passes_request_params
+          RETS4R::Client::Links.stubs(:from_login_url).returns(links = mock('links'))
+          links.stubs(:search).returns(:search_url)
+          expected_data = {'Query' => :query, 'Format' => 'COMPACT', 'Count' => '2', 'QueryType' => 'DMQL2', 'Class' => :class, 'SearchType' => :search_type}
+          RETS4R::Client::Requester.any_instance.expects(:request).with(:search_url, expected_data, {}, 'GET', 2).returns(response = mock('response'))
+          response.stubs(:body).returns(:body)
+          RETS4R::Client::ResponseParser.any_instance.stubs(:parse_count).returns(:count)
+          rets = RETS4R::Client.new(RETS_URL)
+
+          rets.count(:search_type, :class, :query)
+        end
+        def test_count_with_options_passes_request_params
+          RETS4R::Client::Links.stubs(:from_login_url).returns(links = mock('links'))
+          links.stubs(:search).returns(:search_url)
+          # note the extra option is merged in, with the key converted to a string
+          expected_data = {'OPTION' => 'option', 'Query' => :query, 'Format' => 'COMPACT', 'Count' => '2', 'QueryType' => 'DMQL2', 'Class' => :class, 'SearchType' => :search_type}
+          RETS4R::Client::Requester.any_instance.expects(:request).with(:search_url, expected_data, {}, 'GET', 2).returns(response = mock('response'))
+          response.stubs(:body).returns(:body)
+          RETS4R::Client::ResponseParser.any_instance.stubs(:parse_count).returns(:count)
+          rets = RETS4R::Client.new(RETS_URL)
+
+          rets.count(:search_type, :class, :query, 'OPTION' => :option)
+        end
+        # test_count_with_options
     end
 end
