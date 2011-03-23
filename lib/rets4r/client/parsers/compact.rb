@@ -6,8 +6,9 @@ module RETS4R
   class Client
     class CompactDataParser
       # Take an RETS XML Document and parse out its results
+      #--
+      # TODO: move into ResponseDocument, or even better, a child
       def parse_results(doc)
-        # TODO: replace with a a proper document class
         delimiter = doc.at('/RETS/DELIMITER') &&
                     doc.at('/RETS/DELIMITER')['value'].to_i.chr
         columns   = doc.at('/RETS/COLUMNS')

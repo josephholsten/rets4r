@@ -79,6 +79,8 @@ module RETS4R
             raise exception_class.new(attrs['ReplyText'])
           end
         end
+        #--
+        # What does this do? Could this be reused elsewhere?
         def make_hash
           @columns.zip(@string.split(@delimiter)).inject({}) do | h,(k,v) |
             h[k] = v unless k.empty?

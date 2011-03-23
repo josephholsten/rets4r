@@ -206,6 +206,8 @@ module RETS4R
 
       # Parse response to get other URLS
       results = @response_parser.parse_key_value(response.body)
+      # TODO: fix test to like this
+      # results = ResponseDocument.safe_parse(response.body).validate!.parse_key_value
 
       if (results.success?)
         CAPABILITY_LIST.each do |capability|
@@ -262,6 +264,8 @@ module RETS4R
       xml = download_metadata(type, id)
 
       result = @response_parser.parse_metadata(xml, @format)
+      # TODO: fix test to like this
+      # result = ResponseDocument.safe_parse(xml).validate!.to_rexml
 
       if block_given?
         yield result
@@ -309,7 +313,8 @@ module RETS4R
       if response['content-type'] && response['content-type'].include?('text/xml')
         # This probably means that there was an error.
         # Response parser will likely raise an exception.
-        rr = @response_parser.parse_object_response(response.body)
+        # TODO: test this
+        rr = ResponseDocument.safe_parse(response.body).validate!.to_transaction
         return rr
       elsif response['content-type'] && response['content-type'].include?('multipart/parallel')
         content_type = process_content_type(response['content-type'])
@@ -418,6 +423,8 @@ module RETS4R
       options.each { |k,v| data[k] = v.to_s } if options
       response = request(@urls.search, data, header)
       count = @response_parser.parse_count(response.body)
+      # TODO: fix test to like this
+      # ResponseDocument.safe_parse(xml).validate!.parse_count
     end
 
     private

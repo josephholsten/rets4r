@@ -2,7 +2,7 @@ module RETS4R
   class Client
     class Transaction
       attr_accessor :reply_code, :reply_text, :response, :metadata,
-        :header, :maxrows, :delimiter, :secondary_response
+        :header, :maxrows, :delimiter, :secondary_response, :doc
 
       def initialize
         self.maxrows = false
@@ -10,11 +10,15 @@ module RETS4R
         self.delimiter = ?\t
       end
 
+      #--
+      # TODO: delegate onto #doc
       def success?
         return true if self.reply_code == '0'
         return false
       end
 
+      #--
+      # TODO: delegate onto #doc
       def maxrows?
         return true if self.maxrows
         return false

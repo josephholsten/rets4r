@@ -9,6 +9,19 @@ module RETS4R #:nodoc:
         links['Login'] = URI.parse(login_url)
         links
       end
+      #--
+      # TODO: test this and remove crap from Client#login
+      # def []=(capability, uri)
+      #   uri = URI.parse(uri) unless URI === uri
+      #   if uri.absolute?
+      #     super(capability, uri)
+      #   else
+      #     base = self.login.clone
+      #     base.path = results.response[capability]
+      #     super(capability, base)
+      #   end
+      # end
+      #++
       def login
         self['Login']
       end
