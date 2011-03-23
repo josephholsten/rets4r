@@ -38,6 +38,7 @@ lib/rets4r/core_ext/hash/slice.rb
 lib/rets4r/listing_mapper.rb
 lib/rets4r/listing_service.rb
 lib/rets4r/loader.rb
+lib/rets4r/response_document.rb
 lib/tasks/annotations.rake
 lib/tasks/coverage.rake
 rets4r.gemspec
@@ -62,3 +63,4 @@ test/test_loader.rb
 test/test_parser.rb
 test/test_quality.rb
 test/test_requester.rb
+test/test_response_document.rb

@@ -44,7 +44,7 @@ class TestCompactNokogiri < Test::Unit::TestCase
       BODY
       @parser = RETS4R::Client::CompactNokogiriParser.new(StringIO.new(@response))
     end
-    should "raise the execption" do
+    should "raise the exception" do
       assert_raise RETS4R::Client::MiscellaneousSearchErrorException do
         @parser.to_a
       end

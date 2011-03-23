@@ -13,7 +13,7 @@ class TestRequester < Test::Unit::TestCase
 <?xml version="1.0"?>
 <RETS ReplyCode="20203" ReplyText="User does not have access to Class named RES. Reference ID: 3fe82558-8015-4d9d-ab0c-776d9e4b5943" />
         BODY
-        @response = stub('HTTPResponse', :code => '200', :body => body) 
+        @response = stub('HTTPResponse', :code => '200', :body => body)
         @response.stubs(:get_fields).with('set-cookie').returns(['RETS-Session-ID=2qwiti55hq311j553ihivc3r; path=/'])
         Net::HTTP.any_instance.stubs(:get => @response )
         @requester.request(@uri)

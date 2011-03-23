@@ -61,35 +61,15 @@ module RETS4R
       private
 
       def parse_common(xml, &block)
-        if xml == ''
-          raise RETSException, 'No transaction body was returned!'
-        end
-
-        doc = Nokogiri::XML(xml) do |config|
+        doc = RETS4R::ResponseDocument.parse(xml) do |config|
           config.strict.noblanks
           config.strict.noerror
           config.strict.recover
         end
 
-        root = doc.root
-        if root.nil? || root.name != 'RETS'
-          raise "Response had invalid root node. Document was: #{doc.inspect}"
-        end
+        doc.validate!
 
-        transaction = Transaction.new
-        transaction.reply_code = root['ReplyCode']
-        transaction.reply_text = root['ReplyText']
-        transaction.maxrows    = (doc.search('/RETS/MAXROWS').length > 0)
-
-        # XXX: If it turns out we need to parse the response of errors, then this will
-        # need to change.
-        if transaction.reply_code.to_i > 0 && transaction.reply_code.to_i != 20201
-          exception_type = Client::EXCEPTION_TYPES[transaction.reply_code.to_i] || RETSTransactionException
-          raise exception_type, "#{transaction.reply_code} - #{transaction.reply_text}"
-        end
-
-        transaction.response = yield doc
-        return transaction
+        transaction = doc.to_transaction {|response| yield response }
       end
 
       def get_parser_by_name(name)
