@@ -7,9 +7,10 @@ module RETS4R
           if response['www-authenticate'].nil? || response['www-authenticate'].empty?
             raise "Missing required header 'www-authenticate'. Got: #{response}"
           elsif response['www-authenticate'] =~ /Basic/
-            # allow for Baisc auth here since boards are not reliable in headers they send
+            # use Basic Authentication
             'Basic ' + ["#{username}:#{password}"].pack('m').delete("\r\n")
-          else #using digest
+          else
+            # use Digest Authentication
             authHeader = Auth.parse_header(response['www-authenticate'])
             cnonce = cnonce(useragent, password, requestId, authHeader['nonce'])
             authHash = calculate_digest(username, password, authHeader['realm'], authHeader['nonce'], method, uri, authHeader['qop'], cnonce, nc)
