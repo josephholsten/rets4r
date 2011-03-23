@@ -1,13 +1,64 @@
+Wed Mar 23 00:44:24 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    update news
+
+Wed Mar 23 00:35:48 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Use more idiomatic nokogiri
+
+    * lib/rets4r/client/parsers/response_parser.rb
+      (RETS4R::Client::ResponseParser#parse_key_value)
+      (RETS4R::Client::ResponseParser#parse_common)
+      (RETS4R::Client::ResponseParser#parse_count): use idiomatic nokogiri
+
+Wed Mar 23 00:30:04 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Use simpler nokogiri calls
+
+    * lib/rets4r/client/parsers/compact.rb (RETS4R::Client::CompactDataParser#parse_results):
+      use simpler nokogiri methods helper
+
+Wed Mar 23 00:19:34 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Allow options for count
+
+    * lib/rets4r/client.rb (RETS4R::Client#count): merge and remove custom_count
+    * test/test_client.rb: add count tests
+
+Tue Mar 22 23:28:21 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Clean up comments
+
+    * lib/rets4r/auth.rb: clean up comments
+
+Tue Mar 22 22:03:25 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    merge news
+
+Fri Jan 21 17:22:01 2011  Braxton Beyer <braxton@braxtonbeyer.com>
+
+    stepped version, added author and removed redundant user_agent method
+
+Thu Jan 20 17:41:52 2011  Braxton Beyer <braxton@braxtonbeyer.com>
+
+    * allowing for basic authentication
+    * added custom_count function which allows you to pass options could probably just be combined with count function
+    * switched to nokogiri for xml parsing.
+
+Tue Mar 22 21:33:39 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Update documentation
+
 Tue Mar 22 19:36:54 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     Bump and tag for release
-    
+
     * lib/rets4r.rb (RETS4R::VERSION): bump to 1.1.18
 
 Tue Mar 22 19:34:26 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     Support rubygems-test
-    
+
     * .gemtest: add
     * MANIFEST (.gemtest): add
     * rets4r.gemspec: remove test files
@@ -15,19 +66,19 @@ Tue Mar 22 19:34:26 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
 Tue Mar 22 19:30:42 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     Use bundler for gem tasks
-    
+
     * Rakefile: install bundler gem helper
 
 Tue Mar 22 19:10:43 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     Use rake
-    
+
     * rets4r.gemspec: add development dep rake
 
 Sun Feb 27 18:48:18 2011  Brian Dunn <brianpatrickdunn@gmail.com>
 
     lock in the nokogiri version: fixes the sax parser
-    
+
     * Gemfile: use the gemfile
     * Rakefile: load the bundle
     * rets4r.gemspec: lock in the nokogiri version
