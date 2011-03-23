@@ -1,7 +1,7 @@
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__)))
 require 'test_helper'
 
-class ListingMapperTest < Test::Unit::TestCase
+class TestListingMapper < Test::Unit::TestCase
   context "ListingMapper" do
     should "access select" do
       config = RETS4R::ListingService.connection

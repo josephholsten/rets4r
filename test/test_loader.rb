@@ -3,7 +3,7 @@ $:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 require 'rets4r'
 require 'test/unit'
 
-class LoaderTest < Test::Unit::TestCase
+class TestLoader < Test::Unit::TestCase
   def test_should_pass_records_to_block
     file = File.expand_path(File.join('test', 'data', '1.5', 'search_compact.xml'))
 

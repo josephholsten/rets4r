@@ -2,7 +2,7 @@
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
 require 'test_helper'
 
-class CompactNokogiriTest < Test::Unit::TestCase
+class TestCompactNokogiri < Test::Unit::TestCase
   def test_should_do_stuff
     file = File.expand_path(File.join('test', 'data', '1.5', 'search_compact.xml'))
     listings = RETS4R::Client::CompactNokogiriParser.new(open(file)).to_a
