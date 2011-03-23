@@ -7,10 +7,10 @@ module RETS4R
     class CompactDataParser
       def parse_results(doc)
 
-        delimiter = doc.get_elements('/RETS/DELIMITER')[0] &&
-                    doc.get_elements('/RETS/DELIMITER')[0].attributes['value'].to_i.chr
-        columns   = doc.get_elements('/RETS/COLUMNS')[0]
-        rows      = doc.get_elements('/RETS/DATA')
+        delimiter = doc.xpath('/RETS/DELIMITER')[0] &&
+                    doc.xpath('/RETS/DELIMITER')[0]['value'].to_i.chr
+        columns   = doc.xpath('/RETS/COLUMNS')[0]
+        rows      = doc.xpath('/RETS/DATA')
 
         parse_data(columns, rows, delimiter)
       end

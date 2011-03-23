@@ -8,7 +8,7 @@ module RETS4R
       def parse_key_value(xml)
         parse_common(xml) do |doc|
           parsed = nil
-          first_child = doc.get_elements('/RETS/RETS-RESPONSE')[0] ? doc.get_elements('/RETS/RETS-RESPONSE')[0] : doc.get_elements('/RETS')[0]
+          first_child = doc.xpath('/RETS/RETS-RESPONSE')[0] ? doc.xpath('/RETS/RETS-RESPONSE')[0] : doc.xpath('/RETS')[0]
           unless first_child.nil?
             parsed = {}
             first_child.text.each do |line|
@@ -38,7 +38,7 @@ module RETS4R
 
       def parse_count(xml)
         parse_common(xml) do |doc|
-          doc.get_elements('/RETS/COUNT')[0].attributes['Records']
+          doc.xpath('/RETS/COUNT')[0]['Records']
         end
       end
 
@@ -61,7 +61,11 @@ module RETS4R
           raise RETSException, 'No transaction body was returned!'
         end
 
-        doc = REXML::Document.new(xml)
+        doc = Nokogiri::XML(xml) do |config|
+          config.strict.noblanks
+          config.strict.noerror
+          config.strict.recover
+        end
 
         root = doc.root
         if root.nil? || root.name != 'RETS'
@@ -69,10 +73,9 @@ module RETS4R
         end
 
         transaction = Transaction.new
-        transaction.reply_code = root.attributes['ReplyCode']
-        transaction.reply_text = root.attributes['ReplyText']
-        transaction.maxrows    = (doc.get_elements('/RETS/MAXROWS').length > 0)
-
+        transaction.reply_code = root['ReplyCode']
+        transaction.reply_text = root['ReplyText']
+        transaction.maxrows    = (doc.xpath('/RETS/MAXROWS').length > 0)
 
         # XXX: If it turns out we need to parse the response of errors, then this will
         # need to change.

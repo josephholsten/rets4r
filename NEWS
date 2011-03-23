@@ -14,6 +14,9 @@
   * Remove broken RETS Session ID header support
   * Fix nokogiri dependency
   * Remove broken multi-thread support
+  * Allows for Basic authentication
+  * switched XML parser to Nokogiri
+  * removed redundant user_agent method
 
 1.1.17
     New features

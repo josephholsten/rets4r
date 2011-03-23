@@ -62,17 +62,20 @@ module RETS4R
                 assert_equal nil, transaction.secondary_response
             end
 
-            def test_unescaped_search_compact
-              assert_raise(REXML::ParseException) do
-                @parser.parse_key_value(load_xml_from_file("#{DATA_DIR}search_unescaped_compact.xml"))
-              end
-            end
-
-            def test_invalid_search_compact
-                assert_raise(REXML::ParseException) do
-                  @parser.parse_key_value(load_xml_from_file("#{DATA_DIR}search_unescaped_compact.xml"))
-                end
-            end
+            # disabled these tests since errors are not raised anymore since nokogiri can handle them
+            # the whole point of switiching to nokogiri is to allow for these errors since the boards 
+            # of realtors are not at all reliable in sending correct xml
+            # def test_unescaped_search_compact
+            #   assert_raise(Nokogiri::XML::SyntaxError) do
+            #     @parser.parse_key_value(load_xml_from_file("#{DATA_DIR}search_unescaped_compact.xml"))
+            #   end
+            # end
+            # 
+            # def test_invalid_search_compact
+            #     assert_raise(Nokogiri::XML::SyntaxError) do
+            #       @parser.parse_key_value(load_xml_from_file("#{DATA_DIR}search_unescaped_compact.xml"))
+            #     end
+            # end
 
             def test_login_results
                 transaction = parse_to_transaction("#{DATA_DIR}login.xml")
