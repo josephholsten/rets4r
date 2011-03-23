@@ -3,7 +3,7 @@ dir = File.join File.dirname(__FILE__), 'rets4r'
 $:.unshift(dir) unless $:.include?(dir) || $:.include?(File.expand_path(dir))
 
 module RETS4R # :nodoc:
-  VERSION = '1.1.17'
+  VERSION = '1.1.18'
 end
 
 require 'client'
