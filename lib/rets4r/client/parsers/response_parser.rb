@@ -8,7 +8,11 @@ module RETS4R
       def parse_key_value(xml)
         parse_common(xml) do |doc|
           parsed = nil
-          first_child = doc.xpath('/RETS/RETS-RESPONSE')[0] ? doc.xpath('/RETS/RETS-RESPONSE')[0] : doc.xpath('/RETS')[0]
+          first_child = if doc.at('/RETS/RETS-RESPONSE')
+            doc.at('/RETS/RETS-RESPONSE')
+          else
+            doc.at('/RETS')
+          end
           unless first_child.nil?
             parsed = {}
             first_child.text.each do |line|
@@ -38,7 +42,7 @@ module RETS4R
 
       def parse_count(xml)
         parse_common(xml) do |doc|
-          doc.xpath('/RETS/COUNT')[0]['Records']
+          doc.at('/RETS/COUNT')['Records']
         end
       end
 
@@ -75,7 +79,7 @@ module RETS4R
         transaction = Transaction.new
         transaction.reply_code = root['ReplyCode']
         transaction.reply_text = root['ReplyText']
-        transaction.maxrows    = (doc.xpath('/RETS/MAXROWS').length > 0)
+        transaction.maxrows    = (doc.search('/RETS/MAXROWS').length > 0)
 
         # XXX: If it turns out we need to parse the response of errors, then this will
         # need to change.
