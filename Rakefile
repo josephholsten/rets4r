@@ -1,10 +1,7 @@
-require "rubygems"
-require "bundler/setup"
+require 'rubygems'
+require 'bundler/setup'
 require 'rake'
 require 'rake/clean'
-require 'rake/packagetask'
-require 'rake/gempackagetask'
-require 'rake/contrib/rubyforgepublisher'
 require 'fileutils'
 include FileUtils
 
@@ -47,6 +44,5 @@ end
 
 CLEAN << '.rake_tasks'
 
-lib     = File.expand_path("../lib/rets4r.rb", __FILE__)
-version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d+)\1/, 2]
-CLEAN << "rets4r-#{version}.gem"
+Bundler::GemHelper.install_tasks
+CLEAN << 'pkg/*'
