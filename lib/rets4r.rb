@@ -8,7 +8,6 @@ end
 
 require 'client'
 require 'loader'
-require 'rubygems'
 require 'client/parsers/compact_nokogiri'
 require 'rets4r/listing_service'
 require 'rets4r/listing_mapper'
