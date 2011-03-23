@@ -1,3 +1,20 @@
+1.1.18
+  New Features
+  * Support multiple environments in examples
+  * Use streaming XML (SAX) parser by default
+  * Support case insensitive headers in DataObjects
+  * Support location parameter in Get Object requests
+  * Add a mapper example
+  * Support rubygems-test
+  * Send a meaningful user agent of rets4r/n.n.n
+  * Raise meaningful exceptions when the service responds with an error
+
+  Bug Fixes
+  * Ignore nil keys and values when creating query strings
+  * Remove broken RETS Session ID header support
+  * Fix nokogiri dependency
+  * Remove broken multi-thread support
+
 1.1.17
     New features
     * RETS4R::Client::ResponseParser#parse_results: works with COMPACT-DECODED

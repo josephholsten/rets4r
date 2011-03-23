@@ -1,3 +1,56 @@
+Tue Mar 22 19:36:54 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Bump and tag for release
+    
+    * lib/rets4r.rb (RETS4R::VERSION): bump to 1.1.18
+
+Tue Mar 22 19:34:26 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Support rubygems-test
+    
+    * .gemtest: add
+    * MANIFEST (.gemtest): add
+    * rets4r.gemspec: remove test files
+
+Tue Mar 22 19:30:42 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Use bundler for gem tasks
+    
+    * Rakefile: install bundler gem helper
+
+Tue Mar 22 19:10:43 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
+
+    Use rake
+    
+    * rets4r.gemspec: add development dep rake
+
+Sun Feb 27 18:48:18 2011  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    lock in the nokogiri version: fixes the sax parser
+    
+    * Gemfile: use the gemfile
+    * Rakefile: load the bundle
+    * rets4r.gemspec: lock in the nokogiri version
+
+Wed Aug 25 16:48:32 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    raise exceptions when the service responds with an error message
+
+    * lib/rets4r/client/parsers/compact_nokogiri.rb (RETS4R::Client::CompactNokogiriParser::CompactDocument#start_element): handle RETS element
+    * lib/rets4r/client/parsers/compact_nokogiri.rb (RETS4R::Client::CompactNokogiriParser::CompactDocument#characters): raise exception on error
+
+Tue Aug 24 21:59:50 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    remove misunderstood session id header stuff
+
+    * lib/rets4r/client/requester.rb (Requester#initialize): remove headers['RETS-Session-ID']
+
+Fri Aug 20 16:25:55 2010  Brian Dunn <brianpatrickdunn@gmail.com>
+
+    cleanups, remove bogus top level header RETS-Sesson-ID
+
+    * lib/rets4r/client/requester.rb (Requester#request): set RETS-Sesson-ID header to nil
+
 Tue Aug 17 14:49:49 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     change useragent to something not a total hack

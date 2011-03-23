@@ -27,9 +27,4 @@ Possible To-do Items
 * Get Transaction
 * HTTPS Support
 * Simple mapping to ActiveRecord
-
-
-* remove devver link from readme
 * add metric_fu
-* remove runcoderun link
-* set up integrety on heroku
