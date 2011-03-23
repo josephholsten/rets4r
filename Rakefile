@@ -33,7 +33,7 @@ end
 CLEAN << 'rdoc'
 
 file 'MANIFEST.tmp' do
-  sh %{find . -type f | sed 's/\\.\\///' | grep -v '.git' | sort > MANIFEST.tmp}
+  sh %{git ls-files > MANIFEST.tmp}
 end
 CLEAN << 'MANIFEST.tmp'
 

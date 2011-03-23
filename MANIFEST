@@ -61,3 +61,4 @@ test/test_listing_mapper.rb
 test/test_loader.rb
 test/test_parser.rb
 test/test_quality.rb
+test/test_requester.rb
