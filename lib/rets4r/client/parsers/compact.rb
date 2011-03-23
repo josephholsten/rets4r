@@ -5,18 +5,18 @@ require 'cgi'
 module RETS4R
   class Client
     class CompactDataParser
+      # Take an RETS XML Document and parse out its results
       def parse_results(doc)
-
-        delimiter = doc.xpath('/RETS/DELIMITER')[0] &&
-                    doc.xpath('/RETS/DELIMITER')[0]['value'].to_i.chr
-        columns   = doc.xpath('/RETS/COLUMNS')[0]
-        rows      = doc.xpath('/RETS/DATA')
+        # TODO: replace with a a proper document class
+        delimiter = doc.at('/RETS/DELIMITER') &&
+                    doc.at('/RETS/DELIMITER')['value'].to_i.chr
+        columns   = doc.at('/RETS/COLUMNS')
+        rows      = doc.search('/RETS/DATA')
 
         parse_data(columns, rows, delimiter)
       end
 
       def parse_data(column_element, row_elements, delimiter = "\t")
-
         column_names = column_element.to_s.split(delimiter)
 
         result = []
