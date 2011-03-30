@@ -46,7 +46,7 @@ module RETS4R
           case name
           when 'COLUMNS'
             @columns_element = false
-            @columns = @string.split(@delimiter)
+            @columns = RETS4R::ResponseDocument::Search.split_raw_headers(@string, @delimiter)
           when 'DATA'
             @data_element = false
             handle_row
@@ -82,10 +82,7 @@ module RETS4R
         #--
         # What does this do? Could this be reused elsewhere?
         def make_hash
-          @columns.zip(@string.split(@delimiter)).inject({}) do | h,(k,v) |
-            h[k] = v unless k.empty?
-            next h
-          end
+          RETS4R::ResponseDocument::Search.row_to_hash(@string, @columns, @delimiter)
         end
       end
     end
