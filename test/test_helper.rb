@@ -4,6 +4,8 @@ require 'test/unit'
 require 'rets4r'
 require 'mocha'
 require 'shoulda'
+require 'pathname'
+Pathname(__FILE__).join('../support').children.each {|f| require f}
 
 # Configure ListingService
 listing_service_config_file = File.expand_path(File.join('test', 'data', 'listing_service.yml'))

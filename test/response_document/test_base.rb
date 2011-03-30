@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
 require 'test_helper'
-require 'rets4r/response_document'
-class TestResponseDocument < Test::Unit::TestCase
+require 'rets4r/response_document/base'
+class TestResponseDocumentBase < Test::Unit::TestCase
   def fixture(name)
     File.open("test/data/1.5/#{name}.xml").read
   end
 
   context "normal doc" do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('search_compact'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('search_compact'))
     end
     should 'have max_rows' do
       assert @doc.max_rows?
@@ -87,7 +87,7 @@ class TestResponseDocument < Test::Unit::TestCase
   end
   context 'empty doc' do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('metadata'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('metadata'))
     end
     should 'not be rets' do
       assert !@doc.rets?
@@ -103,7 +103,7 @@ class TestResponseDocument < Test::Unit::TestCase
   end
   context 'error doc' do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('error'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('error'))
     end
     should 'not be valid' do
       assert @doc.invalid?
@@ -125,7 +125,7 @@ class TestResponseDocument < Test::Unit::TestCase
   end
   context 'login doc' do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('login'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('login'))
     end
     should 'parse_key_value' do
       transaction = @doc.parse_key_value

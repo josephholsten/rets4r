@@ -3,6 +3,7 @@ Fix
 
 Add support for
 * Standard (non-compact) XML
+* RETS-UA-Authorization header
 
 Add
 * More Examples
