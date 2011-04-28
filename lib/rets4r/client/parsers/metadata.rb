@@ -39,7 +39,6 @@ module RETS4R
           when 'COLUMNS'
             @current_content = ''
             @columns = []
-          when 'SYSTEM'
           when 'COMMENTS'
             @current_content = ''
           else
@@ -69,7 +68,7 @@ module RETS4R
         private
 
           def receives_content? tag
-            tag =~ /^(X-)?METADATA/i
+            tag =~ /^(X-)?(METADATA|SYSTEM)/i
           end
 
           def process_content_as_columns
@@ -78,37 +77,44 @@ module RETS4R
 
           def process_content_as_data
             data = hashify_current_content
-            resource_tag, attrs = @stack.last
+            tag, attrs = @stack.last
 
-            case resource_tag
+            resource = data.delete('ResourceID') || attrs['Resource']
+            klass    = data.delete('ClassName')  || attrs['Class']
+
+            case tag
             when 'METADATA-RESOURCE'
-              @metadata[data.delete('ResourceID')].merge!(data)
+              @metadata[resource] = data
             when 'METADATA-CLASS'
-              @metadata[attrs['Resource']][:classes][data.delete('ClassName')].merge!(data)
+              @metadata[resource][:classes][klass] = data
             when 'METADATA-TABLE'
-              @metadata[attrs['Resource']][:classes][attrs['Class']][:tables][data.delete('SystemName')].merge!(data)
+              @metadata[resource][:classes][klass][:tables][data.delete('SystemName')] = data
             when 'METADATA-OBJECT'
-              @metadata[attrs['Resource']][:objects][data.delete('ObjectType')].merge!(data)
+              @metadata[resource][:objects][data.delete('ObjectType')] = data
             when 'METADATA-LOOKUP'
-              @metadata[attrs['Resource']][:lookups][data.delete('LookupName')].merge!(data)
+              @metadata[resource][:lookups][data.delete('LookupName')] = data
             when 'METADATA-LOOKUP_TYPE'
-              @metadata[attrs['Resource']][:lookup_types][attrs['Lookup']][data.delete('Value')].merge!(data)
+              @metadata[resource][:lookup_types][attrs['Lookup']][data.delete('Value')] = data
             end
           end
 
           def process_content_as_system
-            resource_tag, attrs = @stack.last
+            tag, attrs = @stack.last
+
             @metadata.merge! attrs
           end
 
           def process_content_as_comments
-            @metadata['Comments'] = @current_content
+            @metadata['Comments'] = @current_content.strip
           end
 
           def hashify_current_content
-            @columns.zip(@current_content.split(DELIMITER)).inject({}) do |h, (k,v)|
-              h[k] = v unless k.empty?
-              next h
+            # So that we can do direct assignment easily, we set the default proc to create
+            # hashe for non-existant elements.
+            @columns.zip(@current_content.split(DELIMITER)).inject(
+              Hash.new(&@metadata.default_proc)) do |h, (k,v)|
+                h[k] = v unless k.empty?
+                next h
             end
           end
       end
