@@ -1,0 +1,95 @@
+<RETS ReplyCode="0" ReplyText="SUCCESS">
+<METADATA-SYSTEM Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"> <SYSTEM SystemID="NTREIS" SystemDescription="North Texas Real Estate Information System" /> <COMMENTS>
+This is a comment line </COMMENTS> </METADATA-SYSTEM>
+
+<METADATA-RESOURCE Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	ResourceID	StandardName	VisibleName	Description	ClassCount	KeyField	ClassVersion	ClassDate	ObjectVersion	ObjectDate	SearchHelpVersion	SearchHelpDate	EditMaskVersion	EditMaskDate	LookupVersion	LookupDate	UpdateHelpVersion	UpdateHelpDate	ValidationExpressionVersion	ValidationExpressionDate	ValidationLookupVersion	ValidationLookupDate	ValidationExternalVersion	ValidationExternalDate	</COLUMNS>
+<DATA>	Agent	Agent	Agent	Agent Table	1	Agentid	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT																	</DATA>
+<DATA>	Property	Property	Property	Property Tables	5	LN	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
+<DATA>	Tax	Tax	Tax	Multimedia objects	2	0	PID	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT																	</DATA> </METADATA-RESOURCE>
+
+<METADATA-FOREIGNKEYS Version="1.00.000000" Date="Wed, 23 Jan 2002 12:37:38 GMT">
+<COLUMNS>	PARENT_RESOURCE_ID	PARENT_CLASS_ID	PARENT_SYSTEMNAME	CHILD_RESOURCE_ID	CHILD_CLASS_ID	CHILD_SYSTEMNAME	</COLUMNS> <DATA>	Property	RES	MLSNUM	TAX	TAX	MLSNUM	</DATA> <DATA>	Property	RES	MLSNUM	History	History	MLSNUM	</DATA> <DATA>	Property	RES	MLSNUM	OpenHouse	OpenHouse	MLSNUM	</DATA> <DATA>	Property	RES	ListingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	Property	RES	COListingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	Property	RES	SellingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	Property	RES	COSellingAgentIDvAgent	Agent	AgentID	</DATA> <DATA>	Property	RES	ListingOfficeID	Office	Office	OfficeID	</DATA> <DATA>	Property	RES	SellingOfficeID	Office	Office	OfficeID	</DATA> </METADATA-FOREIGNKEYS>
+
+<METADATA-CLASS Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT">
+<COLUMNS>	ClassName	VisibleName	StandardName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS>
+<DATA>	RES	Single Family	Residential	Single Family Residential	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
+<DATA>	CON	Condos	CommonInterest	Condos	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
+<DATA>	MUL	Multi Family	MultiFamily	Multi Family Residential	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
+<DATA>	MOB	Mobile Home	ResidentialProperty	Mobile Homes	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
+<DATA>	LND	Lots and Land	Lots and Land	Lots and Land	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
+</METADATA-CLASS>
+
+<METADATA-CLASS Resource="Agent" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"> <COLUMNS>	ClassName	VisibleName	StandardName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS> <DATA>	Agent	Agent	Agent	All Agents	1.00.000
+Sat, 20 Mar 2002 12:03:38 GMT			</DATA> </METADATA-CLASS>
+
+<METADATA-TABLE Resource="Property" Class="RES" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT">
+<COLUMNS>	SystemName	StandardName	LongName	DBName	ShortName	Maximumlength	DataType	Precision	Searchable	Interpretation	Alignment	UseSeparator	EditMaskID	LookupName	MaxSelect	Units	Index	Minimum	Maximum	Default	Required	SearchHelpID	MetadataEntryID	ModTimeStamp	ForeignKey	ForeignField	KeyQuery	KeySelect	</COLUMNS>
+<DATA>	LN	ListID	Listing ID	LN	ListID	8	Int	0	1	Number	Left	0					1			1									</DATA>
+<DATA>	PTYP	PropType	Property Type	PT	Prop Type	2	Int	0	1	Number	Left	0												1					</DATA>
+<DATA>	LP	ListPrice	List Price	LP	Lst Pr	8	Int	0	1	Currency	Right	1					14			2					1					</DATA>
+<DATA>	OWN	Owner	Owner Name	OWN	Own Name	20	Character	0	0		Left	0											</DATA>
+<DATA>	VEW	View	View	VEW	View	10	Long	0	1	LookupBitmask	Left	0		VEW	1									1					</DATA>
+<DATA>	EF	ExtFeat	Features	EF	Ext Feat	10	Character	0	1	LookupMulti	Left	0		EFT	2										1					</DATA>
+<DATA>	SD	SchDist	School District	SD	SchDist	10	Character	0	1	Lookup	Left	0		SD											1					</DATA>
+<DATA>	AR	MLSArea	MLS Area	AR	Area	4	Int	0	1	Lookup	Left	0		AR			30			3	1				1					</DATA>
+</METADATA-TABLE>
+
+<METADATA-UPDATE Resource="Property" Class="RES" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	UpdateName	Description	KeyField	Version	Date	MetadataEntryID	</COLUMNS>
+<DATA>	Add	Add a new Residential Listing		1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA>
+<DATA>	Change	Change a Residential Listing	ListNumber	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA>
+<DATA>	BOM	Put a Residential Listing Back on Market	ListNumber	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA>
+</METADATA-UPDATE>
+
+<METADATA-UPDATE_TYPE Resource="Property" Class="RES" Update="Add" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	SystemName	Sequence	Attributes	Default	ValidationExpressionID	UpdateHelpID	ValidationLookupName	ValidationExternalName	MetadataEntryID	MaxUpdate	</COLUMNS>
+<DATA>	STNUM	1	2			StNumHelp					</DATA> <DATA>	STNAME	2	2				StreetName				</DATA> <DATA>	LD	3	2		ListDate	DateHelp					</DATA> <DATA>	LISTOFF	4	2,3						</DATA> </METADATA-UPDATE_TYPE>
+
+<METADATA-OBJECT Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	ObjectType	StandardName	VisibleName	Description	MetadataEntryID	MIMEType	ObjectTimeStamp	ObjectCount	</COLUMNS>
+<DATA>	Photo	image	Full Photos	High Resolution Property Photos	1	image/jpeg	PhotoTimestap	PhotoCount	</DATA>
+<DATA>	Thumbnail	image	Small Photos	Low Resolution Property Photos	1	image/jpeg	PhotoTimestap	PhotoCount	</DATA>
+</METADATA-OBJECT>
+
+<METADATA-LOOKUP Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	LookupName	VisibleName	Version	Date	MetadataEntryID	</COLUMNS> <DATA>	1	Status	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA> <DATA>	2	Phone Type	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA> </METADATA-LOOKUP>
+<METADATA-LOOKUP Resource="Agent" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT">
+<COLUMNS>	LookupName	VisibleName	Version	Date	MetadataEntryID	</COLUMNS> <DATA>	1	Status	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA> </METADATA-LOOKUP>
+
+<METADATA-LOOKUP_TYPE Resource="Property" Lookup="AR" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"><COLUMNS>	LongValue	ShortValue	Value	MetadataEntryID	</COLUMNS> <DATA>	Capitol Hill	Cap Hill	1	</DATA> <DATA>	Juanita Hill	Juanita	2		</DATA> <DATA>	Maple Valley	Mpl Valley	3		</DATA>
+<DATA>	Downtown Redmond	Dntn Rdmd	4		</DATA> </METADATA-LOOKUP_TYPE> <METADATA-LOOKUP_TYPE Resource="Agent" Lookup="STAT" Version="1.00.000"
+Date="Sat, 20 Mar 2002 12:03:38 GMT"> <COLUMNS>	LongValue	ShortValue	Value	MetadataEntryID	</COLUMNS> <DATA>	Active	ACT	1		</DATA> <DATA>	Suspended	SUS	2		</DATA> <DATA>	Inactvie	INA	3		</DATA> </METADATA-LOOKUP_TYPE>
+
+<METADATA-SEARCH_HELP Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	SearchHelpID	Value	MetadataEntryID	</COLUMNS> <DATA>	1	Enter the number in the following format dxd		</DATA> <DATA>	2	Enter the number in the following format d.dd		</DATA> </METADATA-SEARCH_HELP>
+
+<METADATA-EDITMASK Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"> <COLUMNS>	EditMaskID	Value	MetadataEntryID	</COLUMNS> <DATA>	1	[0-9]{1,2}[x][0-9]{1,2}	</DATA> <DATA>	2	[0-9]{3}-[0-9]{2}-[0-9}{4}	</DATA>
+</METADATA-EDITMASK>
+
+<METADATA-UPDATE_HELP Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	UpdateHelpID	Value	MetadataEntryID	</COLUMNS> <DATA>	1	Enter the number in the following format dxd		</DATA> <DATA>	2	Enter the number in the following format d.dd		</DATA> </METADATA-UPDATE_HELP>
+
+<METADATA-VALIDATION_LOOKUP Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	ValidationLookupName	Parent1Field	Parent2Field	Version	Date	MetadataEntryID	</COLUMNS>
+<DATA>	School	Area	Subarea	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA>
+<DATA>	ZipCode	Area		1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA> <DATA>	City			1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA> </METADATA-VALIDATION_LOOKUP>
+
+<METADATA-VALIDATION_LOOKUP_TYPE Resource="Property" ValidationLookup="School" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	ValidText	Parent1Value	Parent2Value	MetadataEntryID	</COLUMNS> <DATA>	133	AREA1	SUBAREA1		</DATA> <DATA>	134	AREA1	SUBAREA2		</DATA> <DATA>	135	AREA2			</DATA>
+</METADATA-VALIDATION_LOOKUP_TYPE>
+
+<METADATA-VALIDATION_EXPRESSION Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	ValidationExpressionID	ValidationExpressionType	Value	MetadataEntryID	</COLUMNS>
+<DATA>	Office1	ACCEPT>	LAG=.AGENTCODE. .OR. (LO=.BROKERCODE. .AND. .ENTRY.=OFFICE)		</DATA>
+<DATA>	Agent1	ACCEPT	(LAG=.AGENTCODE.) .OR. (SAG=.AGENTCODE.)		</DATA> <DATA>	ListDate	ACCEPT	LD&gt;.TODAY. - 3 .AND. LD&lt;.TODAY. + 3		</DATA> </METADATA-VALIDATION_EXPRESSION>
+
+<METADATA-VALIDATION_EXTERNAL Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	ValidationExternalName	SearchResource	SearchClass	Version	Date	MetadataEntryID	</COLUMNS>
+<DATA>	1	Office	Office	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA> <DATA>	2	Tax	HENN	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT		</DATA> </METADATA-VALIDATION_EXTERNAL>
+
+<METADATA-VALIDATION_EXTERNAL_TYPE Resource="Property" ValidationExternalName="VET1" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT" >
+<COLUMNS>	SearchField	DisplayField	ResultsFields	MetadataEntryID	</COLUMNS>
+<DATA>	AgentID, AgentCode	AgentName, OfficeName	SaleAgentID=AgentID, SaleAgentName=AgentName, SaleOfficeID=OfficeID, SaleOfficeName=OfficeName		</DATA>
+</METADATA-VALIDATION_EXTERNAL_TYPE>
+</RETS>
