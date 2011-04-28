@@ -14,6 +14,20 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
         @results = @mdp.parse_file(@metadata_path)
       end
 
+      context "when METADATA-SYSTEM" do
+        should "add system name" do
+          assert_equal 'North Texas Real Estate Information System', @results['SystemDescription']
+        end
+
+        should "add system id" do
+          assert_equal 'NTREIS', @results['SystemID']
+        end
+
+        should "add comments" do
+          assert_equal 'This is a comment line', @results['Comments']
+        end
+      end
+
       context "when METADATA-RESOURCE" do
         should "create key for each resource" do
           assert 3, @results.keys.size
