@@ -3,9 +3,48 @@ require 'nokogiri'
 module RETS4R
   class Client
     class Metadata < DelegateClass(Hash)
+      # The initial version of this would set the hash default_proc to create new
+      # hashes that would in turn create new hashes, which is quite clean, but also
+      # meant that you couldn't simply check to see if a given key was nil. Because this is
+      # meant to be a mostly transparent replacement of the REXML-based parser, I decided to
+      # manually create nested hashes as needed in case existing code relied on the
+      # existence of nils.
+
       def initialize
-        super(Hash.new {|l, k| l[k] = Hash.new(&l.default_proc)})
+        super(Hash.new)
       end
+
+      ## Helper access methods to ensure that nested hashes are created as needed.
+
+      def resource(name)
+        self[name] ||= {}
+      end
+
+      def resource_classes(resource)
+        resource(resource)[:classes] ||= {}
+      end
+
+      def resource_class(resource, klass)
+        resource_classes(resource)[klass] ||= {}
+      end
+
+      def class_tables(resource, klass)
+        resource_class(resource, klass)[:tables] ||= {}
+      end
+
+      def resource_objects(resource)
+        resource(resource)[:objects] ||= {}
+      end
+
+      def resource_lookups(resource)
+        resource(resource)[:lookups] ||= {}
+      end
+
+      def resource_lookup_types(resource, lookup)
+        lookups = resource(resource)[:lookup_types] ||= {}
+        lookups[lookup] ||= {}
+      end
+
 
       class CompactDocument < Nokogiri::XML::SAX::Document
         DELIMITER = "\t"
@@ -84,17 +123,17 @@ module RETS4R
 
             case tag
             when 'METADATA-RESOURCE'
-              @metadata[resource] = data
+              @metadata.resource(resource).merge!(data)
             when 'METADATA-CLASS'
-              @metadata[resource][:classes][klass] = data
+              @metadata.resource_class(resource, klass).merge!(data)
             when 'METADATA-TABLE'
-              @metadata[resource][:classes][klass][:tables][data.delete('SystemName')] = data
+              @metadata.class_tables(resource, klass)[data.delete('SystemName')] = data
             when 'METADATA-OBJECT'
-              @metadata[resource][:objects][data.delete('ObjectType')] = data
+              @metadata.resource_objects(resource)[data.delete('ObjectType')] = data
             when 'METADATA-LOOKUP'
-              @metadata[resource][:lookups][data.delete('LookupName')] = data
+              @metadata.resource_lookups(resource)[data.delete('LookupName')] = data
             when 'METADATA-LOOKUP_TYPE'
-              @metadata[resource][:lookup_types][attrs['Lookup']][data.delete('Value')] = data
+              @metadata.resource_lookup_types(resource, attrs['Lookup'])[data.delete('Value')] = data
             end
           end
 
@@ -109,8 +148,9 @@ module RETS4R
           end
 
           def hashify_current_content
-            # So that we can do direct assignment easily, we set the default proc to create
-            # hashe for non-existant elements.
+            # While not necessary anymore, I've left the setting of the default_proc to that
+            # of the metadata object so that the default value will be consistent throughout
+            # all the metadata.
             @columns.zip(@current_content.split(DELIMITER)).inject(
               Hash.new(&@metadata.default_proc)) do |h, (k,v)|
                 h[k] = v unless k.empty?
