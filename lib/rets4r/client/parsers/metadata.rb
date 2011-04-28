@@ -3,6 +3,7 @@ require 'nokogiri'
 module RETS4R
   class Client
     class Metadata < DelegateClass(Hash)
+
       # The initial version of this would set the hash default_proc to create new
       # hashes that would in turn create new hashes, which is quite clean, but also
       # meant that you couldn't simply check to see if a given key was nil. Because this is
@@ -114,6 +115,7 @@ module RETS4R
             @columns = @current_content.split(DELIMITER)
           end
 
+          # TODO add support for additional metadata content
           def process_content_as_data
             data = hashify_current_content
             tag, attrs = @stack.last
