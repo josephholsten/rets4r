@@ -1,92 +1,120 @@
-require 'rexml/document'
-require 'yaml'
-require 'rets4r/client/parsers/compact'
+require 'nokogiri'
 
 module RETS4R
   class Client
-    class MetadataParser
-
-      TAGS = [ 'METADATA-RESOURCE',
-               'METADATA-CLASS',
-               'METADATA-TABLE',
-               'METADATA-OBJECT',
-               'METADATA-LOOKUP',
-               'METADATA-LOOKUP_TYPE' ]
-
-      def initialize()
-        @parser = RETS4R::Client::CompactDataParser.new
+    class Metadata < DelegateClass(Hash)
+      def initialize
+        super(Hash.new {|l, k| l[k] = Hash.new(&l.default_proc)})
       end
 
-      def parse_file(file = 'metadata.xml')
-        xml = File.read(file)
-        doc = REXML::Document.new(xml)
-        parse(doc)
-      end
+      class CompactDocument < Nokogiri::XML::SAX::Document
+        DELIMITER = "\t"
 
-      def parse(doc)
+        def self.parse_file(filename)
+          new.parse_file(filename)
+        end
 
-        rets_resources = {}
+        def initialize
+          @parser = Nokogiri::XML::SAX::Parser.new(self)
+        end
 
-        doc.get_elements('/RETS/*').each do |elem|
+        def parse_file(filename = 'metadata.xml')
+          parse(File.open(filename))
+        end
 
-          next unless TAGS.include?(elem.name)
+        def parse(content)
+          @metadata = Metadata.new
+          @stack    = []
+          @current_content = ''
+          @parser.parse(content)
+          @metadata
+        end
 
-          columns   = elem.get_elements('COLUMNS')[0]
-          rows      = elem.get_elements('DATA')
+        def start_element name, raw_attrs = []
+          attrs = Hash[*raw_attrs.flatten]
 
-          data = @parser.parse_data(columns, rows)
-
-          resource_id = elem.attributes['Resource']
-
-          case elem.name
-            when 'METADATA-RESOURCE'
-              data.each do |resource_info|
-                id = resource_info.delete('ResourceID')
-                rets_resources[id] = resource_info
-              end
-
-            when 'METADATA-CLASS'
-              data.each do |class_info|
-                class_name = class_info.delete('ClassName')
-                rets_resources[resource_id][:classes] ||= {}
-                rets_resources[resource_id][:classes][class_name] = class_info
-              end
-
-            when 'METADATA-TABLE'
-              class_name = elem.attributes['Class']
-              data.each do |table_info|
-                system_name = table_info.delete('SystemName')
-                rets_resources[resource_id][:classes][class_name][:tables] ||= {}
-                rets_resources[resource_id][:classes][class_name][:tables][system_name] = table_info
-              end
-
-            when 'METADATA-OBJECT'
-              data.each do |object_info|
-                object_type = object_info.delete('ObjectType')
-                rets_resources[resource_id][:objects] ||= {}
-                rets_resources[resource_id][:objects][object_type] = object_info
-              end
-
-            when 'METADATA-LOOKUP'
-              data.each do |lookup_info|
-                lookup_name = lookup_info.delete('LookupName')
-                rets_resources[resource_id][:lookups] ||= {}
-                rets_resources[resource_id][:lookups][lookup_name] = lookup_info
-              end
-
-            when 'METADATA-LOOKUP_TYPE'
-              lookup = elem.attributes['Lookup']
-              rets_resources[resource_id][:lookup_types] ||= {}
-              rets_resources[resource_id][:lookup_types][lookup] = {}
-              data.each do |lookup_type_info|
-                value = lookup_type_info.delete('Value')
-                rets_resources[resource_id][:lookup_types][lookup][value] = lookup_type_info
-              end
+          case name.upcase
+          when 'DATA'
+            @current_content = ''
+          when 'COLUMNS'
+            @current_content = ''
+            @columns = []
+          when 'SYSTEM'
+          when 'COMMENTS'
+            @current_content = ''
+          else
+            @stack << [name.upcase, attrs]
           end
         end
 
-        rets_resources
+        def end_element name
+          case name.upcase
+          when 'DATA'
+            process_content_as_data
+          when 'COLUMNS'
+            process_content_as_columns
+          when 'SYSTEM'
+            process_content_as_system
+          when 'COMMENTS'
+            process_content_as_comments
+          else
+            @stack.pop
+          end
+        end
+
+        def characters content
+          @current_content << content if receives_content? @stack.last[0]
+        end
+
+        private
+
+          def receives_content? tag
+            tag =~ /^(X-)?METADATA/i
+          end
+
+          def process_content_as_columns
+            @columns = @current_content.split(DELIMITER)
+          end
+
+          def process_content_as_data
+            data = hashify_current_content
+            resource_tag, attrs = @stack.last
+
+            case resource_tag
+            when 'METADATA-RESOURCE'
+              @metadata[data.delete('ResourceID')].merge!(data)
+            when 'METADATA-CLASS'
+              @metadata[attrs['Resource']][:classes][data.delete('ClassName')].merge!(data)
+            when 'METADATA-TABLE'
+              @metadata[attrs['Resource']][:classes][attrs['Class']][:tables][data.delete('SystemName')].merge!(data)
+            when 'METADATA-OBJECT'
+              @metadata[attrs['Resource']][:objects][data.delete('ObjectType')].merge!(data)
+            when 'METADATA-LOOKUP'
+              @metadata[attrs['Resource']][:lookups][data.delete('LookupName')].merge!(data)
+            when 'METADATA-LOOKUP_TYPE'
+              @metadata[attrs['Resource']][:lookup_types][attrs['Lookup']][data.delete('Value')].merge!(data)
+            end
+          end
+
+          def process_content_as_system
+            resource_tag, attrs = @stack.last
+            @metadata.merge! attrs
+          end
+
+          def process_content_as_comments
+            @metadata['Comments'] = @current_content
+          end
+
+          def hashify_current_content
+            @columns.zip(@current_content.split(DELIMITER)).inject({}) do |h, (k,v)|
+              h[k] = v unless k.empty?
+              next h
+            end
+          end
       end
     end
+
+    ## Kept for compatibility with previous versions.
+    MetadataParser = Metadata::CompactDocument
   end
 end
