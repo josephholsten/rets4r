@@ -173,6 +173,22 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
           assert_equal 'Dntn Rdmd',        @lookup_types['AR']['4']['ShortValue']
         end
       end
+
+      context "when METADATA-FOREIGNKEYS" do
+        should "add all foreign keys" do
+          assert_equal 9, @results[:foreign_keys].keys.size
+        end
+
+        should "add foreign key 6" do
+          fk = @results[:foreign_keys]['6']
+
+          assert_equal 'Agent',          fk['CHILD_RESOURCE_ID']
+          assert_equal 'RES',            fk['PARENT_CLASS_ID']
+          assert_equal 'Property',       fk['PARENT_RESOURCE_ID']
+          assert_equal 'SellingAgentID', fk['PARENT_SYSTEMNAME']
+          assert_equal 'AgentID',        fk['CHILD_SYSTEMNAME']
+        end
+      end
     end
   end
 end

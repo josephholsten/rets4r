@@ -46,6 +46,9 @@ module RETS4R
         lookups[lookup] ||= {}
       end
 
+      def foreign_keys
+        self[:foreign_keys] ||= {}
+      end
 
       class CompactDocument < Nokogiri::XML::SAX::Document
         DELIMITER = "\t"
@@ -136,6 +139,8 @@ module RETS4R
               @metadata.resource_lookups(resource)[data.delete('LookupName')] = data
             when 'METADATA-LOOKUP_TYPE'
               @metadata.resource_lookup_types(resource, attrs['Lookup'])[data.delete('Value')] = data
+            when 'METADATA-FOREIGNKEYS'
+              @metadata.foreign_keys[data.delete('ForeignKeyID')] = data
             end
           end
 
