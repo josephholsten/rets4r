@@ -2,6 +2,39 @@ require 'nokogiri'
 
 module RETS4R
   class Client
+
+    # Provides a Hash-like representation of metadata.
+    # Currently only compact metadata is supported.
+    #
+    # String keys represent data that has come from the parsed metadata file.
+    # Symbol keys are used to indicate categories such as :lookup_types. All are pluralized
+    # except for :search_help, and have are snakecase.
+    #
+    # The following is the basic structure of a metadata object, which generally follows the
+    # RETS specification metadata structure, but with a few notable non-nested exceptions such as
+    # lookup_types.
+    #
+    # {:foreign_keys => {<fkey_id> => {...}},
+    #  'Comments'    => ...,
+    #  'SystemID'    => ...,
+    #  'SystemDescription' => ...
+    #  <Resource Name> => {...,
+    #                   :lookup_types => {
+    #                     <Lookup Name> => {<Lookup Type Value> => {...}}},
+    #
+    #           :objects => {<Object Type> => {...}},
+    #           :classes => {<Class Name>: => {...,
+    #                                          :tables => {<System Name> => {...}}},
+    #           :search_help => {<Search Help ID> => {...}},
+    #           :lookups     => {<Lookup Name>    => {...}}
+    #           :edit_masks: => {<Edit Mask ID>:  => {...}}
+    #
+    # Update related metadata is currently NOT handled by the parser. The following metadata
+    # types ARE handled by the parser: System, Resource, Class, Table, Object, Lookup,
+    # LookupType, ForeignKeys, SearchHelp, and EditMask.
+    #
+    # To generate a metadata object, use one of CompactDocument parse methods.
+
     class Metadata < DelegateClass(Hash)
 
       # The initial version of this would set the hash default_proc to create new
@@ -58,6 +91,9 @@ module RETS4R
         self[:foreign_keys] ||= {}
       end
 
+      # Nokogiri SAX compact metadata parser
+      #
+      # TODO add version and date supplied by a tag's attributes to the relevant metadata results.
       class CompactDocument < Nokogiri::XML::SAX::Document
         DELIMITER = "\t"
 
