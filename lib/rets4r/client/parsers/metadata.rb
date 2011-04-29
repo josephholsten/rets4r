@@ -46,6 +46,14 @@ module RETS4R
         lookups[lookup] ||= {}
       end
 
+      def search_help(resource)
+        resource(resource)[:search_help] ||= {}
+      end
+
+      def edit_masks(resource)
+        resource(resource)[:edit_masks] ||= {}
+      end
+
       def foreign_keys
         self[:foreign_keys] ||= {}
       end
@@ -118,7 +126,6 @@ module RETS4R
             @columns = @current_content.split(DELIMITER)
           end
 
-          # TODO add support for additional metadata content
           def process_content_as_data
             data = hashify_current_content
             tag, attrs = @stack.last
@@ -141,6 +148,10 @@ module RETS4R
               @metadata.resource_lookup_types(resource, attrs['Lookup'])[data.delete('Value')] = data
             when 'METADATA-FOREIGNKEYS'
               @metadata.foreign_keys[data.delete('ForeignKeyID')] = data
+            when 'METADATA-SEARCH_HELP'
+              @metadata.search_help(resource)[data.delete('SearchHelpID')] = data
+            when 'METADATA-EDITMASK'
+              @metadata.edit_masks(resource)[data.delete('EditMaskID')] = data
             end
           end
 

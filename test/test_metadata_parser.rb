@@ -174,6 +174,38 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
         end
       end
 
+      context "when METADATA-SEARCH_HELP" do
+        context "when Property resource" do
+          setup do
+            @search_help = @results['Property'][:search_help]
+          end
+
+          should "add all search help" do
+            assert_equal 2, @search_help.size
+          end
+
+          should "add search help 1" do
+            assert_equal "Enter the number in the following format dxd", @search_help['1']['Value']
+          end
+        end
+      end
+
+      context "when METADATA-EDITMASK" do
+        context "when Property resource" do
+          setup do
+            @edit_masks = @results['Property'][:edit_masks]
+          end
+
+          should "add all edit masks" do
+            assert_equal 2, @edit_masks.size
+          end
+
+          should "add edit mask 1" do
+            assert_equal "[0-9]{1,2}[x][0-9]{1,2}", @edit_masks['1']['Value']
+          end
+        end
+      end
+
       context "when METADATA-FOREIGNKEYS" do
         should "add all foreign keys" do
           assert_equal 9, @results[:foreign_keys].keys.size
