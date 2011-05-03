@@ -20,8 +20,7 @@ This is a comment line </COMMENTS> </METADATA-SYSTEM>
 <DATA>	LND	Lots and Land	Lots and Land	Lots and Land	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
 </METADATA-CLASS>
 
-<METADATA-CLASS Resource="Agent" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"> <COLUMNS>	ClassName	VisibleName	StandardName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS> <DATA>	Agent	Agent	Agent	All Agents	1.00.000
-Sat, 20 Mar 2002 12:03:38 GMT			</DATA> </METADATA-CLASS>
+<METADATA-CLASS Resource="Agent" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"> <COLUMNS>	ClassName	VisibleName	StandardName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS> <DATA>	Agent	Agent	Agent	All Agents	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT			</DATA> </METADATA-CLASS>
 
 <METADATA-TABLE Resource="Property" Class="RES" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT">
 <COLUMNS>	SystemName	StandardName	LongName	DBName	ShortName	Maximumlength	DataType	Precision	Searchable	Interpretation	Alignment	UseSeparator	EditMaskID	LookupName	MaxSelect	Units	Index	Minimum	Maximum	Default	Required	SearchHelpID	MetadataEntryID	ModTimeStamp	ForeignKey	ForeignField	KeyQuery	KeySelect	</COLUMNS>
