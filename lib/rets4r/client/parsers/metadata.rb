@@ -7,8 +7,14 @@ module RETS4R
     # Currently only compact metadata is supported.
     #
     # String keys represent data that has come from the parsed metadata file.
-    # Symbol keys are used to indicate categories such as :lookup_types. All are pluralized
-    # except for :search_help, and have are snakecase.
+    #
+    # Symbol keys tend to indicate categories such as :lookup_types. Additionally,
+    # there are corresponding _date and _version keys for each category.
+    # e.g. :lookup_types, :lookup_types_date, and :lookup_types_version
+    #
+    # The reason these are symbols is to help distinguish them from the parsed data.
+    #
+    # All categories are pluralized snakecase except for :search_help.
     #
     # The following is the basic structure of a metadata object, which generally follows the
     # RETS specification metadata structure, but with a few notable non-nested exceptions such as
@@ -22,7 +28,9 @@ module RETS4R
     #                   :lookup_types => {
     #                     <Lookup Name> => {<Lookup Type Value> => {...}}},
     #
-    #           :objects => {<Object Type> => {...}},
+    #           :objects         => {<Object Type> => {...}},
+    #           :objects_date    => ...,
+    #           :objects_version => ...,
     #           :classes => {<Class Name>: => {...,
     #                                          :tables => {<System Name> => {...}}},
     #           :search_help => {<Search Help ID> => {...}},
@@ -92,8 +100,6 @@ module RETS4R
       end
 
       # Nokogiri SAX compact metadata parser
-      #
-      # TODO add version and date supplied by a tag's attributes to the relevant metadata results.
       class CompactDocument < Nokogiri::XML::SAX::Document
         DELIMITER = "\t"
 
@@ -130,6 +136,8 @@ module RETS4R
             @current_content = ''
           else
             @stack << [name.upcase, attrs]
+
+            apply_tag_attributes
           end
         end
 
@@ -209,6 +217,50 @@ module RETS4R
               Hash.new(&@metadata.default_proc)) do |h, (k,v)|
                 h[k] = v unless k.empty?
                 next h
+            end
+          end
+
+          # Adds the tag attributes date and version to the top level tag
+          # if it corresponds to a container.
+          def apply_tag_attributes
+            tag, attrs = @stack.last
+
+            container = container_for(tag, attrs)
+            base      = category_sym_from_tag(tag)
+
+            if container && base
+              container["#{base}_date".to_sym]    = attrs['Date']
+              container["#{base}_version".to_sym] = attrs['Version']
+            end
+
+            container
+          end
+
+          def container_for(tag, attrs)
+            resource = attrs['Resource']
+
+            case tag
+            when 'METADATA-TABLE'
+              @metadata.resource_class(resource, attrs['Class'])
+            when 'METADATA-FOREIGNKEYS'
+              @metadata.foreign_keys
+            else
+              @metadata.resource(resource)
+            end
+          end
+
+          def category_sym_from_tag(tag)
+            case tag
+            when 'METADATA-CLASS'       then :classes
+            when 'METADATA-TABLE'       then :tables
+            when 'METADATA-OBJECT'      then :objects
+            when 'METADATA-LOOKUP'      then :lookups
+            when 'METADATA-LOOKUP_TYPE' then :lookup_types
+            when 'METADATA-FOREIGNKEYS' then :foreign_keys
+            when 'METADATA-SEARCH_HELP' then :search_help
+            when 'METADATA-EDITMASK'    then :edit_masks
+            else
+              nil
             end
           end
       end
