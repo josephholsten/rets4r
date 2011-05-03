@@ -93,8 +93,6 @@ module RETS4R
       end
 
       # Nokogiri SAX compact metadata parser
-      #
-      # TODO add version and date supplied by a tag's attributes to the relevant metadata results.
       class CompactDocument < Nokogiri::XML::SAX::Document
         DELIMITER = "\t"
 
