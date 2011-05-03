@@ -14,6 +14,10 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
         @results = @mdp.parse_file(@metadata_path)
       end
 
+      should "have clean stack upon completion" do
+        assert @mdp.instance_variable_get(:@stack).empty?
+      end
+
       context "when METADATA-SYSTEM" do
         should "add system name" do
           assert_equal 'North Texas Real Estate Information System', @results['SystemDescription']

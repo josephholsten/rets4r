@@ -149,7 +149,10 @@ module RETS4R
           when 'COLUMNS'
             process_content_as_columns
           when 'SYSTEM'
+            # unlike the other tags here, SYSTEM cotains its own content so it
+            # needs to be processed as well as removed from the stack.
             process_content_as_system
+            @stack.pop
           when 'COMMENTS'
             process_content_as_comments
           else
