@@ -1,3 +1,4 @@
+require 'delegate'
 require 'nokogiri'
 
 module RETS4R
