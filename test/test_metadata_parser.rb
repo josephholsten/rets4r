@@ -71,7 +71,7 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
 
       context "when METADATA-CLASS" do
         should "add class data to appropriate resource" do
-          assert_equal 5, @results['Property'][:classes].size
+          assert_equal 5, @results['Property'][:classes].keys.size
         end
 
         should "add class attributes for RES" do
@@ -85,20 +85,11 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
           assert_equal 'Single Family',                 res_class['VisibleName']
           assert_equal 'Residential',                   res_class['StandardName']
         end
-
-        should "add version" do
-          assert_equal '1.00.000', @results['Property'][:classes_version]
-        end
-
-        should "add data" do
-          assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT',
-                       @results['Property'][:classes_date]
-        end
       end
 
       context "when METADATA-TABLE" do
         should "add table data to appropriate class" do
-          assert_equal 8, @results['Property'][:classes]['RES'][:tables].size
+          assert_equal 8, @results['Property'][:classes]['RES'][:tables].keys.size
         end
 
         should "add VEW table attributes to class" do
@@ -132,20 +123,11 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
           assert_nil vew_table['ForeignField']
           assert_nil vew_table['KeySelect']
         end
-
-        should "add version" do
-          assert_equal '1.00.000', @results['Property'][:classes]['RES'][:tables_version]
-        end
-
-        should "add data" do
-          assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT',
-                       @results['Property'][:classes]['RES'][:tables_date]
-        end
       end
 
       context "when METADATA-OBJECT" do
         should "add property obects to Property resource" do
-          assert_equal 2, @results['Property'][:objects].size
+          assert_equal 2, @results['Property'][:objects].keys.size
         end
 
         should "add thumbnail object to Property resource" do
@@ -159,20 +141,11 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
           assert_equal 'image',         thumbnail['StandardName']
           assert_equal 'Low Resolution Property Photos', thumbnail['Description']
         end
-
-        should "add version" do
-          assert_equal '1.00.000', @results['Property'][:objects_version]
-        end
-
-        should "add data" do
-          assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT',
-                       @results['Property'][:objects_date]
-        end
       end
 
       context "when METADATA-LOOKUP" do
         should "add lookups to Property resource" do
-          assert_equal 2, @results['Property'][:lookups].size
+          assert_equal 2, @results['Property'][:lookups].keys.size
         end
 
         should "add '1' lookup to Property resource" do
@@ -183,44 +156,25 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
           assert_equal 'Status',   lookup['VisibleName']
           assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT', lookup['Date']
         end
-
-        should "add version" do
-          assert_equal '1.00.000', @results['Property'][:lookups_version]
-        end
-
-        should "add data" do
-          assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT', @results['Property'][:lookups_date]
-        end
       end
 
       context "when METADATA-LOOKUP_TYPE" do
-        context "when Property resource" do
-          setup do
-            @lookup_types = @results['Property'][:lookup_types]
-          end
+        setup do
+          @lookup_types = @results['Property'][:lookup_types]
+        end
 
-          should "add lookup types to Property resource" do
-            assert_equal 1, @lookup_types.size
-          end
+        should "add lookup types to Property resource" do
+          assert_equal 1, @lookup_types.keys.size
+        end
 
-          should "add AR lookup types to Property resource" do
-            assert_equal 4, @lookup_types['AR'].size
-          end
+        should "add AR lookup types to Property resource" do
+          assert_equal 4, @lookup_types['AR'].keys.size
+        end
 
-          should "add AR lookup value '4' to lookup types" do
-            assert_nil @lookup_types['AR']['4']['MetadataEntryID']
-            assert_equal 'Downtown Redmond', @lookup_types['AR']['4']['LongValue']
-            assert_equal 'Dntn Rdmd',        @lookup_types['AR']['4']['ShortValue']
-          end
-
-          should "add version" do
-            assert_equal '1.00.000', @results['Property'][:lookup_types_version]
-          end
-
-          should "add data" do
-            assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT',
-                         @results['Property'][:lookup_types_date]
-          end
+        should "add AR lookup value '4' to lookup types" do
+          assert_nil @lookup_types['AR']['4']['MetadataEntryID']
+          assert_equal 'Downtown Redmond', @lookup_types['AR']['4']['LongValue']
+          assert_equal 'Dntn Rdmd',        @lookup_types['AR']['4']['ShortValue']
         end
       end
 
@@ -235,17 +189,7 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
           end
 
           should "add search help 1" do
-            assert_equal "Enter the number in the following format dxd",
-                         @search_help['1']['Value']
-          end
-
-          should "add version" do
-            assert_equal '1.00.000', @results['Property'][:search_help_version]
-          end
-
-          should "add data" do
-            assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT',
-                         @results['Property'][:search_help_date]
+            assert_equal "Enter the number in the following format dxd", @search_help['1']['Value']
           end
         end
       end
@@ -263,21 +207,12 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
           should "add edit mask 1" do
             assert_equal "[0-9]{1,2}[x][0-9]{1,2}", @edit_masks['1']['Value']
           end
-
-          should "add version" do
-            assert_equal '1.00.000', @results['Property'][:edit_masks_version]
-          end
-
-          should "add data" do
-            assert_equal 'Sat, 20 Mar 2002 12:03:38 GMT',
-                         @results['Property'][:edit_masks_date]
-          end
         end
       end
 
       context "when METADATA-FOREIGNKEYS" do
-        should "add all foreign keys and attributes" do
-          assert_equal 11, @results[:foreign_keys].size
+        should "add all foreign keys" do
+          assert_equal 9, @results[:foreign_keys].keys.size
         end
 
         should "add foreign key 6" do
