@@ -34,8 +34,6 @@ class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
 
       context "when METADATA-RESOURCE" do
         should "create key for each resource" do
-          assert 3, @results.keys.size
-
           ['Tax', 'Agent', 'Property'].each do |resource|
             assert @results.has_key?(resource)
           end
