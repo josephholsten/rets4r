@@ -113,7 +113,7 @@ module RETS4R
     #--
     # TODO: put this in a LoginResponseDocument
     def to_h
-      pairs = first_child.text.map do |line|
+      pairs = first_child.text.lines.map do |line|
         key, value = parse_key_value_line(line)
       end
       Hash[pairs]
