@@ -87,7 +87,7 @@ class TestResponseDocument < Test::Unit::TestCase
   end
   context 'empty doc' do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('metadata'))
+      @doc = RETS4R::ResponseDocument.parse(fixture('empty'))
     end
     should 'not be rets' do
       assert !@doc.rets?
