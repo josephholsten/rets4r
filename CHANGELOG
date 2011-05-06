@@ -603,42 +603,42 @@ Wed Nov 25 06:37:07 2009  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
     Fixed auth issue with authenticate headers with spaces after commas. (Ken Wiesner, Scott Patterson)
     When an exception is raised in the authentication parsing code, complain by raising
         a new exception, but also report anything of interest at the same time: request,
-        response, response's body. (François Beausoleil)
+        response, response's body. (Fran√ßois Beausoleil)
     Fixed Client#request to actually respect the specified request method instead of always using GET requests. (Scott Patterson)
     Set default request method to POST since some RETS servers seem to have trouble with GET requests. (Scott Patterson)
 
 0.8.3
-    Added example #set_pre_request_block. (François Beausoleil)
+    Added example #set_pre_request_block. (Fran√ßois Beausoleil)
     Allow a pre request block to be set for RETS4R::Client.
         This allows the caller to change the request in any meaningful way, such as adding a
-        RETS-UA-Authorization header when appropriate. (François Beausoleil)
+        RETS-UA-Authorization header when appropriate. (Fran√ßois Beausoleil)
     Better response handling of HTTP errors. Response codes > 300 other than 401 now raise an
         HTTPError exception that encapsulates the HTTPResponse object.
         401 errors raise a LoginError exception. (Scott Patterson)
     Added in RETS specification error messages to reference. (Scott Patterson)
-    New Rakefile.  Install the rake gem and do 'rake test' to run the tests. (François Beausoleil)
+    New Rakefile.  Install the rake gem and do 'rake test' to run the tests. (Fran√ßois Beausoleil)
 
 0.8.2
     Added missing result parameter to Client#search's yield (Scott Patterson)
-    Added 1.7 to supported list and default version (François Beausoleil)
-    No longer sends empty (nil) headers (François Beausoleil)
-    Added debugging to HTTP output. (François Beausoleil, Scott Patterson)
-    Added support for multiple set-cookie headers in the server response (François Beausoleil)
+    Added 1.7 to supported list and default version (Fran√ßois Beausoleil)
+    No longer sends empty (nil) headers (Fran√ßois Beausoleil)
+    Added debugging to HTTP output. (Fran√ßois Beausoleil, Scott Patterson)
+    Added support for multiple set-cookie headers in the server response (Fran√ßois Beausoleil)
     Added basic search example (Scott Patterson)
-    Implied default value of \t in RETS4R::Client::Transaction#delimiter (François Beausoleil)
-    #get_metadata now returns the block's value or the results. (François Beausoleil)
+    Implied default value of \t in RETS4R::Client::Transaction#delimiter (Fran√ßois Beausoleil)
+    #get_metadata now returns the block's value or the results. (Fran√ßois Beausoleil)
     Made sure #login always calls #logout if called with a block.  #login returns the block's value
-        instead of results. (François Beausoleil)
+        instead of results. (Fran√ßois Beausoleil)
     New assertions that require Client to have Ruby-like accessors for attributes, instead of
         getters and setters.  Applied 'Rename Attribute' on @parser, because #get_parser_class
-        was returning the class of the parser's class, instead of the parser's class itself. (François Beausoleil)
+        was returning the class of the parser's class, instead of the parser's class itself. (Fran√ßois Beausoleil)
     Client#set_rets_version should take care to generate the correct RETS-Version header,
         and #get_rets_version should undo the changes that #set_rets_version did before
-        returning the value. (François Beausoleil)
-    Don't rescue an exception that's not being processed in Parser. (François Beausoleil)
+        returning the value. (Fran√ßois Beausoleil)
+    Don't rescue an exception that's not being processed in Parser. (Fran√ßois Beausoleil)
     RETS4R::Client#get_object extensions: yield or return the array of DataObject instances;
         changed the multipart/parallel response boundary processing rules
-        (include \r\n in the boundary detection); added documentation. (François Beausoleil)
+        (include \r\n in the boundary detection); added documentation. (Fran√ßois Beausoleil)
     Added GetObject example (Scott Patterson)
     Changed #get_object now yields each DataObject if a block is given rather
         than an array of DataObjects (Scott Patterson)
