@@ -31,7 +31,11 @@ module RETS4R
         def start_element name, attrs = []
           case name
           when 'DELIMITER'
-            @delimiter = attrs.last.to_i.chr
+            if attrs.last.respond_to?('last')
+              @delimiter = attrs.last.last.to_i.chr
+            else
+              @delimiter = attrs.last.to_i.chr
+            end
           when 'COLUMNS'
             @columns_element = true
             @string = ''
