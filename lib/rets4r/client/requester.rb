@@ -7,7 +7,7 @@ module RETS4R
       DEFAULT_USER_AGENT      = "rets4r/#{::RETS4R::VERSION}"
       DEFAULT_RETS_VERSION    = '1.7'
 
-      attr_accessor :logger, :headers, :pre_request_block, :nc, :username, :password, :method
+      attr_accessor :logger, :headers, :pre_request_block, :post_request_block, :nc, :username, :password, :method
       def initialize
         @nc = 0
         @headers = {
@@ -16,6 +16,7 @@ module RETS4R
           'RETS-Version' => "RETS/#{DEFAULT_RETS_VERSION}",
         }
         @pre_request_block = nil
+        @post_request_block = nil
       end
 
       def user_agent
@@ -130,6 +131,8 @@ module RETS4R
 
           logger.debug(response.body) if logger
         end
+
+        @post_request_block.call(self, http, headers) if @post_request_block
 
         return response
       end
