@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -w
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
 require 'test_helper'
 
