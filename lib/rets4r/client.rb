@@ -18,11 +18,9 @@ require 'net/http'
 require 'uri'
 require 'webrick/httputils'
 
-require 'rets4r/auth'
 require 'rets4r/client/dataobject'
 require 'rets4r/client/exceptions'
 require 'rets4r/client/links'
-require 'rets4r/client/parsers/compact'
 require 'rets4r/client/parsers/response_parser'
 require 'rets4r/client/requester'
 

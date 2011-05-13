@@ -1,5 +1,3 @@
-require 'rets4r/client/data'
-
 module RETS4R
     class Client
         # Represents a set of metadata. It is simply an extended Array with type and attributes accessors.
