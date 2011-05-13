@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+#!/usr/bin/env ruby -w
+$:.unshift File.expand_path('../..',__FILE__)
 require 'test_helper'
 require 'rets4r/response_document/base'
 class TestResponseDocumentBase < Test::Unit::TestCase
@@ -47,41 +47,45 @@ class TestResponseDocumentBase < Test::Unit::TestCase
     should 'validate!' do
       assert_equal @doc, @doc.validate!
     end
-    should 'parse_results' do
-      transaction = @doc.parse_results
+    context 'parse_results' do
+      setup { @transaction = @doc.parse_results }
+      subject { @transaction }
 
-      assert_equal @doc.success?, transaction.success?
-      assert_equal @doc.reply_code.to_s, transaction.reply_code
-      assert_equal @doc.reply_text, transaction.reply_text
-      assert_equal [], transaction.header
+      should match_attributes(:success?, :reply_text, :max_rows?).of { @doc }
+      should('have ascii_delimiter') { assert_equal "\t", subject.ascii_delimiter }
+      should('have header') { assert_equal [], subject.header }
+      should('have metadata') { assert_equal nil, subject.metadata }
 
-      assert_equal nil, transaction.metadata
-
-      assert_equal ?\t, transaction.delimiter
-      assert_equal "\t", transaction.ascii_delimiter
-      assert_equal true, transaction.maxrows?
-
-      assert_equal 2, transaction.response.length, 'response length should be 2'
-      assert_equal "Datum1", transaction.response[0]['First']
-      assert_equal "Datum2", transaction.response[0]['Second']
-      assert_equal "Datum3", transaction.response[0]['Third']
-      assert_equal "Datum4", transaction.response[1]['First']
-      assert_equal "Datum5", transaction.response[1]['Second']
-      assert_equal "Datum6", transaction.response[1]['Third']
+      context 'response' do
+        subject { @transaction.response }
+        should('be length 2') { assert_equal 2, subject.length }
+        should('have first row') { assert_equal({"Third"=>"Datum3", "Second"=>"Datum2", "First"=>"Datum1"}, subject[0]) }
+        should('have second row') { assert_equal({"Third"=>"Datum6", "Second"=>"Datum5", "First"=>"Datum4"}, subject[1]) }
+      end
+      context 'deprecated methods' do
+        setup { $VERBOSE = false }
+        teardown { $VERBOSE = true }
+        should('have integer #delimiter') { assert_equal ?\t, subject.delimiter }
+        should('have #maxrows?') { assert_equal @doc.max_rows?, subject.maxrows? }
+        should('have string #reply_code') { assert_equal @doc.reply_code.to_s, subject.reply_code }
+      end
     end
     context :to_transaction do
       setup { @transaction = @doc.to_transaction }
-      should 'set reply code' do
-        assert_equal @doc.reply_code.to_s, @transaction.reply_code
-      end
-      should 'set reply_text' do
-        assert_equal @doc.reply_text, @transaction.reply_text
-      end
+      subject { @transaction }
+      should match_attributes(:success?, :reply_text, :max_rows?).of { @doc }
+      should('set doc') { assert_equal @doc, subject.doc }
       context 'with block' do
         setup { @transaction = @doc.to_transaction { :inside_block }}
         should 'set response from block' do
           assert_equal :inside_block, @transaction.response
         end
+      end
+      context 'deprecated methods' do
+        setup { $VERBOSE = false }
+        teardown { $VERBOSE = true }
+        should('have #maxrows?') { assert_equal @doc.max_rows?, subject.maxrows? }
+        should('have string #reply_code') { assert_equal @doc.reply_code.to_s, subject.reply_code }
       end
     end
   end
