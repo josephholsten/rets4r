@@ -15,6 +15,7 @@ bindings available from the Center for Realtor¨ Technology
 
 * Source: http://github.com/josephholsten/rets4r
 * Documentation: http://rdoc.info/projects/josephholsten/rets4r
+* Build Status: http://travis-ci.org/josephholsten/rets4r.png
 
 == Requirements
 
