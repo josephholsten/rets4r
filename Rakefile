@@ -4,6 +4,7 @@ require 'rake'
 require 'rake/clean'
 require 'fileutils'
 include FileUtils
+require 'rets4r'
 
 # impart all tasks in lib/tasks/
 Dir['lib/tasks/*.rake'].each { |task| import task }
@@ -46,3 +47,5 @@ CLEAN << '.rake_tasks'
 
 Bundler::GemHelper.install_tasks
 CLEAN << 'pkg/*'
+CLOBBER << 'Gemfile.lock'
+CLOBBER << "rets4r-#{RETS4R::VERSION}.gem"
