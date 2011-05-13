@@ -1,4 +1,5 @@
 require 'forwardable'
+
 module RETS4R
   class Client
     class Transaction

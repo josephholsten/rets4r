@@ -1,6 +1,7 @@
-require 'rets4r/client/transaction'
-require 'rets4r/client/parsers/compact'
 require 'rexml/document'
+
+require 'rets4r/client/parsers/compact'
+require 'rets4r/client/transaction'
 
 module RETS4R
   class Client

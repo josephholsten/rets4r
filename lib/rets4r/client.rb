@@ -11,19 +11,20 @@
 #  TODO: 2.0 Support (Adding this support will be very difficult since it is a completely different methodology)
 #  TODO: Case-insensitive header
 
+require 'cgi'
 require 'digest/md5'
+require 'logger'
 require 'net/http'
 require 'uri'
-require 'cgi'
+require 'webrick/httputils'
+
 require 'rets4r/auth'
 require 'rets4r/client/dataobject'
-require 'rets4r/client/parsers/response_parser'
-require 'rets4r/client/parsers/compact'
-require 'rets4r/client/links'
-require 'rets4r/client/requester'
 require 'rets4r/client/exceptions'
-require 'logger'
-require 'webrick/httputils'
+require 'rets4r/client/links'
+require 'rets4r/client/parsers/compact'
+require 'rets4r/client/parsers/response_parser'
+require 'rets4r/client/requester'
 
 module RETS4R
   class Client

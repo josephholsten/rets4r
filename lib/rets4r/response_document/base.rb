@@ -1,5 +1,5 @@
-require 'rets4r/client/transaction'
 require 'rets4r/client/exceptions'
+require 'rets4r/client/transaction'
 
 module RETS4R
   module ResponseDocument

@@ -1,4 +1,5 @@
 require 'nokogiri'
+
 module RETS4R
   class Client
     class CompactNokogiriParser
