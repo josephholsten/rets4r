@@ -40,7 +40,6 @@ lib/rets4r/response_document/search.rb
 lib/tasks/annotations.rake
 lib/tasks/coverage.rake
 rets4r.gemspec
-spec/rets4r_compact_data_parser_spec.rb
 test/data/1.5/bad_compact.xml
 test/data/1.5/count_only_compact.xml
 test/data/1.5/error.xml
