@@ -31,10 +31,6 @@ lib/rets4r/client/parsers/metadata.rb
 lib/rets4r/client/parsers/response_parser.rb
 lib/rets4r/client/requester.rb
 lib/rets4r/client/transaction.rb
-lib/rets4r/core_ext/array/extract_options.rb
-lib/rets4r/core_ext/class/attribute_accessors.rb
-lib/rets4r/core_ext/hash/keys.rb
-lib/rets4r/core_ext/hash/slice.rb
 lib/rets4r/listing_mapper.rb
 lib/rets4r/listing_service.rb
 lib/rets4r/loader.rb
@@ -57,6 +53,7 @@ test/data/1.5/search_unescaped_compact.xml
 test/data/listing_service.yml
 test/response_document/test_base.rb
 test/response_document/test_search.rb
+test/support/match_attributes.rb
 test/test_auth.rb
 test/test_client.rb
 test/test_client_links.rb
