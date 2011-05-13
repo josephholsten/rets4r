@@ -14,7 +14,13 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-task :default => :test
+task :default => %w{test test:isolated}
+
+namespace :test do
+  Rake::TestTask.new(:isolated) do |t|
+    t.pattern = 'test/ts_isolated.rb'
+  end
+end
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
