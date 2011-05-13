@@ -14,6 +14,7 @@ module RETS4R
       def delimiter
         at('/RETS/DELIMITER')['value'].to_i.chr
       end
+      alias_method :ascii_delimiter, :delimiter
 
       def headers
         split_raw_headers(at('/RETS/COLUMNS').text)
