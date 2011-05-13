@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+#!/usr/bin/env ruby -w
+$:.unshift File.expand_path('../..',__FILE__)
 require 'test_helper'
 require 'rets4r/response_document/search'
 
@@ -32,22 +32,23 @@ class TestResponseDocumentSearch < Test::Unit::TestCase
     context 'as transaction' do
       setup { @transaction = @doc.to_transaction }
       subject { @transaction }
-      should match_attributes(:success?, :reply_text).of { @doc }
-      should('have reply_code') { assert_equal @doc.reply_code.to_s, subject.reply_code }
+
+      should match_attributes(:success?, :reply_text, :max_rows?, :ascii_delimiter).of { @doc }
       should('have empty header') { assert_equal [], subject.header }
       should('have nil metadata') { assert_equal nil, subject.metadata }
-      should('do everything else') do
-        assert_equal ?\t, subject.delimiter
-        assert_equal "\t", subject.ascii_delimiter
-        assert_equal true, subject.maxrows?
 
-        assert_equal 2, subject.response.length, 'response length should be 2'
-        assert_equal "Datum1", subject.response[0]['First']
-        assert_equal "Datum2", subject.response[0]['Second']
-        assert_equal "Datum3", subject.response[0]['Third']
-        assert_equal "Datum4", subject.response[1]['First']
-        assert_equal "Datum5", subject.response[1]['Second']
-        assert_equal "Datum6", subject.response[1]['Third']
+      context 'response' do
+        subject { @transaction.response }
+        should('be length 2') { assert_equal 2, subject.length }
+        should('have first row') { assert_equal({"Third"=>"Datum3", "Second"=>"Datum2", "First"=>"Datum1"}, subject[0]) }
+        should('have second row') { assert_equal({"Third"=>"Datum6", "Second"=>"Datum5", "First"=>"Datum4"}, subject[1]) }
+      end
+      context 'deprecated methods' do
+        setup { $VERBOSE = false }
+        teardown { $VERBOSE = true }
+        should('have integer #delimiter') { assert_equal ?\t, subject.delimiter }
+        should('have #maxrows?') { assert_equal true, subject.maxrows? }
+        should('have string #reply_code') { assert_equal @doc.reply_code.to_s, subject.reply_code }
       end
     end
   end
