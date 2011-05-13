@@ -1,3 +1,6 @@
+require 'nokogiri'
+require 'rexml/document'
+
 require 'rets4r/client/exceptions'
 require 'rets4r/client/transaction'
 

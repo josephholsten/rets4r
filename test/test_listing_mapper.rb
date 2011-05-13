@@ -1,9 +1,17 @@
 #!/usr/bin/env ruby -w
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__)))
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
+require 'rets4r/listing_mapper'
+require 'rets4r/listing_service'
 
 class TestListingMapper < Test::Unit::TestCase
   context "ListingMapper" do
+    setup do
+      listing_service_config_file = PROJECT_ROOT.join('test', 'data', 'listing_service.yml')
+      RETS4R::ListingService.configurations = YAML.load_file(listing_service_config_file)
+      RETS4R::ListingService.env = 'test'
+    end
     should "access select" do
       config = RETS4R::ListingService.connection
       mapper = RETS4R::ListingMapper.new(config)

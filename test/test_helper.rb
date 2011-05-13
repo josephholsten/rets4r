@@ -1,13 +1,12 @@
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+libdir = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'test/unit'
-require 'rets4r'
 require 'mocha'
 require 'shoulda'
 require 'pathname'
-Pathname(__FILE__).join('../support').children.each {|f| require f}
 
-# Configure ListingService
-listing_service_config_file = File.expand_path(File.join('test', 'data', 'listing_service.yml'))
-RETS4R::ListingService.configurations = YAML.load_file(listing_service_config_file)
-RETS4R::ListingService.env = 'test'
+unless defined? PROJECT_ROOT
+  PROJECT_ROOT = Pathname(__FILE__).join('../..')
+  PROJECT_ROOT.join('test/support').children.each {|f| require f}
+end
