@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby -w
+
 libdir = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
@@ -16,7 +17,8 @@ class TestQuality < Test::Unit::TestCase
     error_messages = []
     Dir.chdir(root) do
       File.read("MANIFEST").split("\n").each do |filename|
-        next if filename =~ /data/
+        next unless code_file?(filename)
+
         error_messages << check_for_tab_characters(filename)
         error_messages << check_for_extra_spaces(filename)
       end
@@ -49,6 +51,12 @@ class TestQuality < Test::Unit::TestCase
     unless failing_lines.empty?
       "#{filename} has spaces on the EOL on lines #{failing_lines.join(', ')}"
     end
+  end
+
+  def code_file?(filename)
+    additional_files = %w(Rakefile Gemfile rake)
+    filename =~ /.rb/ || additional_files.include?(filename)
+#    filename =~ /data|CONTRIBUTORS|CHANGELOG|LICENSE|README|RUBYS|TODO/
   end
 
   def root
