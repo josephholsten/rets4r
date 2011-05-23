@@ -8,14 +8,13 @@ module RETS4R
     end
     # Represents a RETS object (as returned by the get_object) transaction.
     class DataObject
-      
       attr_accessor :header, :data
 
       alias :type :header
       alias :info :type
 
       def initialize(headers, data)
-        @header = ObjectHeader.new(headers) 
+        @header = ObjectHeader.new(headers)
         @data = data
       end
 

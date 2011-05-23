@@ -16,9 +16,10 @@ class TestQuality < Test::Unit::TestCase
     error_messages = []
     Dir.chdir(root) do
       File.read("MANIFEST").split("\n").each do |filename|
-        next if filename =~ /data/
-        error_messages << check_for_tab_characters(filename)
-        error_messages << check_for_extra_spaces(filename)
+        if filename =~ /.rb|.yml|Gemfile|Rakefile/
+          error_messages << check_for_tab_characters(filename)
+          error_messages << check_for_extra_spaces(filename)
+        end
       end
     end
     assert_well_formed error_messages.compact
