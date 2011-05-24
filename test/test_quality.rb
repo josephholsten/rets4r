@@ -56,7 +56,6 @@ class TestQuality < Test::Unit::TestCase
   def code_file?(filename)
     additional_files = %w(Rakefile Gemfile rake)
     filename =~ /.rb/ || additional_files.include?(filename)
-#    filename =~ /data|CONTRIBUTORS|CHANGELOG|LICENSE|README|RUBYS|TODO/
   end
 
   def root

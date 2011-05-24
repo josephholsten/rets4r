@@ -105,7 +105,7 @@ module RETS4R
               end
               set_header('Cookie', cookies.join("; ")) unless cookies.empty?
               # totally wrong. session id is only ever under the Cookie header
-              #set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID'] 
+              #set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID']
               set_header('RETS-Session-ID',nil)
             end
           rescue AuthRequired
@@ -113,14 +113,14 @@ module RETS4R
 
             if retry_auth > 0
               retry_auth -= 1
-                        auth = Auth.authenticate(response,
-                                                                           @username,
-                                                                           @password,
-                                                                           url.path,
-                                                                           method,
-                                                                           @headers['RETS-Request-ID'],
-                                                                           @headers['User-Agent'],
-                                                                           @nc)
+              auth = RETS4R::Auth.authenticate(response,
+                                       @username,
+                                       @password,
+                                       url.path,
+                                       method,
+                                       @headers['RETS-Request-ID'],
+                                       @headers['User-Agent'],
+                                       @nc)
               set_header('Authorization', auth)
               retry
             else
