@@ -8,5 +8,9 @@ require 'pathname'
 
 unless defined? PROJECT_ROOT
   PROJECT_ROOT = Pathname(__FILE__).join('../..')
-  PROJECT_ROOT.join('test/support').children.each {|f| require f}
+  support_dir = File.join(File.expand_path(File.dirname(__FILE__)), "support")
+  $LOAD_PATH.unshift(support_dir)
+  Pathname(support_dir).children.each do |file|
+    require file
+  end
 end
