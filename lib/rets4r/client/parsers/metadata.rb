@@ -1,5 +1,9 @@
 require 'delegate'
 require 'nokogiri'
+require 'rexml/document'
+require 'yaml'
+
+require 'rets4r/client/parsers/compact'
 
 module RETS4R
   class Client

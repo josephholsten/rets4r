@@ -4,6 +4,7 @@ require 'rake'
 require 'rake/clean'
 require 'fileutils'
 include FileUtils
+require 'rets4r'
 
 # impart all tasks in lib/tasks/
 Dir['lib/tasks/*.rake'].each { |task| import task }
@@ -13,7 +14,13 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-task :default => :test
+task :default => %w{test test:isolated}
+
+namespace :test do
+  Rake::TestTask.new(:isolated) do |t|
+    t.pattern = 'test/ts_isolated.rb'
+  end
+end
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
@@ -46,3 +53,5 @@ CLEAN << '.rake_tasks'
 
 Bundler::GemHelper.install_tasks
 CLEAN << 'pkg/*'
+CLOBBER << 'Gemfile.lock'
+CLOBBER << "rets4r-#{RETS4R::VERSION}.gem"

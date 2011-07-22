@@ -5,18 +5,19 @@
 # You will need to set the necessary variables below.
 #
 #############################################################################################
-# Settings
 
-require 'yaml'
+$:.unshift 'lib'
 require 'active_support/core_ext/hash'
+require 'yaml'
+
+require 'rets4r'
+
+# Settings
 settings_file = File.expand_path(File.join(File.dirname(__FILE__), "settings.yml"))
 ENV['LISTING_ENV'] ||= 'development'
 settings = YAML.load_file(settings_file)[ENV['LISTING_ENV']].symbolize_keys
 
 #############################################################################################
-$:.unshift 'lib'
-
-require 'rets4r'
 
 client = RETS4R::Client.new(settings[:url])
 

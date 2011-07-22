@@ -1,10 +1,13 @@
-#!/usr/bin/env ruby
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+#!/usr/bin/env ruby -w
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
+require 'rets4r/client/requester'
+
 class TestRequester < Test::Unit::TestCase
   context RETS4R::Client::Requester do
     setup do
-      @uri = URI.parse('http://demo.crt.realtors.org:6103/rets/login')
+      @uri = URI.parse('http://rets.example:6103/rets/login')
       @requester = RETS4R::Client::Requester.new
     end
     context "when the last response contains a RETS-Session-ID cookie" do
@@ -15,7 +18,8 @@ class TestRequester < Test::Unit::TestCase
         BODY
         @response = stub('HTTPResponse', :code => '200', :body => body)
         @response.stubs(:get_fields).with('set-cookie').returns(['RETS-Session-ID=2qwiti55hq311j553ihivc3r; path=/'])
-        Net::HTTP.any_instance.stubs(:get => @response )
+        @http = stub('HTTP', :get => @response )
+        Net::HTTP.any_instance.stubs(:start).yields(@http)
         @requester.request(@uri)
       end
       context "the next request" do
@@ -23,13 +27,13 @@ class TestRequester < Test::Unit::TestCase
           @requester.request(@uri)
         end
         before_should "not set a RETS-Session-ID header" do
-          Net::HTTP.any_instance.expects(:get).with do |anything,headers|
+          @http.expects(:get).with do |anything,headers|
             assert_does_not_contain headers.keys, 'RETS-Session-ID'
             true
           end.returns(@response)
         end
         before_should "set a RETS-Session cookie" do
-          Net::HTTP.any_instance.expects(:get).with(anything,has_entry('Cookie' => 'RETS-Session-ID=2qwiti55hq311j553ihivc3r')).returns(@response)
+          @http.expects(:get).with(anything,has_entry('Cookie' => 'RETS-Session-ID=2qwiti55hq311j553ihivc3r')).returns(@response)
         end
       end
     end

@@ -1,15 +1,18 @@
-#!/usr/bin/env ruby
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+#!/usr/bin/env ruby -w
+testdir = File.expand_path('../..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
-require 'rets4r/response_document'
-class TestResponseDocument < Test::Unit::TestCase
+require 'rets4r/response_document/base'
+require 'rets4r/response_document/search'
+
+class TestResponseDocumentBase < Test::Unit::TestCase
   def fixture(name)
     File.open("test/data/1.5/#{name}.xml").read
   end
 
   context "normal doc" do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('search_compact'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('search_compact'))
     end
     should 'have max_rows' do
       assert @doc.max_rows?
@@ -47,47 +50,51 @@ class TestResponseDocument < Test::Unit::TestCase
     should 'validate!' do
       assert_equal @doc, @doc.validate!
     end
-    should 'parse_results' do
-      transaction = @doc.parse_results
+    context 'parse_results' do
+      setup { @transaction = @doc.parse_results }
+      subject { @transaction }
 
-      assert_equal @doc.success?, transaction.success?
-      assert_equal @doc.reply_code.to_s, transaction.reply_code
-      assert_equal @doc.reply_text, transaction.reply_text
-      assert_equal [], transaction.header
+      should match_attributes(:success?, :reply_text, :max_rows?).of { @doc }
+      should('have ascii_delimiter') { assert_equal "\t", subject.ascii_delimiter }
+      should('have header') { assert_equal [], subject.header }
+      should('have metadata') { assert_equal nil, subject.metadata }
 
-      assert_equal nil, transaction.metadata
-
-      assert_equal ?\t, transaction.delimiter
-      assert_equal "\t", transaction.ascii_delimiter
-      assert_equal true, transaction.maxrows?
-
-      assert_equal 2, transaction.response.length, 'response length should be 2'
-      assert_equal "Datum1", transaction.response[0]['First']
-      assert_equal "Datum2", transaction.response[0]['Second']
-      assert_equal "Datum3", transaction.response[0]['Third']
-      assert_equal "Datum4", transaction.response[1]['First']
-      assert_equal "Datum5", transaction.response[1]['Second']
-      assert_equal "Datum6", transaction.response[1]['Third']
+      context 'response' do
+        subject { @transaction.response }
+        should('be length 2') { assert_equal 2, subject.length }
+        should('have first row') { assert_equal({"Third"=>"Datum3", "Second"=>"Datum2", "First"=>"Datum1"}, subject[0]) }
+        should('have second row') { assert_equal({"Third"=>"Datum6", "Second"=>"Datum5", "First"=>"Datum4"}, subject[1]) }
+      end
+      context 'deprecated methods' do
+        setup { $VERBOSE = false }
+        teardown { $VERBOSE = true }
+        should('have integer #delimiter') { assert_equal ?\t, subject.delimiter }
+        should('have #maxrows?') { assert_equal @doc.max_rows?, subject.maxrows? }
+        should('have string #reply_code') { assert_equal @doc.reply_code.to_s, subject.reply_code }
+      end
     end
     context :to_transaction do
       setup { @transaction = @doc.to_transaction }
-      should 'set reply code' do
-        assert_equal @doc.reply_code.to_s, @transaction.reply_code
-      end
-      should 'set reply_text' do
-        assert_equal @doc.reply_text, @transaction.reply_text
-      end
+      subject { @transaction }
+      should match_attributes(:success?, :reply_text, :max_rows?).of { @doc }
+      should('set doc') { assert_equal @doc, subject.doc }
       context 'with block' do
         setup { @transaction = @doc.to_transaction { :inside_block }}
         should 'set response from block' do
           assert_equal :inside_block, @transaction.response
         end
       end
+      context 'deprecated methods' do
+        setup { $VERBOSE = false }
+        teardown { $VERBOSE = true }
+        should('have #maxrows?') { assert_equal @doc.max_rows?, subject.maxrows? }
+        should('have string #reply_code') { assert_equal @doc.reply_code.to_s, subject.reply_code }
+      end
     end
   end
   context 'empty doc' do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('empty'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('empty'))
     end
     should 'not be rets' do
       assert !@doc.rets?
@@ -103,7 +110,7 @@ class TestResponseDocument < Test::Unit::TestCase
   end
   context 'error doc' do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('error'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('error'))
     end
     should 'not be valid' do
       assert @doc.invalid?
@@ -125,7 +132,7 @@ class TestResponseDocument < Test::Unit::TestCase
   end
   context 'login doc' do
     setup do
-      @doc = RETS4R::ResponseDocument.parse(fixture('login'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('login'))
     end
     should 'parse_key_value' do
       transaction = @doc.parse_key_value
