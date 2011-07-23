@@ -20,5 +20,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'shoulda'
   spec.add_development_dependency 'activesupport'
   spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rdoc'
 end
 

@@ -17,10 +17,10 @@ class TestQuality < Test::Unit::TestCase
     error_messages = []
     Dir.chdir(root) do
       File.read("MANIFEST").split("\n").each do |filename|
-        next unless code_file?(filename)
-
-        error_messages << check_for_tab_characters(filename)
-        error_messages << check_for_extra_spaces(filename)
+        unless code_file?(filename)
+          error_messages << check_for_tab_characters(filename)
+          error_messages << check_for_extra_spaces(filename)
+        end
       end
     end
     assert_well_formed error_messages.compact
@@ -55,8 +55,7 @@ class TestQuality < Test::Unit::TestCase
 
   def code_file?(filename)
     additional_files = %w(Rakefile Gemfile rake)
-    filename =~ /.rb/ || additional_files.include?(filename)
-#    filename =~ /data|CONTRIBUTORS|CHANGELOG|LICENSE|README|RUBYS|TODO/
+    filename =~ /.rb|.yml/ || additional_files.include?(filename)
   end
 
   def root
