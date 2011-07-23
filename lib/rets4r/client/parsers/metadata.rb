@@ -1,3 +1,5 @@
+require 'delegate'
+require 'nokogiri'
 require 'rexml/document'
 require 'yaml'
 
@@ -5,89 +7,220 @@ require 'rets4r/client/parsers/compact'
 
 module RETS4R
   class Client
-    class MetadataParser
 
-      TAGS = [ 'METADATA-RESOURCE',
-               'METADATA-CLASS',
-               'METADATA-TABLE',
-               'METADATA-OBJECT',
-               'METADATA-LOOKUP',
-               'METADATA-LOOKUP_TYPE' ]
+    # Provides a Hash-like representation of metadata.
+    # Currently only compact metadata is supported.
+    #
+    # String keys represent data that has come from the parsed metadata file.
+    # Symbol keys are used to indicate categories such as :lookup_types. All are pluralized
+    # except for :search_help, and have are snakecase.
+    #
+    # The following is the basic structure of a metadata object, which generally follows the
+    # RETS specification metadata structure, but with a few notable non-nested exceptions such as
+    # lookup_types.
+    #
+    # {:foreign_keys => {<fkey_id> => {...}},
+    #  'Comments'    => ...,
+    #  'SystemID'    => ...,
+    #  'SystemDescription' => ...
+    #  <Resource Name> => {...,
+    #                   :lookup_types => {
+    #                     <Lookup Name> => {<Lookup Type Value> => {...}}},
+    #
+    #           :objects => {<Object Type> => {...}},
+    #           :classes => {<Class Name>: => {...,
+    #                                          :tables => {<System Name> => {...}}},
+    #           :search_help => {<Search Help ID> => {...}},
+    #           :lookups     => {<Lookup Name>    => {...}}
+    #           :edit_masks: => {<Edit Mask ID>:  => {...}}
+    #
+    # Update related metadata is currently NOT handled by the parser. The following metadata
+    # types ARE handled by the parser: System, Resource, Class, Table, Object, Lookup,
+    # LookupType, ForeignKeys, SearchHelp, and EditMask.
+    #
+    # To generate a metadata object, use one of CompactDocument parse methods.
 
-      def initialize()
-        @parser = RETS4R::Client::CompactDataParser.new
+    class Metadata < DelegateClass(Hash)
+
+      # The initial version of this would set the hash default_proc to create new
+      # hashes that would in turn create new hashes, which is quite clean, but also
+      # meant that you couldn't simply check to see if a given key was nil. Because this is
+      # meant to be a mostly transparent replacement of the REXML-based parser, I decided to
+      # manually create nested hashes as needed in case existing code relied on the
+      # existence of nils.
+
+      def initialize
+        super(Hash.new)
       end
 
-      def parse_file(file = 'metadata.xml')
-        xml = File.read(file)
-        doc = REXML::Document.new(xml)
-        parse(doc)
+      ## Helper access methods to ensure that nested hashes are created as needed.
+
+      def resource(name)
+        self[name] ||= {}
       end
 
-      def parse(doc)
+      def resource_classes(resource)
+        resource(resource)[:classes] ||= {}
+      end
 
-        rets_resources = {}
+      def resource_class(resource, klass)
+        resource_classes(resource)[klass] ||= {}
+      end
 
-        doc.get_elements('/RETS/*').each do |elem|
+      def class_tables(resource, klass)
+        resource_class(resource, klass)[:tables] ||= {}
+      end
 
-          next unless TAGS.include?(elem.name)
+      def resource_objects(resource)
+        resource(resource)[:objects] ||= {}
+      end
 
-          columns   = elem.get_elements('COLUMNS')[0]
-          rows      = elem.get_elements('DATA')
+      def resource_lookups(resource)
+        resource(resource)[:lookups] ||= {}
+      end
 
-          data = @parser.parse_data(columns, rows)
+      def resource_lookup_types(resource, lookup)
+        lookups = resource(resource)[:lookup_types] ||= {}
+        lookups[lookup] ||= {}
+      end
 
-          resource_id = elem.attributes['Resource']
+      def search_help(resource)
+        resource(resource)[:search_help] ||= {}
+      end
 
-          case elem.name
-            when 'METADATA-RESOURCE'
-              data.each do |resource_info|
-                id = resource_info.delete('ResourceID')
-                rets_resources[id] = resource_info
-              end
+      def edit_masks(resource)
+        resource(resource)[:edit_masks] ||= {}
+      end
 
-            when 'METADATA-CLASS'
-              data.each do |class_info|
-                class_name = class_info.delete('ClassName')
-                rets_resources[resource_id][:classes] ||= {}
-                rets_resources[resource_id][:classes][class_name] = class_info
-              end
+      def foreign_keys
+        self[:foreign_keys] ||= {}
+      end
 
-            when 'METADATA-TABLE'
-              class_name = elem.attributes['Class']
-              data.each do |table_info|
-                system_name = table_info.delete('SystemName')
-                rets_resources[resource_id][:classes][class_name][:tables] ||= {}
-                rets_resources[resource_id][:classes][class_name][:tables][system_name] = table_info
-              end
+      # Nokogiri SAX compact metadata parser
+      class CompactDocument < Nokogiri::XML::SAX::Document
+        DELIMITER = "\t"
 
-            when 'METADATA-OBJECT'
-              data.each do |object_info|
-                object_type = object_info.delete('ObjectType')
-                rets_resources[resource_id][:objects] ||= {}
-                rets_resources[resource_id][:objects][object_type] = object_info
-              end
+        def self.parse_file(filename)
+          new.parse_file(filename)
+        end
 
-            when 'METADATA-LOOKUP'
-              data.each do |lookup_info|
-                lookup_name = lookup_info.delete('LookupName')
-                rets_resources[resource_id][:lookups] ||= {}
-                rets_resources[resource_id][:lookups][lookup_name] = lookup_info
-              end
+        def initialize
+          @parser = Nokogiri::XML::SAX::Parser.new(self)
+        end
 
-            when 'METADATA-LOOKUP_TYPE'
-              lookup = elem.attributes['Lookup']
-              rets_resources[resource_id][:lookup_types] ||= {}
-              rets_resources[resource_id][:lookup_types][lookup] = {}
-              data.each do |lookup_type_info|
-                value = lookup_type_info.delete('Value')
-                rets_resources[resource_id][:lookup_types][lookup][value] = lookup_type_info
-              end
+        def parse_file(filename = 'metadata.xml')
+          parse(File.open(filename))
+        end
+
+        def parse(content)
+          @metadata = Metadata.new
+          @stack    = []
+          @current_content = ''
+          @parser.parse(content)
+          @metadata
+        end
+
+        def start_element name, raw_attrs = []
+          attrs = Hash[*raw_attrs.flatten]
+
+          case name.upcase
+          when 'DATA'
+            @current_content = ''
+          when 'COLUMNS'
+            @current_content = ''
+            @columns = []
+          when 'COMMENTS'
+            @current_content = ''
+          else
+            @stack << [name.upcase, attrs]
           end
         end
 
-        rets_resources
+        def end_element name
+          case name.upcase
+          when 'DATA'
+            process_content_as_data
+          when 'COLUMNS'
+            process_content_as_columns
+          when 'SYSTEM'
+            # unlike the other tags here, SYSTEM cotains its own content so it
+            # needs to be processed as well as removed from the stack.
+            process_content_as_system
+            @stack.pop
+          when 'COMMENTS'
+            process_content_as_comments
+          else
+            @stack.pop
+          end
+        end
+
+        def characters content
+          @current_content << content if receives_content? @stack.last[0]
+        end
+
+        private
+
+          def receives_content? tag
+            tag =~ /^(X-)?(METADATA|SYSTEM)/i
+          end
+
+          def process_content_as_columns
+            @columns = @current_content.split(DELIMITER)
+          end
+
+          def process_content_as_data
+            data = hashify_current_content
+            tag, attrs = @stack.last
+
+            resource = data.delete('ResourceID') || attrs['Resource']
+            klass    = data.delete('ClassName')  || attrs['Class']
+
+            case tag
+            when 'METADATA-RESOURCE'
+              @metadata.resource(resource).merge!(data)
+            when 'METADATA-CLASS'
+              @metadata.resource_class(resource, klass).merge!(data)
+            when 'METADATA-TABLE'
+              @metadata.class_tables(resource, klass)[data.delete('SystemName')] = data
+            when 'METADATA-OBJECT'
+              @metadata.resource_objects(resource)[data.delete('ObjectType')] = data
+            when 'METADATA-LOOKUP'
+              @metadata.resource_lookups(resource)[data.delete('LookupName')] = data
+            when 'METADATA-LOOKUP_TYPE'
+              @metadata.resource_lookup_types(resource, attrs['Lookup'])[data.delete('Value')] = data
+            when 'METADATA-FOREIGNKEYS'
+              @metadata.foreign_keys[data.delete('ForeignKeyID')] = data
+            when 'METADATA-SEARCH_HELP'
+              @metadata.search_help(resource)[data.delete('SearchHelpID')] = data
+            when 'METADATA-EDITMASK'
+              @metadata.edit_masks(resource)[data.delete('EditMaskID')] = data
+            end
+          end
+
+          def process_content_as_system
+            tag, attrs = @stack.last
+
+            @metadata.merge! attrs
+          end
+
+          def process_content_as_comments
+            @metadata['Comments'] = @current_content.strip
+          end
+
+          def hashify_current_content
+            # While not necessary anymore, I've left the setting of the default_proc to that
+            # of the metadata object so that the default value will be consistent throughout
+            # all the metadata.
+            @columns.zip(@current_content.split(DELIMITER)).inject(
+              Hash.new(&@metadata.default_proc)) do |h, (k,v)|
+                h[k] = v unless k.empty?
+                next h
+            end
+          end
       end
     end
+
+    ## Kept for compatibility with previous versions.
+    MetadataParser = Metadata::CompactDocument
   end
 end

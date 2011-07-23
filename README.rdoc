@@ -8,7 +8,7 @@ Specifically, there is no support for Update transactions.
 
 While this is the only "native" Ruby RETS library currently available
 (to my knowledge), there is another client written in C++ with Ruby
-bindings available from the Center for Realtor¨ Technology
+bindings available from the Center for RealtorÂ® Technology
 (http://www.crt.realtors.org/projects/rets/librets/).
 
 == Links
@@ -29,7 +29,7 @@ Please see the LICENSE file.
 == Acknowledgments
 
 This project was made possible in part by the Contra Costa Association of
-Realtors¨ (http://www.ccartoday.com).
+RealtorsÂ® (http://www.ccartoday.com).
 
 == Getting Started
 

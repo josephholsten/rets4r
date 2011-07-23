@@ -24,7 +24,6 @@ lib/rets4r/client/data.rb
 lib/rets4r/client/dataobject.rb
 lib/rets4r/client/exceptions.rb
 lib/rets4r/client/links.rb
-lib/rets4r/client/metadata.rb
 lib/rets4r/client/parsers/compact.rb
 lib/rets4r/client/parsers/compact_nokogiri.rb
 lib/rets4r/client/parsers/metadata.rb

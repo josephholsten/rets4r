@@ -9,7 +9,7 @@ This is a comment line </COMMENTS> </METADATA-SYSTEM>
 <DATA>	Tax	Tax	Tax	Multimedia objects	2	0	PID	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT																	</DATA> </METADATA-RESOURCE>
 
 <METADATA-FOREIGNKEYS Version="1.00.000000" Date="Wed, 23 Jan 2002 12:37:38 GMT">
-<COLUMNS>	PARENT_RESOURCE_ID	PARENT_CLASS_ID	PARENT_SYSTEMNAME	CHILD_RESOURCE_ID	CHILD_CLASS_ID	CHILD_SYSTEMNAME	</COLUMNS> <DATA>	Property	RES	MLSNUM	TAX	TAX	MLSNUM	</DATA> <DATA>	Property	RES	MLSNUM	History	History	MLSNUM	</DATA> <DATA>	Property	RES	MLSNUM	OpenHouse	OpenHouse	MLSNUM	</DATA> <DATA>	Property	RES	ListingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	Property	RES	COListingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	Property	RES	SellingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	Property	RES	COSellingAgentIDvAgent	Agent	AgentID	</DATA> <DATA>	Property	RES	ListingOfficeID	Office	Office	OfficeID	</DATA> <DATA>	Property	RES	SellingOfficeID	Office	Office	OfficeID	</DATA> </METADATA-FOREIGNKEYS>
+<COLUMNS>	ForeignKeyID	PARENT_RESOURCE_ID	PARENT_CLASS_ID	PARENT_SYSTEMNAME	CHILD_RESOURCE_ID	CHILD_CLASS_ID	CHILD_SYSTEMNAME	</COLUMNS> <DATA>	1	Property	RES	MLSNUM	TAX	TAX	MLSNUM	</DATA> <DATA>	2	Property	RES	MLSNUM	History	History	MLSNUM	</DATA> <DATA>	3	Property	RES	MLSNUM	OpenHouse	OpenHouse	MLSNUM	</DATA> <DATA>	4	Property	RES	ListingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	5	Property	RES	COListingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	6	Property	RES	SellingAgentID	Agent	Agent	AgentID	</DATA> <DATA>	7	Property	RES	COSellingAgentIDvAgent	Agent	AgentID	</DATA> <DATA>	8	Property	RES	ListingOfficeID	Office	Office	OfficeID	</DATA> <DATA>	9	Property	RES	SellingOfficeID	Office	Office	OfficeID	</DATA> </METADATA-FOREIGNKEYS>
 
 <METADATA-CLASS Resource="Property" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT">
 <COLUMNS>	ClassName	VisibleName	StandardName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS>
@@ -20,8 +20,7 @@ This is a comment line </COMMENTS> </METADATA-SYSTEM>
 <DATA>	LND	Lots and Land	Lots and Land	Lots and Land	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT	</DATA>
 </METADATA-CLASS>
 
-<METADATA-CLASS Resource="Agent" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"> <COLUMNS>	ClassName	VisibleName	StandardName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS> <DATA>	Agent	Agent	Agent	All Agents	1.00.000
-Sat, 20 Mar 2002 12:03:38 GMT			</DATA> </METADATA-CLASS>
+<METADATA-CLASS Resource="Agent" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT"> <COLUMNS>	ClassName	VisibleName	StandardName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS> <DATA>	Agent	Agent	Agent	All Agents	1.00.000	Sat, 20 Mar 2002 12:03:38 GMT			</DATA> </METADATA-CLASS>
 
 <METADATA-TABLE Resource="Property" Class="RES" Version="1.00.000" Date="Sat, 20 Mar 2002 12:03:38 GMT">
 <COLUMNS>	SystemName	StandardName	LongName	DBName	ShortName	Maximumlength	DataType	Precision	Searchable	Interpretation	Alignment	UseSeparator	EditMaskID	LookupName	MaxSelect	Units	Index	Minimum	Maximum	Default	Required	SearchHelpID	MetadataEntryID	ModTimeStamp	ForeignKey	ForeignField	KeyQuery	KeySelect	</COLUMNS>
