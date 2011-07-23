@@ -17,7 +17,7 @@ class TestQuality < Test::Unit::TestCase
     error_messages = []
     Dir.chdir(root) do
       File.read("MANIFEST").split("\n").each do |filename|
-        unless code_file?(filename)
+        if code_file?(filename)
           error_messages << check_for_tab_characters(filename)
           error_messages << check_for_extra_spaces(filename)
         end
@@ -55,7 +55,7 @@ class TestQuality < Test::Unit::TestCase
 
   def code_file?(filename)
     additional_files = %w(Rakefile Gemfile rake)
-    filename =~ /.rb|.yml|.xml/ || additional_files.include?(filename)
+    filename =~ /.rb|.yml/ || additional_files.include?(filename)
   end
 
   def root
