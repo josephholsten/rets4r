@@ -135,6 +135,17 @@ module RETS4R
       @request_struct.pre_request_block = block
     end
 
+    # Assigns a block that will be called just before the response is returned to the calling method.
+    # This block must accept three parameters:
+    # * self
+    # * Net::HTTP instance
+    # * Hash of headers
+    #
+    # The block's return value will be ignored.
+    def set_post_request_block(&block)
+      @request_struct.post_request_block = block
+    end
+
     # So very much delegated to the request struct
     def set_header(name, value)
       @request_struct.set_header(name, value)
