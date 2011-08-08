@@ -117,5 +117,17 @@ class TestListingMapper < Test::Unit::TestCase
       }
       expected.merge(actual).keys.each{|k| assert_equal expected[k], actual[k], "mismatched on key #{k}"}
     end
+    context :to_dmql do
+      subject { RETS4R::ListingMapper.new.to_dmql( :mls => 5 ) }
+      should "be a dmql clause" do
+        assert_equal "(ListingID=5)", subject
+      end
+    end
+    context :reverse_map do
+      subject { RETS4R::ListingMapper.new.reverse_map( :mls => 5 ) }
+      should "be the hash, backards" do
+        assert_equal( {'ListingID' => 5 }, subject )
+      end
+    end
   end
 end
