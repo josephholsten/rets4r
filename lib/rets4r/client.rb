@@ -23,6 +23,7 @@ require 'rets4r/client/exceptions'
 require 'rets4r/client/links'
 require 'rets4r/client/parsers/response_parser'
 require 'rets4r/client/requester'
+require 'rets4r/client/metadata_request'
 
 module RETS4R
   class Client
@@ -285,17 +286,8 @@ module RETS4R
     end
 
     def download_metadata(type, id)
-      header = {
-        'Accept' => 'text/xml,text/plain;q=0.5'
-      }
-
-      data = {
-        'Type'   => type,
-        'ID'     => id,
-        'Format' => @format
-      }
-
-      request(@urls.metadata, data, header).body
+      req = MetadataRequest.new(@urls.metadata, type, id, @format, @request_struct)
+      req.request.body
     end
 
     # Performs a GetObject transaction on the server. For details on the arguments, please see

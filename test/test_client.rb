@@ -9,60 +9,6 @@ module RETS4R
         public :process_content_type
     end
 
-    class TestClientGetMetadata < Test::Unit::TestCase
-        RETS_PORT     = '9080'
-        RETS_URL      = "http://localhost:#{RETS_PORT}"
-        RETS_LOGIN    = 'login'
-        RETS_PASSWORD = 'password'
-
-        class CustomError < StandardError; end
-
-        def setup
-            @logfile = StringIO.open
-            @rets    = RETS4R::Client.new(RETS_URL)
-            @rets.logger = Logger.new(@logfile)
-            @rets.logger.level = Logger::DEBUG
-
-            @rets.stubs(:request).returns(@response = mock("response"))
-            @response.stubs(:body).returns(:body)
-            @rets.stubs(:parse).returns(@results = mock("results"))
-            Client::ResponseParser.any_instance.stubs(:parse_metadata).returns(@results = mock("results"))
-        end
-
-        def teardown
-            @logfile.close
-        end
-
-        def test_get_metadata_yields_the_results_if_given_a_block
-            in_block = false
-            @rets.get_metadata do |results|
-                in_block = true
-                assert_equal @results, results
-            end
-
-            assert in_block, "Block was never yielded to"
-        end
-
-        def test_useragent
-          assert_match /^rets4r/, RETS4R::Client::Requester::DEFAULT_USER_AGENT
-          assert_match /#{::RETS4R::VERSION}/, RETS4R::Client::Requester::DEFAULT_USER_AGENT
-        end
-
-        def test_get_metadata_returns_the_metadata_when_no_block_given
-            rval = @rets.get_metadata
-
-            assert_equal @results, rval
-        end
-
-        def test_get_metadata_returns_the_blocks_value_when_given_a_block
-            rval = @rets.get_metadata do |results|
-                :block_value
-            end
-
-            assert_equal :block_value, rval
-        end
-    end
-
     class TestClientGetObject < Test::Unit::TestCase
         RETS_PORT     = '9080'
         RETS_URL      = "http://localhost:#{RETS_PORT}"
