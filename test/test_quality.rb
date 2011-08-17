@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby -w
-
-libdir = File.expand_path('../../lib', __FILE__)
-$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
-
-require "test/unit"
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
+require 'test_helper'
 
 class TestQuality < Test::Unit::TestCase
   def test_can_still_be_built

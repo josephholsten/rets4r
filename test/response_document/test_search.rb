@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby -w
-$:.unshift File.expand_path('../..',__FILE__)
+testdir = File.expand_path('../..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
+
 require 'rets4r/response_document/search'
 
 class TestResponseDocumentSearch < Test::Unit::TestCase

@@ -2,6 +2,7 @@
 testdir = File.expand_path('..', __FILE__)
 $LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
+
 require 'rets4r/client/parsers/compact_nokogiri'
 require 'rets4r/client/exceptions'
 require 'rets4r/response_document'

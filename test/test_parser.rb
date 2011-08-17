@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby -w
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
+require 'test_helper'
 
-require 'test/unit'
 require 'rets4r'
 
 module RETS4R

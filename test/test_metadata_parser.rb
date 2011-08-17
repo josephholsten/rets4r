@@ -1,5 +1,8 @@
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+#!/usr/bin/env ruby -w
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
+
 require 'rets4r/client/parsers/metadata'
 
 class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
