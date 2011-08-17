@@ -1,5 +1,7 @@
 .document
 .gemtest
+.gitignore
+.travis.yml
 CHANGELOG
 CONTRIBUTORS
 Gemfile
@@ -24,6 +26,7 @@ lib/rets4r/client/data.rb
 lib/rets4r/client/dataobject.rb
 lib/rets4r/client/exceptions.rb
 lib/rets4r/client/links.rb
+lib/rets4r/client/metadata_request.rb
 lib/rets4r/client/parsers/compact.rb
 lib/rets4r/client/parsers/compact_nokogiri.rb
 lib/rets4r/client/parsers/metadata.rb
@@ -41,6 +44,7 @@ lib/tasks/coverage.rake
 rets4r.gemspec
 test/data/1.5/bad_compact.xml
 test/data/1.5/count_only_compact.xml
+test/data/1.5/empty.xml
 test/data/1.5/error.xml
 test/data/1.5/invalid_compact.xml
 test/data/1.5/login.xml
@@ -55,10 +59,13 @@ test/support/match_attributes.rb
 test/test_auth.rb
 test/test_client.rb
 test/test_client_links.rb
+test/test_client_metadata_request.rb
 test/test_compact_nokogiri.rb
 test/test_helper.rb
 test/test_listing_mapper.rb
 test/test_loader.rb
+test/test_metadata_parser.rb
 test/test_parser.rb
 test/test_quality.rb
 test/test_requester.rb
+test/ts_isolated.rb
