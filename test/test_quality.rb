@@ -59,6 +59,6 @@ class TestQuality < Test::Unit::TestCase
   end
 
   def code_file?(filename)
-    !(filename =~ /.xml/)
+    !(filename =~ /.xml|.feature/)
   end
 end

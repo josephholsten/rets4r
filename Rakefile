@@ -22,6 +22,10 @@ namespace :test do
   end
 end
 
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new
+task :default => :cucumber
+
 require 'rdoc/task'
 RDoc::Task.new do |rdoc|
   if File.exist?('VERSION.yml')

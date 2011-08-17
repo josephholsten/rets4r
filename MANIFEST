@@ -12,13 +12,14 @@ README.rdoc
 RUBYS
 Rakefile
 TODO
+bin/rets4r
 examples/client_get_object.rb
 examples/client_login.rb
-examples/client_mapper.rb
 examples/client_metadata.rb
-examples/client_parser.rb
 examples/client_search.rb
 examples/settings.yml
+features/commandline.feature
+features/support/env.rb
 lib/rets4r.rb
 lib/rets4r/auth.rb
 lib/rets4r/client.rb
