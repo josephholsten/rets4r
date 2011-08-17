@@ -17,6 +17,7 @@ module RETS4R
         }
         @pre_request_block = nil
         @post_request_block = nil
+        @method = METHOD_GET
       end
 
       def user_agent
