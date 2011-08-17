@@ -108,7 +108,7 @@ Tue Aug 17 14:49:49 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
 
     * lib/rets4r.rb: set version before requires
     * lib/rets4r/client/requester
-    (RETS4R::Client::Requester::DEFAULT_USER_AGENT): set to rets4r/n.n.n
+      (RETS4R::Client::Requester::DEFAULT_USER_AGENT): set to rets4r/n.n.n
 
 Tue Aug 17 14:43:42 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
@@ -244,7 +244,7 @@ Fri Jun 25 09:22:07 2010  Brian Dunn <brianpatrickdunn@gmail.com>
     * lib/rets4r/client.rb (Client#get_object): use true and false for location
 
     * test/test_client.rb (test_search_without_query_should_not_raise_no_metho_error):
-    just check for that particular exception.
+      just check for that particular exception.
 
 Wed Jun 23 09:33:21 2010  Brian Dunn <brianpatrickdunn@gmail.com>
 
@@ -288,8 +288,8 @@ Fri Jun 18 17:11:12 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
     * examples/settings.yml: add environments
 
     * examples/client_get_object.rb, examples/client_login.rb
-    examples/client_metadata.rb, examples/client_search.rb: use env
-    ruby. load settings based on LISTING_ENV
+      examples/client_metadata.rb, examples/client_search.rb: use env
+      ruby. load settings based on LISTING_ENV
 
 Fri Jun 18 15:53:15 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
@@ -363,12 +363,12 @@ Sat Feb 20 05:39:51 2010  Brian Dunn <brianpatrickdunn@gmail.com>
 Thu Feb 11 06:21:54 2010  Brian Dunn <brianpatrickdunn@gmail.com>
 
     * lib/rets4r/client/parsers/compact_nokogiri.rb
-    (CompactNokogiriParser#each): new. should yield each row as the stream is
-    read
-    (CompactNokogiriParser#to_a): reads the whole stream and returns
-    rows in an array
+      (CompactNokogiriParser#each): new. should yield each row as the stream is
+      read
+      (CompactNokogiriParser#to_a): reads the whole stream and returns
+      rows in an array
     * lib/rets4r/loader.rb: uses the each method to yield as the stream
-    is read
+      is read
     * test/compact_nokogiri_test.rb: uses to_a instead.
 
 Sun Feb  7 19:05:46 2010  Scott Patterson <scott.patterson@digitalaun.com>
