@@ -1,6 +1,6 @@
+require 'active_support/core_ext/array'
 require 'active_support/core_ext/class/attribute_accessors'
-require 'active_support/core_ext/hash/keys'
-require 'active_support/core_ext/hash/slice'
+require 'active_support/core_ext/hash'
 
 module RETS4R
   class ListingService
