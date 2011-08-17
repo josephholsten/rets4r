@@ -42,7 +42,8 @@ Fri Jan 21 17:22:01 2011  Braxton Beyer <braxton@braxtonbeyer.com>
 Thu Jan 20 17:41:52 2011  Braxton Beyer <braxton@braxtonbeyer.com>
 
     * allowing for basic authentication
-    * added custom_count function which allows you to pass options could probably just be combined with count function
+    * added custom_count function which allows you to pass options could
+      probably just be combined with count function
     * switched to nokogiri for xml parsing.
 
 Tue Mar 22 21:33:39 2011  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
@@ -152,8 +153,8 @@ Mon Aug  2 04:50:18 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
     remove old setters and getters
 
     * lib/rets4r/client.rb (Client#set_user_agent, #get_user_agent)
-    (#set_request_method, #get_request_method, #set_rets_version)
-    (#get_rets_version): remove, as replacements exist
+      (#set_request_method, #get_request_method, #set_rets_version)
+      (#get_rets_version): remove, as replacements exist
 
 Mon Aug  2 04:36:03 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
@@ -165,6 +166,7 @@ Mon Aug  2 04:36:03 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
 Mon Aug  2 04:17:47 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
     remove exceptions
+
     * lib/rets4r/client.rb: remove exceptions into lib/rets4r/client/exceptions.rb
 
 Mon Aug  2 01:07:59 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
@@ -213,7 +215,7 @@ Tue Jul 13 10:36:34 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
     remove threads, use noko parser
 
     * lib/rets4r/client.rb (Client#search): streaming yield through SAX parser
-    (Client#request): remove semaphores
+      (Client#request): remove semaphores
 
 Tue Jul 13 10:17:36 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
@@ -302,7 +304,7 @@ Fri Jun 18 15:50:04 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
     remove rubygems requires
 
     * Rakefile, lib/rets4r/client/parsers/compact_nokogiri.rb
-    test/test_client.rb, test/test_helper.rb: remove require
+      test/test_client.rb, test/test_helper.rb: remove require
 
 Fri Jun 18 15:44:47 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.com>
 
@@ -439,7 +441,7 @@ Fri Jan 22 01:32:47 2010  Joseph Anthony Pasquale Holsten <joseph@josephholsten.
       (RETS4R::Client::CompactNokogiriParser::CompactDocument#start_element)
       (RETS4R::Client::CompactNokogiriParser::CompactDocument#end_element)
       (RETS4R::Client::CompactNokogiriParser::CompactDocument#characters):
-        defer string handling until the element has ended
+      defer string handling until the element has ended
     * test/compact_nokogiri_test.rb
       (CompactNokogiriTest#test_should_handle_big_data): added
     * test/data/1.5/bad_compact.xml: new file
