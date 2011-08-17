@@ -26,7 +26,7 @@ Feature: Command Line Tool
       </RETS>
       """
 
-  Scenario: parse
+  Scenario: Parse a saved XML response
     When I run `rets4r parse search_compact.xml`
     Then the output should contain:
       """
@@ -34,7 +34,7 @@ Feature: Command Line Tool
       AGENTLIST_FULLNAME: Bill, LISTPRICE: 5, MLSNUM: 4
       """
 
-  Scenario: Map
+  Scenario: Map a saved XML response onto reasonable keys
     When I run `rets4r map search_compact.xml`
     Then the output should contain:
       """
@@ -47,6 +47,6 @@ Feature: Command Line Tool
     Then the output should contain:
       """
       We successfully logged into the RETS server!
-      nil
+      
       We just logged out of the server.
       """

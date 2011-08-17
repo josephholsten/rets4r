@@ -42,7 +42,7 @@ module RETS4R
           puts "We successfully logged into the RETS server!"
 
           # Print the action URL results (if any)
-          puts login_result.secondary_response
+          puts login_result.secondary_response || ''
 
           client.logout
 
