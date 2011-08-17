@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/client/parsers/metadata'
 
-class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
+class TestMetadataParser < Test::Unit::TestCase
   context RETS4R::Client::MetadataParser do
     setup do
       @metadata_path = File.expand_path('data/1.5/metadata.xml', File.dirname(__FILE__))
