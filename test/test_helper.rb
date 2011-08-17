@@ -17,6 +17,6 @@ end
 
 class Test::Unit::TestCase
   def fixture(*path_elems)
-    PROJECT_ROOT.join('test', 'data', '1.5', *path_elems)
+    PROJECT_ROOT.join('test', 'fixtures', *path_elems)
   end
 end

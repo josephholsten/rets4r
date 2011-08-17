@@ -10,28 +10,15 @@ class TestParser < Test::Unit::TestCase
         @parser = RETS4R::Client::ResponseParser.new
     end
 
-    def load_xml_from_file(file_name)
-        xml = ''
-
-        File.open(file_name) do |file|
-            file.each do |line|
-                xml << line
-            end
-        end
-
-        xml
-    end
-
-    def parse_to_transaction(xml_file_name)
-        @parser.parse_key_value(load_xml_from_file(xml_file_name))
+    def parse_to_transaction(xml_path_name)
+        @parser.parse_key_value(xml_path_name.read)
     end
 
     # Test Cases
 
 #           TODO: verify test_search_compact header, metadata
     def test_search_compact
-        xml = load_xml_from_file(fixture('search_compact.xml'))
-        transaction = @parser.parse_results(xml, 'COMPACT')
+        transaction = @parser.parse_results(fixture('search_compact.xml').read, 'COMPACT')
 
         assert_equal true, transaction.success?, "transaction should be successful"
         assert_equal '0', transaction.reply_code
@@ -65,18 +52,18 @@ class TestParser < Test::Unit::TestCase
     # of realtors are not at all reliable in sending correct xml
     # def test_unescaped_search_compact
     #   assert_raise(Nokogiri::XML::SyntaxError) do
-    #     @parser.parse_key_value(load_xml_from_file("#{DATA_DIR}search_unescaped_compact.xml"))
+    #     @parser.parse_key_value(fixture('search_unescaped_compact.xml').read)
     #   end
     # end
     # 
     # def test_invalid_search_compact
     #     assert_raise(Nokogiri::XML::SyntaxError) do
-    #       @parser.parse_key_value(load_xml_from_file("#{DATA_DIR}search_unescaped_compact.xml"))
+    #       @parser.parse_key_value(fixture('search_unescaped_compact.xml').read)
     #     end
     # end
 
     def test_login_results
-        transaction = parse_to_transaction(fixture('login.xml'))
+        transaction = @parser.parse_key_value(fixture('login.xml').read)
 
         assert_equal(true, transaction.success?)
         assert_equal('srealtor,1,11,11111', transaction.response['User'])
@@ -84,10 +71,8 @@ class TestParser < Test::Unit::TestCase
     end
 
     def test_error_results
-        xml = load_xml_from_file(fixture('error.xml'))
-
         exception = assert_raise(RETS4R::Client::InvalidResourceException) do
-          @parser.parse_object_response(xml)
+          @parser.parse_object_response(fixture('error.xml').read)
         end
 
         assert_equal('20400 - Invalid Invalidness.', exception.message)

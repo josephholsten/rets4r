@@ -8,13 +8,12 @@ require 'rets4r/client/parsers/metadata'
 class TestMetadataParser < Test::Unit::TestCase
   context RETS4R::Client::MetadataParser do
     setup do
-      @metadata_path = fixture('metadata.xml')
       @mdp = RETS4R::Client::MetadataParser.new
     end
 
     context "when compact metadata" do
       setup do
-        @results = @mdp.parse_file(@metadata_path)
+        @results = @mdp.parse_file(fixture('metadata.xml'))
       end
 
       should "have clean stack upon completion" do
