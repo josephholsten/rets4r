@@ -24,6 +24,13 @@ class TestQuality < Test::Unit::TestCase
     assert_well_formed error_messages.compact
   end
 
+  def test_manifest_up_to_date
+    Dir.chdir(root) do
+      files = `git ls-files`
+      assert_equal File.read('MANIFEST'), files
+    end
+  end
+
   def assert_well_formed(actual)
     assert actual.empty?, actual.join("\n")
   end
