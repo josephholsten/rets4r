@@ -38,10 +38,18 @@ module RETS4R
         def start_element name, attrs = []
           case name
           when 'DELIMITER'
-            if attrs.last.respond_to?('last')
-              @delimiter = attrs.last.last.to_i.chr
+            # This is a workaround for the old attribute handling in nokogiri
+            @delimiter = if Array === attrs.last
+               # In nokogiri >= 1.4.4, we recieve attributes as an assoc list,
+               # which also includes the current namespaces in the context
+              attrs.last.last.to_i.chr
             else
-              @delimiter = attrs.last.to_i.chr
+              if $VERBOSE
+                warn "#{caller.first}: warning: support for Nokogiri <= 1.4.3.1 is deprecated and will be removed by rets4r 2.0; Please upgrade to Nokogiri 1.4.4 or newer"
+              end
+              # Earlier versions would flatten attributes, making it painful for
+              # namespace aware parsing.
+              attrs.last.to_i.chr
             end
           when 'COLUMNS'
             @columns_element = true
