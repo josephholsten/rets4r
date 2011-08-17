@@ -7,15 +7,14 @@ require 'rets4r/client/parsers/response_parser'
 
 class TestParserDeprecatedBehavior < Test::Unit::TestCase
   def setup
-    @parser = RETS4R::Client::ResponseParser.new
+    $VERBOSE = false
   end
-
-  def parse_to_transaction(xml_path_name)
-    @parser.parse_key_value(xml_path_name.read)
+  def teardown
+    $VERBOSE = true
   end
 
   def test_search_compact
-    transaction = @parser.parse_results(fixture('search_compact.xml').read, 'COMPACT')
+    transaction = RETS4R::Client::ResponseParser.new.parse_results(fixture('search_compact.xml').read, 'COMPACT')
 
     assert_equal transaction.max_rows?, transaction.maxrows?
     assert_equal transaction.response, transaction.data
