@@ -5,7 +5,7 @@ require 'test_helper'
 
 class TestQuality < Test::Unit::TestCase
   def test_can_still_be_built
-    PROJECT_ROOT.chdir do
+    Dir.chdir(PROJECT_ROOT) do
       `gem build rets4r.gemspec`
       assert_equal 0, $?
     end
@@ -13,7 +13,7 @@ class TestQuality < Test::Unit::TestCase
 
   def test_has_no_malformed_whitespace
     error_messages = []
-    PROJECT_ROOT.chdir do
+    Dir.chdir(PROJECT_ROOT) do
       File.read("MANIFEST").split("\n").each do |filename|
         if code_file?(filename)
           error_messages << check_for_tab_characters(filename)
@@ -25,7 +25,7 @@ class TestQuality < Test::Unit::TestCase
   end
 
   def test_manifest_up_to_date
-    PROJECT_ROOT.chdir do
+    Dir.chdir(PROJECT_ROOT) do
       files = `git ls-files`
       assert_equal File.read('MANIFEST'), files
     end
