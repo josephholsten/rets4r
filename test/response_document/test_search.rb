@@ -6,12 +6,8 @@ require 'test_helper'
 require 'rets4r/response_document/search'
 
 class TestResponseDocumentSearch < Test::Unit::TestCase
-  def fixture(name)
-    File.open("test/data/1.5/#{name}.xml").read
-  end
-
   context 'RETS4R::ResponseDocument::Search' do
-    setup { @doc = RETS4R::ResponseDocument::Search.parse(fixture('search_compact')) }
+    setup { @doc = RETS4R::ResponseDocument::Search.parse(fixture('search_compact.xml').open) }
     subject { @doc }
     context 'when exposing the old transaction API' do
       should('have max_rows') { assert subject.max_rows? }

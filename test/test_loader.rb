@@ -7,7 +7,7 @@ require 'rets4r/loader'
 
 class TestLoader < Test::Unit::TestCase
   def test_should_pass_records_to_block
-    file = File.expand_path(File.join('test', 'data', '1.5', 'search_compact.xml'))
+    file = fixture('search_compact.xml')
 
     listings = []
     RETS4R::Loader.load(open(file)) do |record|

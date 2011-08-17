@@ -10,8 +10,6 @@ class TestParser < Test::Unit::TestCase
         @parser = RETS4R::Client::ResponseParser.new
     end
 
-    DATA_DIR = 'test/data/1.5/'
-
     def load_xml_from_file(file_name)
         xml = ''
 
@@ -32,7 +30,7 @@ class TestParser < Test::Unit::TestCase
 
 #           TODO: verify test_search_compact header, metadata
     def test_search_compact
-        xml = load_xml_from_file("#{DATA_DIR}search_compact.xml")
+        xml = load_xml_from_file(fixture('search_compact.xml'))
         transaction = @parser.parse_results(xml, 'COMPACT')
 
         assert_equal true, transaction.success?, "transaction should be successful"
@@ -78,7 +76,7 @@ class TestParser < Test::Unit::TestCase
     # end
 
     def test_login_results
-        transaction = parse_to_transaction("#{DATA_DIR}login.xml")
+        transaction = parse_to_transaction(fixture('login.xml'))
 
         assert_equal(true, transaction.success?)
         assert_equal('srealtor,1,11,11111', transaction.response['User'])
@@ -86,7 +84,7 @@ class TestParser < Test::Unit::TestCase
     end
 
     def test_error_results
-        xml = load_xml_from_file("#{DATA_DIR}error.xml")
+        xml = load_xml_from_file(fixture('error.xml'))
 
         exception = assert_raise(RETS4R::Client::InvalidResourceException) do
           @parser.parse_object_response(xml)

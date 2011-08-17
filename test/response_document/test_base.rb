@@ -7,13 +7,9 @@ require 'rets4r/response_document/base'
 require 'rets4r/response_document/search'
 
 class TestResponseDocumentBase < Test::Unit::TestCase
-  def fixture(name)
-    File.open("test/data/1.5/#{name}.xml").read
-  end
-
   context "normal doc" do
     setup do
-      @doc = RETS4R::ResponseDocument::Base.parse(fixture('search_compact'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('search_compact.xml').open)
     end
     should 'have max_rows' do
       assert @doc.max_rows?
@@ -95,7 +91,7 @@ class TestResponseDocumentBase < Test::Unit::TestCase
   end
   context 'empty doc' do
     setup do
-      @doc = RETS4R::ResponseDocument::Base.parse(fixture('empty'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('empty.xml').open)
     end
     should 'not be rets' do
       assert !@doc.rets?
@@ -111,7 +107,7 @@ class TestResponseDocumentBase < Test::Unit::TestCase
   end
   context 'error doc' do
     setup do
-      @doc = RETS4R::ResponseDocument::Base.parse(fixture('error'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('error.xml').open)
     end
     should 'not be valid' do
       assert @doc.invalid?
@@ -133,7 +129,7 @@ class TestResponseDocumentBase < Test::Unit::TestCase
   end
   context 'login doc' do
     setup do
-      @doc = RETS4R::ResponseDocument::Base.parse(fixture('login'))
+      @doc = RETS4R::ResponseDocument::Base.parse(fixture('login.xml').open)
     end
     should 'parse_key_value' do
       transaction = @doc.parse_key_value
