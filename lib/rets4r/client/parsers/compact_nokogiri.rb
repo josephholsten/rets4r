@@ -30,6 +30,10 @@ module RETS4R
 
         def initialize
           @results = []
+          @data_element = nil
+          @reply_code = nil
+          @columns_element = nil
+          @proc = nil
         end
         def start_element name, attrs = []
           case name
