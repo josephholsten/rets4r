@@ -86,7 +86,19 @@ module RETS4R
           end
         end
         def handle_body_start attrs
-          attrs = Hash[*attrs]
+          # This is a workaround for the old attribute handling in nokogiri
+          attrs = if Array === attrs.first
+             # In nokogiri >= 1.4.4, we recieve attributes as an assoc list,
+             # which also includes the current namespaces in the context
+            Hash[attrs]
+          else
+            if $VERBOSE
+              warn "#{caller.first}: warning: support for Nokogiri <= 1.4.3.1 is deprecated and will be removed by rets4r 2.0; Please upgrade to Nokogiri 1.4.4 or newer"
+            end
+            # Earlier versions would flatten attributes, making it painful for
+            # namespace aware parsing.
+            Hash[*attrs]
+          end
           if exception_class = Client::EXCEPTION_TYPES[attrs['ReplyCode'].to_i]
             raise exception_class.new(attrs['ReplyText'])
           end
