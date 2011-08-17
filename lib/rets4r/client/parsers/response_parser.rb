@@ -1,3 +1,5 @@
+require 'rets4r/response_document'
+
 module RETS4R
   class Client
     class ResponseParser
