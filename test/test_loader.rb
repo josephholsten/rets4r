@@ -3,7 +3,7 @@ testdir = File.expand_path('..', __FILE__)
 $LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
 
-require 'rets4r'
+require 'rets4r/loader'
 
 class TestLoader < Test::Unit::TestCase
   def test_should_pass_records_to_block
