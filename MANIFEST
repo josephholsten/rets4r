@@ -58,7 +58,9 @@ test/response_document/test_search.rb
 test/support/match_attributes.rb
 test/test_auth.rb
 test/test_client.rb
+test/test_client_get_object.rb
 test/test_client_links.rb
+test/test_client_login.rb
 test/test_client_metadata_request.rb
 test/test_compact_nokogiri.rb
 test/test_helper.rb
