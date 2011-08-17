@@ -28,7 +28,7 @@ def handle_object(object)
         else extension = 'unknown'
     end
 
-    File.open("#{object.info['Content-ID']}_#{object.info['Object-ID']}.#{extension}", 'w') do |f|
+    File.open("#{object.info['Content-ID']}_#{object.info['Object-ID']}.#{extension}", 'wb') do |f|
         f.write(object.data)
     end
 end
