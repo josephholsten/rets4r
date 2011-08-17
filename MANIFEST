@@ -42,6 +42,7 @@ lib/rets4r/response_document/search.rb
 lib/tasks/annotations.rake
 lib/tasks/coverage.rake
 rets4r.gemspec
+test/deprecated/test_parser.rb
 test/fixtures/bad_compact.xml
 test/fixtures/count_only_compact.xml
 test/fixtures/empty.xml
