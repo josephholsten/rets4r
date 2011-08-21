@@ -16,9 +16,9 @@ Gem::Specification.new do |spec|
   spec.files = File.read("MANIFEST").split(/\r?\n\r?/)
 
   spec.add_runtime_dependency 'nokogiri', '>= 1.3.2'
-  spec.add_runtime_dependency 'activesupport', '>= 2.3.2'
   spec.add_runtime_dependency 'thor'
   spec.add_development_dependency 'aruba'
+  spec.add_development_dependency 'activesupport'
   spec.add_development_dependency 'cucumber'
   spec.add_development_dependency 'i18n'
   spec.add_development_dependency 'mocha'
