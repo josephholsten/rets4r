@@ -6,59 +6,80 @@ require 'test_helper'
 require 'rets4r/auth'
 
 class TestAuth < Test::Unit::TestCase
-    def setup
-      @useragent  = 'TestAgent/0.00'
-      @username   = 'username'
-      @password   = 'password'
-      @realm      = 'REALM'
-      @nonce      =  '2006-03-03T17:37:10'
-
-      @auth = RETS4R::Auth.new.tap do |a|
-        a.username = @username
-        a.password = @password
-        a.realm = @realm
-        a.nonce = 'test'
-        a.method = 'GET'
-        a.uri = '/my/rets/url'
-        a.request_id = 'test'
-      end
+  def setup
+    @auth = RETS4R::Auth.new.tap do |a|
+      a.username = 'username'
+      a.password = 'password'
+      a.method = 'GET'
+      a.uri = '/my/rets/url'
+      a.request_id = 'test'
+      a.useragent = 'TestAgent/0.00'
     end
+  end
 
-    def test_digest_authentication
-        response = {
-            'www-authenticate' => 'Digest qop="auth",realm="'+ @realm +'",nonce="'+ @nonce +'",opaque="",stale="false",domain="\my\test\domain"'
-            }
+  def test_digest_authentication_with_qop
+    response = {
+      'www-authenticate' => 'Digest '+
+        'qop="auth",'+
+        'realm="REALM",'+
+        'nonce="'+ '2006-03-03T17:37:10' +'",'+
+        'opaque="5ccc069c403ebaf9f0171e9517f40e41",'+
+        'stale="false",'+
+        'domain="\my\test\domain"' }
 
-        @auth.update_with_response response
+    @auth.update_with_response response
 
-        assert_match /^Digest/, @auth.to_s
-    end
+    expected = 'Digest '+
+      'username="username", '+
+      'realm="REALM", '+
+      'qop="auth", '+
+      'uri="/my/rets/url", '+
+      'nonce="2006-03-03T17:37:10", '+
+      'nc=00000000, '+
+      'cnonce="32cc9e7f3a4f6ad3127bb00715dd0fda", '+
+      'response="d013c72b8456679af31832caf04497be", '+
+      'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
+    assert_equal expected, @auth.to_s
+  end
 
-    def test_basic_authentication
-        response = {
-            'www-authenticate' => 'Basic realm="'+@realm+'"'
-            }
+  def test_digest_authentication_without_qop
+    digest_header = 'Digest realm="REALM",nonce="2006-03-03T17:37:10",opaque="5ccc069c403ebaf9f0171e9517f40e41",stale="false",domain="\my\test\domain"'
 
-        @auth.update_with_response response
+    @auth.update_with_response 'www-authenticate' => digest_header
 
-        assert_match /^Basic/, @auth.to_s
-    end
+    expected = 'Digest '+
+      'username="username", '+
+      'realm="REALM", '+
+      'qop="false", '+
+      'uri="/my/rets/url", '+
+      'nonce="2006-03-03T17:37:10", '+
+      'nc=00000000, '+
+      'cnonce="32cc9e7f3a4f6ad3127bb00715dd0fda", '+
+      'response="58962110796b5ce18fd89c91e10e9aeb", '+
+      'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
+    assert_equal expected, @auth.to_s
+  end
 
-    def test_calculate_digest
-        @auth.qop = false
-        assert_equal('bceafa34467a3519c2f6295d4800f4ea', @auth.response, 'without qop')
+  def test_digest_authentication_for_www_authenticate_with_spaces
+    digest_header_without_spaces = 'Digest realm="REALM",nonce="2006-03-03T17:37:10",opaque="5ccc069c403ebaf9f0171e9517f40e41",stale="false",domain="\my\test\domain"'
+    digest_header_with_spaces    = 'Digest realm="REALM", nonce="2006-03-03T17:37:10", opaque="5ccc069c403ebaf9f0171e9517f40e41", stale="false", domain="\my\test\domain"'
+    expected_auth = @auth.dup
+    expected_auth.update_with_response('www-authenticate' => digest_header_without_spaces)
 
-        @auth.qop = true
-        assert_equal('08426a9012bdbb8dfe75d5e08d285418', @auth.response, 'with qop')
-    end
+    @auth.update_with_response 'www-authenticate' => digest_header_with_spaces
 
-    def test_request_id
-        assert_not_nil(true, RETS4R::Auth.request_id)
-    end
+    assert_equal expected_auth.to_s, @auth.to_s
+  end
 
-    def test_cnonce
-        # We call cnonce with a static request ID so that we have a consistent result with which
-        # to test against
-        assert_equal('a13ebdc07593ad2de5a43224efb53394', @auth.cnonce)
-    end
+  def test_basic_authentication
+    auth = RETS4R::Auth.new.tap do |a|
+       a.username = 'Aladdin'
+       a.password = 'open sesame'
+     end
+    response = { 'www-authenticate' => 'Basic realm="WallyWorld"' }
+
+    auth.update_with_response response
+
+    assert_equal 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==', auth.to_s
+  end
 end
