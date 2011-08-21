@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.homepage = 'http://rets4r.rubyforge.org/'
   spec.rubyforge_project = 'rets4r'
   spec.description = %q{RETS4R is a native Ruby interface to the RETS (Real Estate Transaction Standard). It currently is built for the 1.5 specification, but support for 1.7 and 2.0 are planned. It does not currently implement all of the specification, but the most commonly used portions. Specifically, there is no support for Update transactions.}
-  spec.extra_rdoc_files = %w[CHANGELOG CONTRIBUTORS LICENSE MANIFEST NEWS README.rdoc RUBYS TODO ]
+  spec.extra_rdoc_files = %w[CHANGELOG CONTRIBUTORS LICENSE MANIFEST NEWS README.rdoc TODO]
   spec.rdoc_options << "--charset=UTF-8" <<
                        "--main" << "README.rdoc"
   spec.version = version

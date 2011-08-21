@@ -1,20 +1,19 @@
 1.2.0
   New Features
-  * Use Nokogiri in response parser
+  * Response parser uses Nokogiri
   * Support HTTP Basic authentication (Braxton Beyer)
   * Update metadata parser to support many new element types (Scott Patterson)
   * Add DMQL key mapping in ListingMapper
-  * Support Ruby 1.9 (Scott Patterson, Josh Schairbaum, Anton Djurasaj, pacino)
-  * Support Nokogiri >= 1.4.4 (Eric Taylor, Anton Djurasaj)
-  * Support ActiveSupport 3.1.0 betas
 
-  Internal API changes
+  Internal API Changes
   * DOM APIs have moved to RETS4R::ResponseDocument
   * RETS4R::Client::CompactDataParser deprecated in favor of ResponseDocuments
-  * Core Exts are replaced with ActiveSupport
+  * RETS4R::Auth rewritten to be stateful
 
   Bug Fixes
-  * HTTP Digest authentication tracks state, so works with more servers
+  * Support Ruby 1.9 (Scott Patterson, Josh Schairbaum, Anton Djurasaj, pacino)
+  * Support Nokogiri >= 1.4.4 (Eric Taylor, Anton Djurasaj)
+  * HTTP Digest authentication reuses session, works with more servers
 
   Other changes
   * Tests now can run in isolation

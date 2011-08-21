@@ -22,7 +22,6 @@ bindings available from the Center for Realtor® Technology
 
 * Ruby >= 1.8.4
 * Nokogiri >= 1.3.2
-* ActiveSupport >= 2.3.2
 
 == License
 
