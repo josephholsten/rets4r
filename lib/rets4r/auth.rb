@@ -96,11 +96,11 @@ module RETS4R
       header = ''
       header << "Digest username=\"#{username}\", "
       header << "realm=\"#{realm}\", "
-      header << "qop=\"#{qop}\", "
+      header << "qop=\"#{qop}\", " if qop
       header << "uri=\"#{uri}\", "
       header << "nonce=\"#{nonce}\", "
-      header << "nc=#{('%08x' % nc)}, "
-      header << "cnonce=\"#{cnonce}\", "
+      header << "nc=#{('%08x' % nc)}, " if qop
+      header << "cnonce=\"#{cnonce}\", " if qop
       header << "response=\"#{response}\", "
       header << "opaque=\"#{opaque}\""
       header

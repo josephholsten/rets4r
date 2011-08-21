@@ -50,11 +50,8 @@ class TestAuth < Test::Unit::TestCase
     expected = 'Digest '+
       'username="username", '+
       'realm="REALM", '+
-      'qop="false", '+
       'uri="/my/rets/url", '+
       'nonce="2006-03-03T17:37:10", '+
-      'nc=00000000, '+
-      'cnonce="32cc9e7f3a4f6ad3127bb00715dd0fda", '+
       'response="58962110796b5ce18fd89c91e10e9aeb", '+
       'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
     assert_equal expected, @auth.to_s
