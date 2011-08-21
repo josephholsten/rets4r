@@ -35,9 +35,9 @@ class TestAuth < Test::Unit::TestCase
       'qop="auth", '+
       'uri="/my/rets/url", '+
       'nonce="2006-03-03T17:37:10", '+
-      'nc=00000000, '+
+      'nc=00000001, '+
       'cnonce="32cc9e7f3a4f6ad3127bb00715dd0fda", '+
-      'response="d013c72b8456679af31832caf04497be", '+
+      'response="2bbd0d5b73bb5714906c3011b57e644c", '+
       'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
     assert_equal expected, @auth.to_s
   end

@@ -5,8 +5,8 @@ module RETS4R
     attr_accessor :username, :password, :realm, :method, :uri, :qop,
       :cnonce, :nc, :nonce, :useragent, :request_id, :opaque, :current_strategy
 
-    def initialize(nc = 0)
-      self.nc = 0
+    def initialize(nc = 1)
+      self.nc = nc
       self.current_strategy = :none
     end
 
