@@ -44,30 +44,6 @@ class TestAuth < Test::Unit::TestCase
         assert_match /^Basic/, @auth.to_s
     end
 
-    # test without spacing
-    def test_parse_auth_header_without_spacing
-        header = 'Digest qop="auth",realm="'+ @realm +'",nonce="'+ @nonce +'",opaque="",stale="false",domain="\my\test\domain"'
-        check_header(header)
-    end
-
-    # test with spacing between each item
-    def test_parse_auth_header_with_spacing
-        header = 'Digest qop="auth", realm="'+ @realm +'", nonce="'+ @nonce +'", opaque="", stale="false", domain="\my\test\domain"'
-        check_header(header)
-    end
-
-    # used to check the that the header was processed properly.
-    def check_header(header)
-        results = RETS4R::Auth.parse_header(header)
-
-        assert_equal('auth', results['qop'])
-        assert_equal('REALM', results['realm'])
-        assert_equal('2006-03-03T17:37:10', results['nonce'])
-        assert_equal('', results['opaque'])
-        assert_equal('false', results['stale'])
-        assert_equal('\my\test\domain', results['domain'])
-    end
-
     def test_calculate_digest
         @auth.qop = false
         assert_equal('bceafa34467a3519c2f6295d4800f4ea', @auth.response, 'without qop')

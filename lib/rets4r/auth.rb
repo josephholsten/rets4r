@@ -45,6 +45,49 @@ module RETS4R
       end
     end
 
+    def self.authenticate(response, username, password, uri, method, requestId, useragent, nc = 0) # :nodoc:
+      warn "#{caller.first}: warning: #{self.class}::authenticate is deprecated and will be removed by rets4r 2.0; use a RETS4R::Auth object instead"
+      auth = RETS4R::Auth.new.tap do |a|
+        a.username = username
+        a.password = password
+        a.uri = uri
+        a.method = method
+        a.request_id = requestId
+        a.useragent = useragent
+        a.nc = nc
+      end
+
+      auth.update_with_response response
+
+      auth.to_s
+    end
+
+    def self.calculate_digest(username, password, realm, nonce, method, uri, qop = false, cnonce = false, nc = 0) # :nodoc:
+      warn "#{caller.first}: warning: #{self.class}::authenticate is deprecated and will be removed by rets4r 2.0; use a RETS4R::Auth object instead"
+      text = [hA1(username, realm, password), nonce]
+      if (qop)
+        throw ArgumentException, 'qop requires a cnonce to be provided.' unless cnonce
+
+        text << '%08x' % nc << cnonce << qop
+      end
+      text << hA2(method, uri)
+
+      return Digest::MD5.hexdigest text.join(':')
+    end
+
+    def self.cnonce(useragent, password, requestId, nonce) # :nodoc:
+      warn "#{caller.first}: warning: #{self.class}::cnonce is deprecated and will be removed by rets4r 2.0; use a RETS4R::Auth object instead"
+      Digest::MD5.hexdigest("#{useragent}:#{password}:#{requestId}:#{nonce}")
+    end
+
+    def self.hA2(method, uri)
+      Digest::MD5.hexdigest("#{method}:#{uri}")
+    end
+
+    def self.hA1(username, realm, password)
+      Digest::MD5.hexdigest("#{username}:#{realm}:#{password}")
+    end
+
     def to_basic_header
       'Basic ' + ["#{username}:#{password}"].pack('m').delete("\r\n")
     end
