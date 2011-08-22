@@ -17,7 +17,9 @@ unless defined? PROJECT_ROOT
 end
 
 class Test::Unit::TestCase
-  def fixture(*path_elems)
-    PROJECT_ROOT.join('test', 'fixtures', *path_elems)
+  unless method_defined? :fixture
+    def fixture(*path_elems)
+      PROJECT_ROOT.join('test', 'fixtures', *path_elems)
+    end
   end
 end

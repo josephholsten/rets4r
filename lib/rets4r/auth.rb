@@ -2,8 +2,8 @@ require 'digest/md5'
 
 module RETS4R
   class Auth
-    attr_accessor :username, :password, :realm, :method, :uri, :qop,
-      :cnonce, :nc, :nonce, :useragent, :request_id, :opaque, :current_strategy
+    attr_accessor :current_strategy, :method, :nc, :nonce, :opaque, :password,
+      :qop, :realm, :request_id, :uri, :useragent, :username
 
     def initialize(nc = 1)
       self.nc = nc
