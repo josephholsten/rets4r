@@ -161,7 +161,7 @@ module RETS4R
         end
       end
 
-      # convert the header to a hash. Uses strings for keys, with 'type containing the 
+      # convert the header to a hash. Uses strings for keys, with 'type containing the
       # Examples:
       #   header = 'Digest qop="auth", realm="REALM", nonce="2006-03-03T17:37:10", opaque="", stale="false", domain="test-domain"'
       #   ResponseHeader.parse(header).to_h
