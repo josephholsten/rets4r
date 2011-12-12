@@ -5,7 +5,7 @@ module RETS4R
         # This is the primary method that would normally be used, and while it
         def Auth.authenticate(response, username, password, uri, method, requestId, useragent, nc = 0)
           if response['www-authenticate'].nil? || response['www-authenticate'].empty?
-            raise "Missing required header 'www-authenticate'. Got: #{response}"
+            raise "Missing required header 'www-authenticate'. Got: #{response} header: #{response.to_hash.inspect} body: #{response.body}"
           elsif response['www-authenticate'] =~ /Basic/
             # use Basic Authentication
             'Basic ' + ["#{username}:#{password}"].pack('m').delete("\r\n")
@@ -36,7 +36,7 @@ module RETS4R
 
             requestId = Auth.request_id unless requestId
 
-            if (qop)
+            if qop
                 throw ArgumentException, 'qop requires a cnonce to be provided.' unless cnonce
 
                 response = Digest::MD5.hexdigest("#{Digest::MD5.hexdigest(a1)}:#{nonce}:#{('%08x' % nc)}:#{cnonce}:#{qop}:#{Digest::MD5.hexdigest(a2)}")
