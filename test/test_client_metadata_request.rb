@@ -1,7 +1,9 @@
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+#!/usr/bin/env ruby -w
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
-require 'rets4r'
+
+require 'rets4r/client'
 
 module RETS4R
   class Client
@@ -19,10 +21,11 @@ class TestClientMetadataRequest < Test::Unit::TestCase
 
   def setup
       @logfile = StringIO.open
+      @response = Object.new
       @response.stubs(:body).returns(:body)
-      @rets.stubs(:request).returns(@response)
       RETS4R::Client::Requester.any_instance.stubs(:request).returns(@response)
-      @rets    = RETS4R::Client.new(RETS_URL)
+      @rets = RETS4R::Client.new(RETS_URL)
+      @rets.stubs(:request).returns(@response)
       @rets.logger = Logger.new(@logfile)
       @rets.logger.level = Logger::DEBUG
       @response = mock("response")

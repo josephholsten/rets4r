@@ -1,3 +1,5 @@
+require 'rets4r/client/parsers/compact_nokogiri'
+
 module RETS4R
   # Loader is a convenience class to get lightning-fast RETS XML Document
   # parsing without a lot of typing. Just hand ::load an IO to read the XML

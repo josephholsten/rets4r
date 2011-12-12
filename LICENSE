@@ -1,13 +1,5 @@
-RETS4R
-Copyright 2006 Scott Patterson <scott.patterson@digitalaun.com>
-
-This program is copyrighted free software by Scott Patterson.  You can
-redistribute it and/or modify it under the same terms of Ruby's license;
-either the dual license version in 2003 (see the file RUBYS), or any later
-version.
-
-Some parts Copyright (c) 2009 bgetting
-Some parts Copyright (c) 2009 John Wulff
+Copyright (c) 2006-2011 Scott Patterson. Portions (c) 2009 bgetting. Portions
+(c) 2009 John Wulff.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

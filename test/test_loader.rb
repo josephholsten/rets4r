@@ -1,15 +1,14 @@
 #!/usr/bin/env ruby -w
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
+require 'test_helper'
 
-require 'rets4r'
-require 'test/unit'
+require 'rets4r/loader'
 
 class TestLoader < Test::Unit::TestCase
   def test_should_pass_records_to_block
-    file = File.expand_path(File.join('test', 'data', '1.5', 'search_compact.xml'))
-
     listings = []
-    RETS4R::Loader.load(open(file)) do |record|
+    RETS4R::Loader.load(fixture('search_compact.xml').open) do |record|
       listings << record
     end
 

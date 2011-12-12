@@ -1,21 +1,41 @@
 1.2.0
-    New Features
-    * Support multiple environments in examples
-    * Use streaming XML (SAX) parser by default
-    * Use Nokogiri in response parser
-    * Support case insensitive headers in DataObjects
-    * Support location parameter in Get Object requests
-    * Add a mapper example
-    * Support rubygems-test
-    * Send a meaningful user agent of rets4r/n.n.n
-    * Raise meaningful exceptions when the service responds with an error
-    * Support HTTP Basic authentication
+  New Features
+  * Response parser uses Nokogiri
+  * Support HTTP Basic authentication (Braxton Beyer)
+  * Update metadata parser to support many new element types (Scott Patterson)
+  * Add DMQL key mapping in ListingMapper
 
-    Bug Fixes
-    * Ignore nil keys and values when creating query strings
-    * Remove broken RETS Session ID header support
-    * Fix nokogiri dependency
-    * Remove broken multi-thread support
+  Internal API Changes
+  * DOM APIs have moved to RETS4R::ResponseDocument
+  * RETS4R::Client::CompactDataParser deprecated in favor of ResponseDocuments
+  * RETS4R::Auth rewritten to be stateful
+
+  Bug Fixes
+  * Support Ruby 1.9 (Scott Patterson, Josh Schairbaum, Anton Djurasaj, pacino)
+  * Support Nokogiri >= 1.4.4 (Eric Taylor, Anton Djurasaj)
+  * HTTP Digest authentication reuses session, works with more servers
+
+  Other changes
+  * Tests now can run in isolation
+  * Continuous integration thanks to travis-ci.org
+  * Mailing list thanks to librelist.com
+
+1.1.18
+  New Features
+  * Support multiple environments in examples
+  * Use streaming XML (SAX) parser by default
+  * Support case insensitive headers in DataObjects
+  * Support location parameter in Get Object requests
+  * Add a mapper example
+  * Support rubygems-test
+  * Send a meaningful user agent of rets4r/n.n.n
+  * Raise meaningful exceptions when the service responds with an error
+
+  Bug Fixes
+  * Ignore nil keys and values when creating query strings
+  * Remove broken RETS Session ID header support
+  * Fix nokogiri dependency
+  * Remove broken multi-thread support
 
 1.1.17
     New features

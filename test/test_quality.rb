@@ -1,13 +1,11 @@
 #!/usr/bin/env ruby -w
-
-libdir = File.expand_path('../../lib', __FILE__)
-$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
-
-require "test/unit"
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
+require 'test_helper'
 
 class TestQuality < Test::Unit::TestCase
   def test_can_still_be_built
-    Dir.chdir(root) do
+    Dir.chdir(PROJECT_ROOT) do
       `gem build rets4r.gemspec`
       assert_equal 0, $?
     end
@@ -15,7 +13,7 @@ class TestQuality < Test::Unit::TestCase
 
   def test_has_no_malformed_whitespace
     error_messages = []
-    Dir.chdir(root) do
+    Dir.chdir(PROJECT_ROOT) do
       File.read("MANIFEST").split("\n").each do |filename|
         if code_file?(filename)
           error_messages << check_for_tab_characters(filename)
@@ -24,6 +22,13 @@ class TestQuality < Test::Unit::TestCase
       end
     end
     assert_well_formed error_messages.compact
+  end
+
+  def test_manifest_up_to_date
+    Dir.chdir(PROJECT_ROOT) do
+      files = `git ls-files`
+      assert_equal File.read('MANIFEST'), files
+    end
   end
 
   def assert_well_formed(actual)
@@ -54,11 +59,6 @@ class TestQuality < Test::Unit::TestCase
   end
 
   def code_file?(filename)
-    additional_files = %w(Rakefile Gemfile rake)
-    filename =~ /.rb|.yml/ || additional_files.include?(filename)
-  end
-
-  def root
-    File.expand_path("../..", __FILE__)
+    !(filename =~ /.xml|.feature/)
   end
 end

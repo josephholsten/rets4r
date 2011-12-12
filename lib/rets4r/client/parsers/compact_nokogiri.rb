@@ -1,5 +1,8 @@
 require 'nokogiri'
 
+require 'rets4r/client/exceptions'
+require 'rets4r/response_document'
+
 module RETS4R
   class Client
     class CompactNokogiriParser
@@ -27,14 +30,26 @@ module RETS4R
 
         def initialize
           @results = []
+          @data_element = nil
+          @reply_code = nil
+          @columns_element = nil
+          @proc = nil
         end
         def start_element name, attrs = []
           case name
           when 'DELIMITER'
-            if attrs.last.respond_to?('last')
-              @delimiter = attrs.last.last.to_i.chr
+            # This is a workaround for the old attribute handling in nokogiri
+            @delimiter = if Array === attrs.last
+               # In nokogiri >= 1.4.4, we recieve attributes as an assoc list,
+               # which also includes the current namespaces in the context
+              attrs.last.last.to_i.chr
             else
-              @delimiter = attrs.last.to_i.chr
+              if $VERBOSE
+                warn "#{caller.first}: warning: support for Nokogiri <= 1.4.3.1 is deprecated and will be removed by rets4r 2.0; Please upgrade to Nokogiri 1.4.4 or newer"
+              end
+              # Earlier versions would flatten attributes, making it painful for
+              # namespace aware parsing.
+              attrs.last.to_i.chr
             end
           when 'COLUMNS'
             @columns_element = true
@@ -79,7 +94,19 @@ module RETS4R
           end
         end
         def handle_body_start attrs
-          attrs = Hash[*attrs]
+          # This is a workaround for the old attribute handling in nokogiri
+          attrs = if Array === attrs.first
+             # In nokogiri >= 1.4.4, we recieve attributes as an assoc list,
+             # which also includes the current namespaces in the context
+            Hash[attrs]
+          else
+            if $VERBOSE
+              warn "#{caller.first}: warning: support for Nokogiri <= 1.4.3.1 is deprecated and will be removed by rets4r 2.0; Please upgrade to Nokogiri 1.4.4 or newer"
+            end
+            # Earlier versions would flatten attributes, making it painful for
+            # namespace aware parsing.
+            Hash[*attrs]
+          end
           if exception_class = Client::EXCEPTION_TYPES[attrs['ReplyCode'].to_i]
             raise exception_class.new(attrs['ReplyText'])
           end

@@ -48,39 +48,6 @@ module RETS4R
             'Update'
         ]
 
-    # These are the response messages as defined in the RETS 1.5e2 and 1.7d6 specifications.
-    # Provided for convenience and are used by the HTTPError class to provide more useful
-    # messages.
-    RETS_HTTP_MESSAGES = {
-      '200' => 'Operation successful.',
-      '400' => 'The request could not be understood by the server due to malformed syntax.',
-      '401' => 'Either the header did not contain an acceptable Authorization or the ' +
-                             'username/password was invalid. The server response MUST include a ' +
-                             'WWW-Authenticate header field.',
-      '402' => 'The requested transaction requires a payment which could not be authorized.',
-      '403' => 'The server understood the request, but is refusing to fulfill it.',
-      '404' => 'The server has not found anything matching the Request-URI.',
-      '405' => 'The method specified in the Request-Line is not allowed for the resource ' +
-                             'identified by the Request-URI.',
-      '406' => 'The resource identified by the request is only capable of generating response ' +
-                             'entities which have content characteristics not acceptable according to the accept ' +
-                             'headers sent in the request.',
-      '408' => 'The client did not produce a request within the time that the server was prepared to wait.',
-      '411' => 'The server refuses to accept the request without a defined Content-Length.',
-      '412' => 'Transaction not permitted at this point in the session.',
-      '413' => 'The server is refusing to process a request because the request entity is larger than ' +
-                             'the server is willing or able to process.',
-      '414' => 'The server is refusing to service the request because the Request-URI is longer than ' +
-                             'the server is willing to interpret. This error usually only occurs for a GET method.',
-      '500' => 'The server encountered an unexpected condition which prevented it from fulfilling ' +
-                             'the request.',
-      '501' => 'The server does not support the functionality required to fulfill the request.',
-      '503' => 'The server is currently unable to handle the request due to a temporary overloading ' +
-                             'or maintenance of the server.',
-      '505' => 'The server does not support, or refuses to support, the HTTP protocol version that ' +
-                             'was used in the request message.',
-    }
-
     attr_accessor :mimemap
     attr_reader :format, :urls
 

@@ -127,11 +127,7 @@ module RETS4R
       # a new transaction from this document. An optional block will be
       # evaluated and placed in the transaction response, if provided
       def to_transaction
-        Client::Transaction.new.tap do |t|
-          t.reply_code = reply_code.to_s
-          t.reply_text = reply_text
-          t.maxrows = max_rows?
-          t.doc = self
+        Client::Transaction.new(self).tap do |t|
           t.response = yield if block_given?
         end
       end

@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+# rets4r: All-singing, all-dancing RETS cure-all
+require 'logger'
+require 'thor'
+require 'yaml'
+
+require 'rets4r'
+
+module RETS4R
+  class CLI < Thor
+
+    desc "parse", "take a RETS XML Document and print how it looks"
+    def parse(filename)
+      xml = File.open filename
+      transaction = RETS4R::ResponseDocument::Search.safe_parse(xml).validate!.results
+      transaction.each {|row| puts sorted_print(row) }
+    end
+
+    desc "map", "take a RETS XML Document and map it pretty"
+    def map(filename)
+      load_settings
+      xml = File.open filename
+      mapper = RETS4R::ListingMapper.new
+      RETS4R::Loader.load(xml) do |record|
+        attributes = mapper.map(record)
+        puts sorted_print(attributes)
+      end
+    end
+
+    desc "login", 'login to your rets server'
+    def login
+      settings = load_settings
+
+      client = RETS4R::Client.new(settings[:url])
+      # client.logger = Logger.new(STDOUT)
+
+      login_result = client.login(settings[:username], settings[:password])
+
+      if login_result.success?
+          puts "We successfully logged into the RETS server!"
+
+          # Print the action URL results (if any)
+          puts login_result.secondary_response || ''
+
+          client.logout
+
+          puts "We just logged out of the server."
+      else
+          puts "We were unable to log into the RETS server."
+          puts "Please check that you have set the login variables correctly."
+      end
+    end
+    private
+    def load_settings(filename = 'settings.yml')
+      RETS4R::ListingService.configurations = YAML.load_file(filename)
+      RETS4R::ListingService.env = ENV['RETS4RENV'] || 'development'
+      RETS4R::ListingService.connection
+    end
+    def sorted_print(hash)
+      hash.to_a.
+        sort {|a,b| a.first.to_s <=> b.first.to_s }.
+        map {|pair| pair.join(': ') }.
+        join(', ')
+    end
+  end
+end
+
+RETS4R::CLI.start

@@ -7,9 +7,10 @@ module RETS4R
       DEFAULT_USER_AGENT      = "rets4r/#{::RETS4R::VERSION}"
       DEFAULT_RETS_VERSION    = '1.7'
 
-      attr_accessor :logger, :headers, :pre_request_block, :post_request_block, :nc, :username, :password, :method
+      attr_accessor :logger, :headers, :pre_request_block, :post_request_block, :auth
+      attr_reader :username, :password, :method
+
       def initialize
-        @nc = 0
         @headers = {
           'User-Agent'   => DEFAULT_USER_AGENT,
           'Accept'       => '*/*',
@@ -17,6 +18,8 @@ module RETS4R
         }
         @pre_request_block = nil
         @post_request_block = nil
+        @method = METHOD_GET
+        @auth = RETS4R::Auth.new
       end
 
       def user_agent
@@ -24,7 +27,23 @@ module RETS4R
       end
 
       def user_agent=(name)
+        auth.user_agent = name
         set_header('User-Agent', name)
+      end
+
+      def username=(name)
+        @username = name
+        auth.username = name
+      end
+
+      def password=(pass)
+        @password = pass
+        auth.password = pass
+      end
+
+      def method=(method)
+        @method = method
+        auth.method = method
       end
 
       def rets_version=(version)
@@ -87,6 +106,9 @@ module RETS4R
             logger.debug("Sending headers #{headers.inspect}") if logger
 
             post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
+            auth.update(url.path, method, @headers['RETS-Request-ID'])
+            set_header('Authorization', auth.to_s)
+
             response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
                                                 http.get(uri, headers)
 
@@ -101,29 +123,13 @@ module RETS4R
               cookies = collect_cookies response
               logger.debug("Recieved cookies '#{cookies.inspect}'") if logger
               set_cookies cookies
-              # totally wrong. session id is only ever under the Cookie header
               rets_session_id = response['RETS-Session-ID'] || cookies['RETS-Session-ID']
               set_header('RETS-Session-ID', rets_session_id)
             end
           rescue AuthRequired
-            @nc += 1
-
             if retry_auth > 0
               retry_auth -= 1
-              begin
-                auth = RETS4R::Auth.authenticate(response,
-                                         @username,
-                                         @password,
-                                         url.path,
-                                         method,
-                                         @headers['RETS-Request-ID'],
-                                         @headers['User-Agent'],
-                                         @nc)
-              rescue
-                logger.error $!
-                raise
-              end
-              set_header('Authorization', auth)
+              auth.update_with_response(response)
               retry
             else
               raise LoginError.new(response.message)

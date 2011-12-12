@@ -56,7 +56,7 @@
 #    Style: :style
 
 common: &COMMON
-  url: http://demo.crt.realtors.org:6103/rets/login
+  url: http://www.dis.com:6103/rets/login
   username: Joe
   password: Schmoe
   version: 1.5

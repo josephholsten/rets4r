@@ -1,17 +1,19 @@
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), "."))
+#!/usr/bin/env ruby -w
+testdir = File.expand_path('..', __FILE__)
+$LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
+
 require 'rets4r/client/parsers/metadata'
 
-class RETS4R::Client::TestMetadataParser < Test::Unit::TestCase
+class TestMetadataParser < Test::Unit::TestCase
   context RETS4R::Client::MetadataParser do
     setup do
-      @metadata_path = File.expand_path('data/1.5/metadata.xml', File.dirname(__FILE__))
       @mdp = RETS4R::Client::MetadataParser.new
     end
 
     context "when compact metadata" do
       setup do
-        @results = @mdp.parse_file(@metadata_path)
+        @results = @mdp.parse_file(fixture('metadata.xml'))
       end
 
       should "have clean stack upon completion" do
