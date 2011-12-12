@@ -33,7 +33,7 @@ class TestRequester < Test::Unit::TestCase
             true
           end.returns(@response)
         end
-        before_should "set a RETS-Session cookie" do
+        before_should "set a RETS-Session-ID cookie" do
           @http.expects(:get).with(anything,has_entry('Cookie' => 'RETS-Session-ID=2qwiti55hq311j553ihivc3r')).returns(@response)
         end
       end

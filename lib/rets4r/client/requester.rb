@@ -123,8 +123,6 @@ module RETS4R
               cookies = collect_cookies response
               logger.debug("Recieved cookies '#{cookies.inspect}'") if logger
               set_cookies cookies
-              rets_session_id = response['RETS-Session-ID'] || cookies['RETS-Session-ID']
-              set_header('RETS-Session-ID', rets_session_id)
             end
           rescue AuthRequired
             if retry_auth > 0
