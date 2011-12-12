@@ -84,7 +84,7 @@ module RETS4R
 
             @pre_request_block.call(self, http, headers) if @pre_request_block
 
-            logger.debug(headers.inspect) if logger
+            logger.debug("Sending headers #{headers.inspect}") if logger
 
             post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
             response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
@@ -98,30 +98,31 @@ module RETS4R
               # We have a non-successful response that we cannot handle
               raise HTTPError.new(response)
             else
-              cookies = []
-              if set_cookies = response.get_fields('set-cookie') then
-                set_cookies.each do |cookie|
-                  cookies << cookie.split(";").first
-                end
-              end
-              set_header('Cookie', cookies.join("; ")) unless cookies.empty?
+              cookies = collect_cookies response
+              logger.debug("Recieved cookies '#{cookies.inspect}'") if logger
+              set_cookies cookies
               # totally wrong. session id is only ever under the Cookie header
-              #set_header('RETS-Session-ID', response['RETS-Session-ID']) if response['RETS-Session-ID']
-              set_header('RETS-Session-ID',nil)
+              rets_session_id = response['RETS-Session-ID'] || cookies['RETS-Session-ID']
+              set_header('RETS-Session-ID', rets_session_id)
             end
           rescue AuthRequired
             @nc += 1
 
             if retry_auth > 0
               retry_auth -= 1
-              auth = RETS4R::Auth.authenticate(response,
-                                       @username,
-                                       @password,
-                                       url.path,
-                                       method,
-                                       @headers['RETS-Request-ID'],
-                                       @headers['User-Agent'],
-                                       @nc)
+              begin
+                auth = RETS4R::Auth.authenticate(response,
+                                         @username,
+                                         @password,
+                                         url.path,
+                                         method,
+                                         @headers['RETS-Request-ID'],
+                                         @headers['User-Agent'],
+                                         @nc)
+              rescue
+                logger.error $!
+                raise
+              end
               set_header('Authorization', auth)
               retry
             else
@@ -129,12 +130,30 @@ module RETS4R
             end
           end
 
-          logger.debug(response.body) if logger
+          logger.debug("Recieved headers #{response.to_hash.inspect}") if logger
+          logger.debug("Recieved response #{response.body}") if logger
         end
 
         @post_request_block.call(self, http, headers) if @post_request_block
 
         return response
+      end
+
+      def collect_cookies(response)
+        cookies = {}
+        cookie_fields = response.get_fields('set-cookie') || []
+        cookie_fields.each do |cookie|
+          # Cookies are of the form
+          #   JSESSIONID=7939CD3932648EA8F3C0D27723154039; Path=/
+          # So we need to strip the path component
+          cookies.store *cookie.split(";").first.split('=')
+        end
+        cookies
+      end
+
+      def set_cookies(cookies)
+        cookie_string = cookies.map{|k,v| "#{k}=#{v}"}.join('; ')
+        set_header('Cookie', cookie_string) unless cookies.empty?
       end
 
     end
