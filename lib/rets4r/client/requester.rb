@@ -150,7 +150,8 @@ module RETS4R
           # Cookies are of the form
           #   JSESSIONID=7939CD3932648EA8F3C0D27723154039; Path=/
           # So we need to strip the path component
-          cookies.store *cookie.split(";").first.split('=')
+          key, value = cookie.split(";").first.split('=')
+          cookies.store key, value
         end
         cookies
       end
