@@ -90,52 +90,56 @@ module RETS4R
           http.set_debug_output HTTPDebugLogger.new(logger)
         end
 
-        http.start do |http|
-          begin
-            uri = url.path
+        begin
+          http.start do |http|
+            begin
+              uri = url.path
 
-            if ! data.empty? && method == METHOD_GET
-              uri += "?#{create_query_string(data)}"
+              if ! data.empty? && method == METHOD_GET
+                uri += "?#{create_query_string(data)}"
+              end
+
+              headers = @headers
+              headers.merge(header) unless header.empty?
+
+              @pre_request_block.call(self, http, headers) if @pre_request_block
+
+              logger.debug("Sending headers #{headers.inspect}") if logger
+
+              post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
+              auth.update(url.path, method, @headers['RETS-Request-ID'])
+              set_header('Authorization', auth.to_s)
+
+              response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
+                                                  http.get(uri, headers)
+
+
+              if response.code == '401'
+                # Authentication is required
+                raise AuthRequired
+              elsif response.code.to_i >= 300
+                # We have a non-successful response that we cannot handle
+                raise HTTPError.new(response)
+              else
+                cookies = collect_cookies response
+                logger.debug("Recieved cookies '#{cookies.inspect}'") if logger
+                set_cookies cookies
+              end
+            rescue AuthRequired
+              if retry_auth > 0
+                retry_auth -= 1
+                auth.update_with_response(response)
+                retry
+              else
+                raise LoginError.new(response.message)
+              end
             end
 
-            headers = @headers
-            headers.merge(header) unless header.empty?
-
-            @pre_request_block.call(self, http, headers) if @pre_request_block
-
-            logger.debug("Sending headers #{headers.inspect}") if logger
-
-            post_data = data.map {|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join('&') if method == METHOD_POST
-            auth.update(url.path, method, @headers['RETS-Request-ID'])
-            set_header('Authorization', auth.to_s)
-
-            response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
-                                                http.get(uri, headers)
-
-
-            if response.code == '401'
-              # Authentication is required
-              raise AuthRequired
-            elsif response.code.to_i >= 300
-              # We have a non-successful response that we cannot handle
-              raise HTTPError.new(response)
-            else
-              cookies = collect_cookies response
-              logger.debug("Recieved cookies '#{cookies.inspect}'") if logger
-              set_cookies cookies
-            end
-          rescue AuthRequired
-            if retry_auth > 0
-              retry_auth -= 1
-              auth.update_with_response(response)
-              retry
-            else
-              raise LoginError.new(response.message)
-            end
+            logger.debug("Recieved headers #{response.to_hash.inspect}") if logger
+            logger.debug("Recieved response #{response.body}") if logger
           end
-
-          logger.debug("Recieved headers #{response.to_hash.inspect}") if logger
-          logger.debug("Recieved response #{response.body}") if logger
+        rescue
+          raise ClientException.new("Error connecting to #{url.host}:#{url.port}\n#{$!}")
         end
 
         @post_request_block.call(self, http, headers) if @post_request_block

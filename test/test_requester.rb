@@ -39,4 +39,16 @@ class TestRequester < Test::Unit::TestCase
       end
     end
   end
+
+  def test_adds_context_when_a_connection_is_refused
+    uri = URI.parse('http://rets.example:6103/rets/login')
+    requester = RETS4R::Client::Requester.new
+    Net::HTTP.any_instance.stubs(:start).raises(Errno::ECONNREFUSED)
+
+    exception = assert_raise(RETS4R::Client::ClientException) do
+      requester.request(uri)
+    end
+
+    assert_match /^Error connecting to rets.example:6103/, exception.message
+  end
 end
