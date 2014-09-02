@@ -29,16 +29,16 @@ Gem::Specification.new do |spec|
   spec.summary = spec.description.split(/\.\s+/).first
   spec.files = File.read("MANIFEST").split(/\r?\n\r?/)
 
-  spec.add_runtime_dependency 'nokogiri', '>= 1.3.2'
-  spec.add_runtime_dependency 'thor'
-  spec.add_development_dependency 'activesupport'
-  spec.add_development_dependency 'aruba'
-  spec.add_development_dependency 'cucumber'
-  spec.add_development_dependency 'i18n'
-  spec.add_development_dependency 'minitest'
-  spec.add_development_dependency 'mocha'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rdoc'
-  spec.add_development_dependency 'shoulda'
+  spec.add_runtime_dependency 'nokogiri', '~> 1.3'
+  spec.add_runtime_dependency 'thor', '~> 0.19'
+  spec.add_development_dependency 'activesupport', '~> 4.1'
+  spec.add_development_dependency 'aruba', '~> 0.6'
+  spec.add_development_dependency 'cucumber', '~> 1.3'
+  spec.add_development_dependency 'i18n', '~> 0.6'
+  spec.add_development_dependency 'minitest', '~> 5.4'
+  spec.add_development_dependency 'mocha', '~> 1.1'
+  spec.add_development_dependency 'rake', '~> 10.3'
+  spec.add_development_dependency 'rdoc', '~> 4.1'
+  spec.add_development_dependency 'shoulda', '~> 3.5'
 end
 
