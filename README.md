@@ -6,14 +6,14 @@ This is the first "native" Ruby RETS library currently available, but there is a
 
 ## Links
 
--   Rubygem: [![Version][]][]
+-   Rubygem: [![Version](http://img.shields.io/gem/v/rets4r.svg)](https://rubygems.org/gems/rets4r)
 -   Mailing List: <rets4r@librelist.com> [Archive][]
 -   Documentation: http://rdoc.info/projects/josephholsten/rets4r
 -   Source: http://github.com/josephholsten/rets4r
--   Dependencies: [![Dependencies][]][]
--   Build Status: [![Build Status][]][]
--   Coverage: [![Coverage][]][]
--   Code Climate: [![Code Climate][]][]
+-   Dependencies: [![Dependencies](http://img.shields.io/gemnasium/josephholsten/rets4r.svg)](https://gemnasium.com/josephholsten/rets4r)
+-   Build Status: [![Build Status](http://img.shields.io/travis/josephholsten/rets4r.svg)](https://travis-ci.org/josephholsten/rets4r)
+-   Coverage: [![Coverage](https://img.shields.io/coveralls/josephholsten/rets4r.svg)](https://coveralls.io/r/josephholsten/rets4r)
+-   Code Climate: [![Code Climate](http://img.shields.io/codeclimate/github/josephholsten/rets4r.svg)](https://codeclimate.com/github/josephholsten/rets4r)
 
 ## Requirements
 
@@ -30,7 +30,7 @@ This project was made possible in part by the [Contra Costa Association of Realt
 
 ## Getting Started
 
-Take a look at the [`examples/`][] directory. You'll find it more helpful than the unit tests because the unit tests work off of local files and mock objects, rather than making real transaction calls.
+Take a look at the [examples/][examples/] directory. You'll find it more helpful than the unit tests because the unit tests work off of local files and mock objects, rather than making real transaction calls.
 
 Due to the nature of this library, it is HIGHLY recommended that you have at least a basic understanding of the RETS protocol, available at the [official RETS website][].
 
@@ -39,17 +39,6 @@ Most of the time, you will be either searching for resources or getting objects,
   [rets]: https://github.com/estately/rets
   [resync]: https://code.google.com/p/crt-resync/
   [librets]: https://github.com/NationalAssociationOfRealtors/libRETS
-  [Version]: http://img.shields.io/gem/v/rets4r.svg
-  [![Version][]]: https://rubygems.org/gems/rets4r
   [Archive]: http://librelist.com/browser/rets4r/
-  [Dependencies]: http://img.shields.io/gemnasium/josephholsten/rets4r.svg
-  [![Dependencies][]]: https://gemnasium.com/josephholsten/rets4r
-  [Build Status]: http://img.shields.io/travis/josephholsten/rets4r.svg
-  [![Build Status][]]: https://travis-ci.org/josephholsten/rets4r
-  [Coverage]: https://img.shields.io/coveralls/josephholsten/rets4r.svg
-  [![Coverage][]]: https://coveralls.io/r/josephholsten/rets4r
-  [Code Climate]: http://img.shields.io/codeclimate/github/josephholsten/rets4r.svg
-  [![Code Climate][]]: https://codeclimate.com/github/josephholsten/rets4r
   [Contra Costa Association of Realtors®]: http://www.ccartoday.com
-  [`examples/`]: examples/
   [official RETS website]: http://www.rets.org
