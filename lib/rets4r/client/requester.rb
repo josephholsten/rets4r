@@ -91,7 +91,7 @@ module RETS4R
         end
 
         begin
-          http.start do |http|
+          http.start do |sess|
             begin
               uri = url.path
 
@@ -102,7 +102,7 @@ module RETS4R
               headers = @headers
               headers.merge(header) unless header.empty?
 
-              @pre_request_block.call(self, http, headers) if @pre_request_block
+              @pre_request_block.call(self, sess, headers) if @pre_request_block
 
               logger.debug("Sending headers #{headers.inspect}") if logger
 
@@ -110,8 +110,8 @@ module RETS4R
               auth.update(url.path, method, @headers['RETS-Request-ID'])
               set_header('Authorization', auth.to_s)
 
-              response  = method == METHOD_POST ? http.post(uri, post_data, headers) :
-                                                  http.get(uri, headers)
+              response  = method == METHOD_POST ? sess.post(uri, post_data, headers) :
+                                                  sess.get(uri, headers)
 
 
               if response.code == '401'
