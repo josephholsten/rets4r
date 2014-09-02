@@ -11,7 +11,7 @@ module RETS4R
   end
 end
 
-class TestClientMetadataRequest < Test::Unit::TestCase
+class TestClientMetadataRequest < Minitest::Test
   RETS_PORT     = '9080'
   RETS_URL      = "http://localhost:#{RETS_PORT}"
   RETS_LOGIN    = 'login'

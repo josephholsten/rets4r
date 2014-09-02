@@ -2,8 +2,8 @@ libdir = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 $VERBOSE = true
 
-require 'test/unit'
-require 'mocha'
+require 'minitest/autorun'
+require 'mocha/mini_test'
 require 'shoulda'
 require 'pathname'
 
@@ -16,7 +16,7 @@ unless defined? PROJECT_ROOT
   end
 end
 
-class Test::Unit::TestCase
+class Minitest::Test
   unless method_defined? :fixture
     def fixture(*path_elems)
       PROJECT_ROOT.join('test', 'fixtures', *path_elems)

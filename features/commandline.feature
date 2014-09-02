@@ -42,11 +42,11 @@ Feature: Command Line Tool
       agent_full_name: Bill, list_price: 5, mls: 4
       """
 
-  Scenario: Login
-    When I run `rets4r login`
-    Then the output should contain:
-      """
-      We successfully logged into the RETS server!
-
-      We just logged out of the server.
-      """
+#  Scenario: Login
+#    When I run `rets4r login`
+#    Then the output should contain:
+#      """
+#      We successfully logged into the RETS server!
+#
+#      We just logged out of the server.
+#      """

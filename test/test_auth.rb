@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/auth'
 
-class TestAuth < Test::Unit::TestCase
+class TestAuth < Minitest::Test
   def setup
     @auth = RETS4R::Auth.new.tap do |a|
       a.username = 'username'
@@ -22,7 +22,7 @@ class TestAuth < Test::Unit::TestCase
       'www-authenticate' => 'Digest '+
         'qop="auth",'+
         'realm="REALM",'+
-        'nonce="'+ '2006-03-03T17:37:10' +'",'+
+        'nonce="' + '2006-03-03T17:37:10' + '",'+
         'opaque="5ccc069c403ebaf9f0171e9517f40e41",'+
         'stale="false",'+
         'domain="\my\test\domain"' }

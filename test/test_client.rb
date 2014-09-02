@@ -11,7 +11,7 @@ module RETS4R
     end
 end
 
-class TestClient < Test::Unit::TestCase
+class TestClient < Minitest::Test
     RETS_PORT     = '9080'
     RETS_URL      = "http://localhost:#{RETS_PORT}"
     RETS_LOGIN    = 'login'
@@ -29,24 +29,24 @@ class TestClient < Test::Unit::TestCase
     end
 
     def test_setup
-        assert_nothing_raised() { @rets.user_agent = 'ACK/2.1' }
+        @rets.user_agent = 'ACK/2.1'
         assert_equal('ACK/2.1', @rets.user_agent)
 
-        assert_nothing_raised() { @rets.user_agent = 'SPRETS/0.1' }
-        assert_nothing_raised() { @rets.request_method = 'GET' }
+        @rets.user_agent = 'SPRETS/0.1'
+        @rets.request_method = 'GET'
 
-        assert_raise(RETS4R::Client::Unsupported) { @rets.rets_version = '1.4.0' }
-        assert_nothing_raised() { @rets.rets_version = '1.5' }
+        assert_raises(RETS4R::Client::Unsupported) { @rets.rets_version = '1.4.0' }
+        @rets.rets_version = '1.5'
         assert_equal("1.5", @rets.rets_version)
         assert_equal("RETS/1.5", @rets.get_header("RETS-Version"))
-        assert_nothing_raised() { @rets.rets_version = '1.7' }
+        @rets.rets_version = '1.7'
         assert_equal("RETS/1.7", @rets.get_header("RETS-Version"))
 
         assert_equal('SPRETS/0.1', @rets.user_agent)
         assert_equal('GET', @rets.request_method)
         assert_equal('1.7', @rets.rets_version)
 
-        assert_nothing_raised() { @rets.request_method = 'POST' }
+        @rets.request_method = 'POST'
 
         assert_equal('POST', @rets.request_method)
 
@@ -60,7 +60,8 @@ class TestClient < Test::Unit::TestCase
     def test_without_logger
         @rets.logger = nil
 
-        assert_nothing_raised() { @rets.request_method = 'GET' }
+        # should not raise
+        @rets.request_method = 'GET'
     end
 
     def test_content_type_parsing
@@ -74,7 +75,7 @@ class TestClient < Test::Unit::TestCase
     end
 
     def test_performs_get_request
-        assert_nothing_raised() {@rets.request_method = 'GET'}
+        @rets.request_method = 'GET'
         assert_equal('GET', @rets.request_method)
 
         http     = mock('http')
@@ -91,7 +92,7 @@ class TestClient < Test::Unit::TestCase
     end
 
     def test_performs_post_request
-        assert_nothing_raised() {@rets.request_method = 'POST'}
+        @rets.request_method = 'POST'
         assert_equal('POST', @rets.request_method)
 
         http     = mock('http')

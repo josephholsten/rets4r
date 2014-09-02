@@ -7,7 +7,7 @@ require 'rets4r/client/parsers/compact_nokogiri'
 require 'rets4r/client/exceptions'
 require 'rets4r/response_document'
 
-class TestCompactNokogiri < Test::Unit::TestCase
+class TestCompactNokogiri < Minitest::Test
   def test_should_do_stuff
     listings = RETS4R::Client::CompactNokogiriParser.new(fixture('search_compact.xml').open).to_a
     assert_equal({"Third"=>"Datum3", "Second"=>"Datum2", "First"=>"Datum1"}, listings[0])
@@ -47,7 +47,7 @@ class TestCompactNokogiri < Test::Unit::TestCase
       @parser = RETS4R::Client::CompactNokogiriParser.new(StringIO.new(@response))
     end
     should "raise the exception" do
-      assert_raise RETS4R::Client::MiscellaneousSearchErrorException do
+      assert_raises RETS4R::Client::MiscellaneousSearchErrorException do
         @parser.to_a
       end
     end

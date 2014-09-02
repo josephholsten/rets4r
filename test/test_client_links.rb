@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/client/links'
 
-class TestClientLinks < Test::Unit::TestCase
+class TestClientLinks < Minitest::Test
   def setup
     @links = RETS4R::Client::Links.from_login_url('http://example.com/login')
     @links['Logout'] = URI.parse('http://example.com/logout')

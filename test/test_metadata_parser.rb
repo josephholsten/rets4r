@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/client/parsers/metadata'
 
-class TestMetadataParser < Test::Unit::TestCase
+class TestMetadataParser < Minitest::Test
   context RETS4R::Client::MetadataParser do
     setup do
       @mdp = RETS4R::Client::MetadataParser.new

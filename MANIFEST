@@ -8,7 +8,7 @@ Gemfile
 LICENSE
 MANIFEST
 NEWS
-README.rdoc
+README.md
 Rakefile
 TODO
 bin/rets4r

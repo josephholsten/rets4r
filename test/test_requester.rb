@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/client/requester'
 
-class TestRequester < Test::Unit::TestCase
+class TestRequester < Minitest::Test
   context RETS4R::Client::Requester do
     setup do
       @uri = URI.parse('http://rets.example:6103/rets/login')
@@ -45,7 +45,7 @@ class TestRequester < Test::Unit::TestCase
     requester = RETS4R::Client::Requester.new
     Net::HTTP.any_instance.stubs(:start).raises(Errno::ECONNREFUSED)
 
-    exception = assert_raise(RETS4R::Client::ClientException) do
+    exception = assert_raises(RETS4R::Client::ClientException) do
       requester.request(uri)
     end
 

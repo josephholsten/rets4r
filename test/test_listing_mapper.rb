@@ -6,7 +6,7 @@ require 'test_helper'
 require 'rets4r/listing_mapper'
 require 'rets4r/listing_service'
 
-class TestListingMapper < Test::Unit::TestCase
+class TestListingMapper < Minitest::Test
   context "ListingMapper" do
     setup do
       listing_service_config_file = fixture('listing_service.yml')

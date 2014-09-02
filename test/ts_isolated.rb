@@ -1,9 +1,9 @@
 $:.unshift File.expand_path('../../../lib',__FILE__)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'rbconfig'
 
-class TestIsolated < Test::Unit::TestCase
+class TestIsolated < Minitest::Test
   ruby = File.join(*RbConfig::CONFIG.values_at('bindir', 'RUBY_INSTALL_NAME'))
 
   Dir["#{File.dirname(__FILE__)}/**/test_*.rb"].each do |file|

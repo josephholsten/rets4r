@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/client'
 
-class TestClientLogin < Test::Unit::TestCase
+class TestClientLogin < Minitest::Test
     RETS_PORT     = '9080'
     RETS_URL      = "http://localhost:#{RETS_PORT}"
     RETS_LOGIN    = 'login'

@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/loader'
 
-class TestLoader < Test::Unit::TestCase
+class TestLoader < Minitest::Test
   def test_should_pass_records_to_block
     listings = []
     RETS4R::Loader.load(fixture('search_compact.xml').open) do |record|

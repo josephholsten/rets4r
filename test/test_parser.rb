@@ -5,7 +5,7 @@ require 'test_helper'
 
 require 'rets4r/client/parsers/response_parser'
 
-class TestParser < Test::Unit::TestCase
+class TestParser < Minitest::Test
   def setup
     @parser = RETS4R::Client::ResponseParser.new
   end
@@ -39,15 +39,13 @@ class TestParser < Test::Unit::TestCase
   # nokogiri should allow parsing these invalid documents without errors since
   # the boards of realtors are not at all reliable in sending correct xml
   def test_unescaped_search_compact
-    assert_nothing_raised do
-      @parser.parse_key_value(fixture('search_unescaped_compact.xml').read)
-    end
+    # should not raise
+    @parser.parse_key_value(fixture('search_unescaped_compact.xml').read)
   end
 
   def test_invalid_search_compact
-    assert_nothing_raised do
-      @parser.parse_key_value(fixture('search_unescaped_compact.xml').read)
-    end
+    # should not raise
+    @parser.parse_key_value(fixture('search_unescaped_compact.xml').read)
   end
 
   def test_login_results
@@ -59,7 +57,7 @@ class TestParser < Test::Unit::TestCase
   end
 
   def test_error_results
-    exception = assert_raise(RETS4R::Client::InvalidResourceException) do
+    exception = assert_raises(RETS4R::Client::InvalidResourceException) do
       @parser.parse_object_response(fixture('error.xml').read)
     end
 

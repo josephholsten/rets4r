@@ -3,7 +3,7 @@ testdir = File.expand_path('..', __FILE__)
 $LOAD_PATH.unshift(testdir) unless $LOAD_PATH.include?(testdir)
 require 'test_helper'
 
-class TestQuality < Test::Unit::TestCase
+class TestQuality < Minitest::Test
   def test_can_still_be_built
     Dir.chdir(PROJECT_ROOT) do
       `gem build rets4r.gemspec`
