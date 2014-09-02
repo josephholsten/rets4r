@@ -391,9 +391,9 @@ module RETS4R
       }
       options.each { |k,v| data[k] = v.to_s } if options
       response = request(@urls.search, data, header)
-      count = @response_parser.parse_count(response.body)
       # TODO: fix test to like this
       # ResponseDocument.safe_parse(xml).validate!.parse_count
+      @response_parser.parse_count(response.body)
     end
 
     private
@@ -405,7 +405,6 @@ module RETS4R
       field_start = text.index(';')
 
       content['content-type'] = text[0 ... field_start].strip
-      fields = text[field_start..-1]
 
       parts = text.split(';')
 
