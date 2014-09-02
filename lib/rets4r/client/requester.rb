@@ -1,4 +1,4 @@
-require 'rets4r'
+#require 'rets4r'
 require 'rets4r/client/exceptions'
 
 module RETS4R

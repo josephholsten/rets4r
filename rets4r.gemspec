@@ -1,5 +1,5 @@
-lib     = File.expand_path("../lib/rets4r.rb", __FILE__)
-version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d+)\1/, 2]
+require_relative "lib/rets4r/version.rb"
+version = RETS4R::VERSION
 
 Gem::Specification.new do |spec|
   spec.name = 'rets4r'
