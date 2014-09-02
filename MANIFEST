@@ -38,6 +38,7 @@ lib/rets4r/loader.rb
 lib/rets4r/response_document.rb
 lib/rets4r/response_document/base.rb
 lib/rets4r/response_document/search.rb
+lib/rets4r/version.rb
 lib/tasks/annotations.rake
 lib/tasks/coverage.rake
 rets4r.gemspec
