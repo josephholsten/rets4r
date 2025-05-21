@@ -4,8 +4,11 @@ $VERBOSE = true
 
 require 'minitest/autorun'
 require 'mocha/minitest'
-require 'shoulda'
 require 'pathname'
+require 'shoulda'
+require 'simplecov'
+
+SimpleCov.start
 
 unless defined? PROJECT_ROOT
   PROJECT_ROOT = Pathname(__FILE__).join('../..').expand_path
