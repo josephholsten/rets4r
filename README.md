@@ -7,7 +7,6 @@ This is the first "native" Ruby RETS library currently available, but there is a
 ## Links
 
 -   Rubygem: [![Version](http://img.shields.io/gem/v/rets4r.svg)](https://rubygems.org/gems/rets4r)
--   Mailing List: <rets4r@librelist.com> [Archive][]
 -   Documentation: <http://rdoc.info/github/josephholsten/rets4r>
 -   Source: <http://github.com/josephholsten/rets4r>
 -   Build Status: [![Build Status](https://img.shields.io/github/actions/workflow/status/josephholsten/rets4r/ci.yml)](https://github.com/josephholsten/rets4r/actions/workflows/ci.yml)
@@ -37,6 +36,5 @@ Most of the time, you will be either searching for resources or getting objects,
   [rets]: https://github.com/estately/rets
   [resync]: https://code.google.com/p/crt-resync/
   [librets]: https://github.com/NationalAssociationOfRealtors/libRETS
-  [Archive]: http://librelist.com/browser/rets4r/
   [Contra Costa Association of Realtors®]: http://www.ccartoday.com
   [official RETS website]: http://www.rets.org
