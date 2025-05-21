@@ -14,7 +14,7 @@ This is the first "native" Ruby RETS library currently available, but there is a
 
 ## Requirements
 
--   Ruby \>= 1.9.3
+-   Ruby \>= 3.1
 -   Nokogiri \>= 1.3.2
 
 ## License
