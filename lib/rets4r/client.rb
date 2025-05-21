@@ -422,6 +422,8 @@ module RETS4R
     #++
     def process_header(raw)
       # this util gives us arrays of values. We are only set up to handle one header value.
+      # FIXME: This assumes parsing without the fix in https://github.com/ruby/webrick/issues/137
+      # As this is only used within Auth.process_header, we need to remove it for rets4r 2.0
       WEBrick::HTTPUtils.parse_header(raw.strip).map.inject({}) do |h,(k,v)|
         h[k]=v.first; h
       end

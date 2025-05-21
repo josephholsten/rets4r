@@ -30,10 +30,10 @@ Gem::Specification.new do |spec|
   spec.files = File.read("MANIFEST").split(/\r?\n\r?/)
 
   spec.add_runtime_dependency 'nokogiri', '~> 1.3'
-  spec.add_runtime_dependency 'ostruct'
-  spec.add_runtime_dependency 'rexml'
+  spec.add_runtime_dependency 'ostruct', '~> 0.6.1'
+  spec.add_runtime_dependency 'rexml', '~>3.2'
   spec.add_runtime_dependency 'thor', '~> 0.19'
-  spec.add_runtime_dependency 'webrick'
+  spec.add_runtime_dependency 'webrick', '<= 1.8.1' # we depend on flawed header parsing within Auth.parse_header, which is deprecated. Pinning to get one last release, then removing the offending code.
 
   spec.add_development_dependency 'activesupport', '~> 4.1'
   spec.add_development_dependency 'aruba', '~> 0.6'
