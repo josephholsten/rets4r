@@ -12,7 +12,6 @@ This is the first "native" Ruby RETS library currently available, but there is a
 -   Source: <http://github.com/josephholsten/rets4r>
 -   Build Status: [![Build Status](https://img.shields.io/github/actions/workflow/status/josephholsten/rets4r/ci.yml)](https://github.com/josephholsten/rets4r/actions/workflows/ci.yml)
 -   Coverage: [![Coverage](https://img.shields.io/coveralls/josephholsten/rets4r.svg)](https://coveralls.io/r/josephholsten/rets4r)
--   Code Climate: [![Code Climate](http://img.shields.io/codeclimate/github/josephholsten/rets4r.svg)](https://codeclimate.com/github/josephholsten/rets4r)
 
 ## Requirements
 
