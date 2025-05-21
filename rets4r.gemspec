@@ -30,15 +30,19 @@ Gem::Specification.new do |spec|
   spec.files = File.read("MANIFEST").split(/\r?\n\r?/)
 
   spec.add_runtime_dependency 'nokogiri', '~> 1.3'
-  spec.add_runtime_dependency 'thor', '~> 0.19'
-  spec.add_development_dependency 'activesupport', '~> 4.1'
-  spec.add_development_dependency 'aruba', '~> 0.6'
-  spec.add_development_dependency 'cucumber', '~> 1.3'
-  spec.add_development_dependency 'i18n', '~> 0.6'
+  spec.add_runtime_dependency 'ostruct', '~> 0.6.1'
+  spec.add_runtime_dependency 'rexml', '~>3.2'
+  spec.add_runtime_dependency 'thor', '~> 1.3'
+  spec.add_runtime_dependency 'webrick', '<= 1.8.1' # we depend on flawed header parsing within Auth.parse_header, which is deprecated. Pinning to get one last release, then removing the offending code.
+
+  spec.add_development_dependency 'activesupport', '~> 7.0'
+  spec.add_development_dependency 'aruba', '~> 2.3'
+  spec.add_development_dependency 'cucumber', '~> 9.2'
+  spec.add_development_dependency 'i18n', '~> 1.14'
   spec.add_development_dependency 'minitest', '~> 5.4'
-  spec.add_development_dependency 'mocha', '~> 1.1'
-  spec.add_development_dependency 'rake', '~> 10.3'
-  spec.add_development_dependency 'rdoc', '~> 4.1'
-  spec.add_development_dependency 'shoulda', '~> 3.5'
+  spec.add_development_dependency 'mocha', '~> 2.7'
+  spec.add_development_dependency 'rake', '~>13.2'
+  spec.add_development_dependency 'rdoc', '~>6.14'
+  spec.add_development_dependency 'shoulda', '~> 4.0'
 end
 

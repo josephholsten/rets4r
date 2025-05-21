@@ -5,6 +5,8 @@ require 'test_helper'
 
 require 'rets4r/client'
 
+require 'webrick/httpstatus'
+
 class TestClientGetObject < Minitest::Test
     RETS_PORT     = '9080'
     RETS_URL      = "http://localhost:#{RETS_PORT}"

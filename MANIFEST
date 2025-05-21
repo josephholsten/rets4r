@@ -1,5 +1,6 @@
 .document
 .gemtest
+.github/workflows/ci.yml
 .gitignore
 .travis.yml
 CHANGELOG
